@@ -1,0 +1,36 @@
+{
+    "id": "1",
+    "username": "mateoaldao",
+    "email": "mateoaldaoe@gmail.com",
+    "firstName": "Mateo",
+    "lastName": "Aldao Suaya",
+    "avatarUrl": "../../assets/images/profile-pic.jpg",
+    "createdAt": "2024-02-14T10:30:00.000Z",
+    "updatedAt": "2024-05-11T17:30:00.000Z",
+    "friends": [
+      {
+        "id": "user_56789"
+      },
+      {
+        "id": "user_90123"
+      }
+    ],
+    "groups": [
+      {
+        "id": "group_abc123"
+      },
+      {
+        "id": "group_xyz456"
+      }
+    ],
+    "matches": [ 
+      {
+        "id": "user_78901"
+      }
+    ],
+    "metadata": {
+      "age": 32,
+      "interests": ["hiking", "photography", "cooking"],
+      "description" : "Diseñador y programador, jugador de paddle y de tennis, preferentemente por Zona Norte."
+    }
+}
