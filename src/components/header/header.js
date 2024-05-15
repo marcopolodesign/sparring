@@ -11,7 +11,7 @@ const Header = () => {
 
   const user = useSelector(state => state.user)
   return (
-    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 50}}>
       <Logo />
       <View style={{alignItems: 'center', gap: 20, flexDirection: 'row'}}>
         <Notification />

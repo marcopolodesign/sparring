@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { View, Text } from 'react-native';
 import { Stack } from "expo-router";
 import * as Font from 'expo-font';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import {
   SafeAreaView,
@@ -51,11 +52,14 @@ export const _layout = ({ children, ...props }) => {
   ,[]);
   
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
+
     <Provider store={store}>
-     <Stack>
+     <Stack screenOptions={{animation:'fade', animationDuration: 250}}>
       <Stack.Screen name="index" options={{ headerShown: false }} />
     </Stack>
     </Provider>
+    </GestureHandlerRootView>
   );
 };
 

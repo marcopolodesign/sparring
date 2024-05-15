@@ -9,7 +9,7 @@ const MainButton = ({...props}) => {
   
 
   return (
-    <Button bgColor={props.bgColor} style={{flexDirection: 'row', gap: 10, justifyContent: 'center'}}>
+    <Button onPress={props.onPress} bgColor={props.bgColor} willFlex={props.willFlex} style={{flexDirection: 'row', gap: 10, justifyContent: 'center'}}>
         {props.icon && (
            { ...props.icon === 'Add' && (
             source= <Add />

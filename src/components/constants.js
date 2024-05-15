@@ -7,8 +7,13 @@ export const Colors = {
     darkGreen : "#163300",
     primaryGreen : "#9FE870",
     blue : "#1660B1",
-    textGrey: "#545454;"
+    textGrey: "#545454",
+    lightGrey: "#D9D9D9"
 }   
+
+export const Generals = {
+    borderRadius: 13,
+}
 
 export const Fonts = {
     heading : {

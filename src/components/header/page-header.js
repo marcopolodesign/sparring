@@ -7,7 +7,7 @@ import Arrow from '../../assets/icons/arrow.js';
 
 const PageHeader = () => {
   return (
-    <View>
+    <View style={{paddingRight: 20, paddingLeft: 20}}>
         <Link href="/" asChild>
             <TouchableOpacity onPress={() => {console.log('navigateeee')}}>
               <BackArrow>

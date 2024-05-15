@@ -13,7 +13,24 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "icon": "./src/assets/icon.png",
+      "config": {
+        "googleMapsApiKey": "AIzaSyBaSN2_IOj7PtMTMGro1BRc5qfL1NP_P0A"
+      },
+      "infoPlist": {
+        "NSCameraUsageDescription": "Sparring necesita  el permiso para que puedas acceder a la camara.",
+        "NSPhotoLibraryUsageDescription": "Sparring necesita el permiso a las fotos para que puedas cargar una foto para tu perfil.",
+        "NSLocationWhenInUseUsageDescription": "Sparring necesita el acceso para acceder a la localización",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Sparring necesita el acceso para acceder a la localización",
+        "NSLocationAlwaysUsageDescription": "Sparring necesita el acceso para acceder a la localización",
+        "NSPhotoLibraryAddUsageDescription": "Sparring necesita el permiso para guardar una foto",
+        "UIBackgroundModes": [
+          "location",
+          "fetch"
+        ]
+      },
+      "bundleIdentifier": "com.sparring.sparring-app"
     },
     "android": {
       "adaptiveIcon": {
@@ -28,7 +45,9 @@
       [
         "expo-font",
         {
-          "fonts": ["../assets/fonts/Thunder.ttf"]
+          "fonts": [
+            "../assets/fonts/Thunder.ttf"
+          ]
         }
       ]
     ]

@@ -21,8 +21,8 @@ const Profile = () => {
 return (
     <Container bgColor={Colors.primaryGreen}>
         <PageHeader />
-            <View style={{backgroundColor: "#fff", flex: 1, marginTop: 60, marginLeft: -20, marginRight: -20, alignItems: 'center', paddingHorizontal: 20}}>
-            <View style={{transform: [{translateY: -100}], alignItems: "center"}}>
+            <View style={{backgroundColor: "#fff", flex: 1, marginTop: 60, alignItems: 'center', paddingHorizontal: 20}}>
+            <View style={{transform: [{translateY: -80}], alignItems: "center"}}>
                 <ImageBackground 
                     source={profile}
                     style={{width: 180, height: 180, borderRadius: 100, borderWidth: 2, borderColor: '#fff', overflow: 'hidden', marginBottom: 20}} 
