@@ -1,36 +1,32 @@
 import React, { useCallback, useMemo, useRef } from 'react';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
-import BottomSheet, { BottomSheetView } from '@gorhom/bottom-sheet';
+import BottomSheet, { BottomSheetView, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 const { height } = Dimensions.get('screen');
 import {Colors} from './constants';
 import MainButton from './button'
 import { Heading } from './styled-components';
 import { useSharedValue } from 'react-native-reanimated';
   
-  const BottomUp = ({ title, paragraph, buttonTitle, onPress, loading, sheetRef}) => {
-
-  
-
+  const BottomUp = ({ ...props}) => {
     const snapPoints = useMemo(() => [.05], []);
     const animatedContentHeight = useSharedValue(0)
-
-
     return (
+      
         <BottomSheet
         backgroundStyle={{backgroundColor: "#fff", borderTopLeftRadius: 40, borderTopRightRadius: 40}}
         containerStyle={{flexDirection: 'column', justifyContent: 'center'}} 
-        ref={sheetRef}
+        ref={props.sheetRef}
         snapPoints={snapPoints}
         initialSnapIndex={0}
         shouldMeasureContentHeight={true} 
         index={-1}
         enableDynamicSizing={true}
         contentHeight={animatedContentHeight}
+        backdropComponent={BottomSheetBackdrop}      
         >
           {/* <View style={{paddingVertical : 10}}>
           <View style={{ top: 5}}>
                 <Text style={[{ color: "#111" }]}>
-                  Paseadores recomendados
                 </Text>
             </View>
           </View> */}
@@ -39,27 +35,27 @@ import { useSharedValue } from 'react-native-reanimated';
               style={{padding: 20, paddingBottom: 80,justifyContent: 'center', alignItems: 'center'}}
           >
           <View style={{ marginTop: 10, marginBottom: 0 }}>
-                <Heading style={{textAlign: 'center'}}color={Colors.darkGreen}>{title}</Heading>
+                <Heading style={{textAlign: 'center'}}color={Colors.darkGreen}>{props.title}</Heading>
                   
-                {paragraph && (
+                {props.paragraph && (
                   <Text style={{ color: Colors.textGrey, textAlign: 'center', marginVertical: 20 }}>
-                    {paragraph}
+                    {props.paragraph}
                   </Text>
                 )}
 
-                {buttonTitle && (
+                {props.buttonTitle && (
 
                   <MainButton
                     bgColor={Colors.primaryGreen}
                     color={Colors.darkGreen}
-                    ctaText={buttonTitle}
+                    ctaText={props.buttonTitle}
                     activeOpacity={0.8}
-                    onPress={onPress}
+                    onPress={props.onPress}
                     willFlex={'0'}
                     style={{width: '100%'}}
                     >
                   
-                    {loading == true && (
+                    {props.loading == true && (
                       <ActivityIndicator style={{ marginLeft: 3 }} />
                     )}
                     </MainButton>

@@ -7,7 +7,6 @@ const MainButton = ({...props}) => {
     console.log({...props})
 
   
-
   return (
     <Button onPress={props.onPress} bgColor={props.bgColor} willFlex={props.willFlex} style={{flexDirection: 'row', gap: 10, justifyContent: 'center'}}>
         {props.icon && (

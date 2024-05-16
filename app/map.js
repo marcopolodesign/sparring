@@ -7,18 +7,18 @@ import {Colors} from '../src/components/constants.js'
 import Container from '../Container.js'
 
 
-import ProfileScreen from '../src/screens/Profile.js';
+import Profile from '../src/screens/Profile.js';
+import MapCard from '../src/components/home/MapCard';
 
 
-export default function Profile() {
-
+export default function Map({...props}) {
 
 
   return (
-    <>
+    <Container bgColor={Colors.darkGreen}>
       <Stack.Screen options={{headerShown: false}} title="Profile"/>
-       <ProfileScreen bgColor={Colors.primaryGreen}/> 
-    </>
+       <MapCard href={'/'} enableScroll={true}/>
+    </Container>
   );
 }
 

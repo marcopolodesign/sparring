@@ -24,7 +24,6 @@ import { useFonts } from 'expo-font';
 
 export const _layout = ({ children, ...props }) => {
   
-  console.log('layout');
   
   const insets = useSafeAreaInsets();
   const initialState = { user: null, counter: 0, coach: null };

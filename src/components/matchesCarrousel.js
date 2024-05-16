@@ -12,7 +12,6 @@ const { height, width } = Dimensions.get('screen');
 
 
 const matchesCarrousel = () => {
-    console.log(width)
     const DATA = [
         {
           player1: "Emiliano",
@@ -53,7 +52,6 @@ const matchesCarrousel = () => {
     ];
 
     const openMatches = (item) => {
-        console.log(item)
         return(
             <View style={{padding: 15, backgroundColor: '#fff', borderRadius: 8, flex: 1, width: width * 0.78, marginLeft: 20}}>
                

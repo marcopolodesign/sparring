@@ -1,14 +1,20 @@
 import React from 'react'
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { useSelector } from 'react-redux';
+import {Link} from 'expo-router'
+import MapView, { AnimatedRegion, Animated, Marker } from 'react-native-maps';
 import { LinearGradient } from 'expo-linear-gradient';
+import { Dimensions, Image, Text } from 'react-native';
+const { height, width } = Dimensions.get('screen');
 
+
+import profile from '../../assets/images/profile-pic.jpg'
 
 import { StyleSheet, View } from 'react-native';
 import {Generals, Colors} from '../constants.js'
 import { Heading } from '../styled-components.js';
 
 
-const MapCard = () => {
+const MapCard = ({...props}) => {
 
     const mapviewRef = React.useRef(null);
     const mapStyles = [
@@ -171,32 +177,74 @@ const MapCard = () => {
           ]
         }
       ]
-    
-    return (
-        <View style={[styles.container, {borderRadius: Generals.borderRadius, overflow: 'hidden'}]}>
+      
+    console.log(profile)
+    const user = useSelector(state => state.user);
+    console.log(user, "user")
 
-            <LinearGradient
-            // Background Linear Gradient
-            locations={[0.5, 1]}
-            colors={['#FFF', '#rgba(255, 255, 255, 0.00)']}
-            style={{width: '100%', position: 'absolute', zIndex: 1, top: 0, left: 0, right: 0, justifyContent: 'center', alignItems: 'start', paddingHorizontal: 35, paddingTop: 35, paddingBottom: 80}}
-            >
-                <Heading color={Colors.darkGreen}>Mapa</Heading>
-            </LinearGradient>
-                <MapView 
-                style={styles.map}
-                // minZoomLevel={0.4}
-                ref={mapviewRef}
-                loadingEnabled
-                // provider = { PROVIDER_GOOGLE }
-                customMapStyle={mapStyles}
-                />
-        </View>
+    if (!user) {
+      return null; // or a loading indicator
+    }
+
+    console.log(user.avatarUrl.toString(), 'avatarUrl')
+
+    return (
+      <View style={[styles.container, {borderRadius: Generals.borderRadius, overflow: 'hidden'}]}>
+
+        <LinearGradient
+        // Background Linear Gradient
+        locations={[0.5, 1]}
+        colors={['#FFF', '#rgba(255, 255, 255, 0.00)']}
+        style={{width: '100%', position: 'absolute', zIndex: 1, top: 0, left: 0, right: 0, justifyContent: 'center', alignItems: 'start', paddingHorizontal: 35, paddingTop: 35, paddingBottom: 80, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}
+        >
+          <Heading color={Colors.darkGreen}>Mapa</Heading>
+          <Link href={props.href}>
+            <Text>Pantalla compelta</Text>
+          </Link>
+        </LinearGradient>
+
+
+          <MapView 
+          style={{flex: 1, height: 400}}
+          // cameraZoomRange={4}
+          ref={mapviewRef}
+          loadingEnabled
+          scrollEnabled={props.enableScroll}
+          zoomEnabled={true}
+          showsUserLocation = {true}
+          showsIndoors={false}
+          showsPointsOfInterest={false}
+          showsMyLocationButton={false}
+
+          initialRegion={{
+            latitude: -34.4407708,
+            longitude: -58.7809332,
+            latitudeDelta: 0.00922,
+            longitudeDelta: (width / height) * 0.00922,
+          }}
+          // provider = { PROVIDER_GOOGLE }
+          // customMapStyle={mapStyles}
+          >
+
+          <Marker
+            coordinate={{
+            latitude: -34.4407708,
+            longitude: -58.7809332,
+            }}> 
+            <View style={styles.circle}>
+            <Image
+            source={profile}
+            style={styles.circle}
+            />
+          </View>
+          </Marker>
+            </MapView>
+      </View>
 
     )
 
 
-   
+
 }
 
 export default MapCard;
@@ -215,5 +263,15 @@ const styles = StyleSheet.create({
   gradient: {
     backgroundColor: 'rgba(255, 255, 255, 0)',
      backgroundImage: 'background: linear-gradient(0deg, rgba(255, 255, 255, 0.00) 16.98%, #FFF 67.92%);'
-  }
+  },
+  circle: {
+    width: 45,
+    height: 45,
+    borderRadius: 30,
+    // backgroundColor: 'red',
+    borderWidth: 3,
+    borderColor: Colors.darkGreen,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
