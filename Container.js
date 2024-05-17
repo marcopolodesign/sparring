@@ -31,15 +31,23 @@ const ScreenContainer = ({children, ...props}) => {
    
 
   return (
+    <>
+    {!props.safeArea ? (
     <SafeAreaProvider style={{backgroundColor: props.bgColor, flex: 1, marginBottom: -insets.bottom, marginTop: -insets.top}}> 
-    <SafeAreaView>
- 
-        <ContentContainer bgColor={props.bgColor} style={{marginBottom: insets.bottom, marginTop: insets.top, fontFamily: 'TT Interphases Pro'}}>
+     { console.log("safearea")}
+        <SafeAreaView>
+          <ContentContainer bgColor={props.bgColor} style={{marginBottom: insets.bottom, marginTop: insets.top, fontFamily: 'TT Interphases Pro'}}>
             {children}
-        </ContentContainer>
-
+          </ContentContainer>
         </SafeAreaView>
-    </SafeAreaProvider>
+        </SafeAreaProvider>
+      ) : (
+        <ContentContainer bgColor={props.bgColor} style={{fontFamily: 'TT Interphases Pro'}}>
+          {children}
+        </ContentContainer>
+      )}
+   
+    </>
   )
 }
 

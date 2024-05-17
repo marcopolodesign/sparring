@@ -178,9 +178,7 @@ const MapCard = ({...props}) => {
         }
       ]
       
-    console.log(profile)
     const user = useSelector(state => state.user);
-    console.log(user, "user")
 
     if (!user) {
       return null; // or a loading indicator
@@ -195,9 +193,9 @@ const MapCard = ({...props}) => {
         // Background Linear Gradient
         locations={[0.5, 1]}
         colors={['#FFF', '#rgba(255, 255, 255, 0.00)']}
-        style={{width: '100%', position: 'absolute', zIndex: 1, top: 0, left: 0, right: 0, justifyContent: 'center', alignItems: 'start', paddingHorizontal: 35, paddingTop: 35, paddingBottom: 80, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}
+        style={{width: '100%', position: 'absolute', zIndex: 1, top: 0, left: 0, right: 0, justifyContent: 'center', alignItems: 'start', paddingHorizontal: 25, paddingTop: 35, paddingBottom: 80, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}
         >
-          <Heading color={Colors.darkGreen}>Mapa</Heading>
+          <Heading color={Colors.darkGreen}>Explorar Mapa</Heading>
           <Link href={props.href}>
             <Text>Pantalla compelta</Text>
           </Link>

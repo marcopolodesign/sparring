@@ -1,11 +1,11 @@
 import styled from 'styled-components/native';
 import { Dimensions } from 'react-native';
 const { height } = Dimensions.get('screen');
+import {Colors} from './constants.js'
 const {width} = Dimensions.get('window');
 
 // const {height : heightWindow} = Dimensions.get('window');
 // import Colors  from './constants'
-
 // Views
 export const ContentContainer = styled.View`
   flex: 1;
@@ -56,6 +56,19 @@ export const Text = styled.Text`
   color: ${({ color }) => color || "#fff"};
   line-height: 22px;
 `;
+
+// INPUTS
+
+export const Input = styled.TextInput`
+padding: 15px 20px;
+border: 1px solid ${Colors.lightGrey};
+fontFamily: "TT Interphases Pro";
+font-size: ${({ size }) => size || "16px"};
+font-style: normal;
+font-weight: 400;
+border-radius: 8px;
+color: ${Colors.textGrey};
+`
 
 
 export const Button = styled.TouchableOpacity`

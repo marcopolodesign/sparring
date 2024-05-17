@@ -1,13 +1,15 @@
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { View, Text, TouchableOpacity, ImageBackground } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import { Link } from 'expo-router';
-import { Heading, SubHeading } from '../components/styled-components.js'
+import { Heading, SubHeading, Button } from '../components/styled-components.js'
 import { Colors } from '../../src/components/constants.js'
 
 
 import Container from '../../Container.js'
 import PageHeader from '../../src/components/header/page-header.js'
-import MainButton from '../components/button.js'
+import MainButton from '../../src/components/button.js'
 import Whapp from '../assets/icons/whapp.js'
 
 import profile from '../assets/images/profile-pic.jpg'
@@ -17,7 +19,15 @@ import profile from '../assets/images/profile-pic.jpg'
 
 const Profile = () => {
         const user = useSelector(state => state.user)
-        console.log(user)
+
+        const dispatch = useDispatch();
+
+        const handleLogout = async () => {
+          await AsyncStorage.removeItem('jwt');
+          dispatch({ type: 'LOGOUT' });
+        };
+
+
 return (
     <Container bgColor={Colors.primaryGreen}>
         <PageHeader />
@@ -35,10 +45,15 @@ return (
                     <Whapp />
                 </View>
 
+                <View style={{marginTop: 20, flexDirection: 'row'}}>
+                <MainButton ctaText="Logout" onPress={handleLogout} bgColor={Colors.darkGreen} color={Colors.primaryGreen} willFlex={0}/>
+                </View>
             </View>
+
+            
         </View>
     </Container>
-)
+)   
 }
 
 export default Profile;

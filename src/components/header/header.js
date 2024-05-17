@@ -17,7 +17,7 @@ const Header = () => {
         <Notification />
 
 
-        <Link href="/profile" asChild>
+        <Link href="(tabs)/profile" asChild>
           <TouchableOpacity onPress={() => {console.log('navigate')}}>
           <ImageBackground source={profile} style={{width: 38, height: 38, borderRadius: 100, borderWidth: 2, borderColor: '#fff', overflow: 'hidden'}} 
           onPress={() => {console.log('navigate')}}>

@@ -1,7 +1,7 @@
 import React, {useRef} from 'react'
 import {View, ScrollView, FlatList} from 'react-native';
 import {Colors} from '../components/constants.js';
-import { Heading, Text, ViewJustifyCenter, Span } from '../components/styled-components.js';
+import { Heading, Text, ViewJustifyCenter, Span, SubHeading } from '../components/styled-components.js';
 import { Dimensions } from 'react-native';
 import PaddleRaquet from '../assets/icons/paddle-raquet.js';
 import PhotoMin from './photo-min.js';
@@ -13,7 +13,7 @@ import * as Haptics from 'expo-haptics';
 
 
 
-const matchesCarrousel = () => {
+const coachesCarrousel = () => {
     const DATA = [
         {
           player1: "Emiliano",
@@ -55,24 +55,17 @@ const matchesCarrousel = () => {
 
     const openMatches = (item) => {
         return(
-            <View style={{padding: 15, backgroundColor: '#fff', borderRadius: 8, flex: 1, width: width * 0.78, marginLeft: 20}}>
+            <View style={{padding: 15, backgroundColor: '#fff', borderRadius: 8, flex: 1, width: width * 0.78, marginLeft: 20, height: 200}}>
                
                 <ViewJustifyCenter>
-                    <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
-                        <PaddleRaquet />
-                        <Text size={'18px'} color={'black'}>Paddel</Text>
-                    </View>
-                    <Text size={'18px'} color={'#A8A8A8'}>Mañana, 14:30 — 16:00</Text>
+                    <PaddleRaquet />                      
                 </ViewJustifyCenter>
 
-                <Span bgColor={Colors.lightGrey}/>
        
-                <ViewJustifyCenter>
-                        <Players player1={item.player1} player2={item.player2} />
-                        <Text style={{padding: 5, backgroundColor: Colors.lightGrey, color: Colors.darkGreen}}>VS</Text>
-                        <SignUp />
-                        {/* <Players player1={item.player3} player2={item.player4} /> */}
-                </ViewJustifyCenter>
+                <View style={{marginTop: 25}}>
+                    <Text size={'22px'} color={Colors.darkGreen} weight={'bold'}>{item.player1} Lopez</Text>
+                    <SubHeading size={'14px'} color={Colors.textGrey} weight={'bold'}>Doy clases hace más de 10 años a adultos, niños y adolescentes desde nivel inicial hasta avanzado</SubHeading>
+                </View>
                 
             </View>
         )
@@ -100,13 +93,13 @@ const matchesCarrousel = () => {
             renderItem={({ item }) =>
             openMatches(item)
         }
-            estimatedItemSize={200}
+            estimatedItemSize={400}
         />
     </View>
   )
 }
 
 
-export default matchesCarrousel;
+export default coachesCarrousel;
 
 

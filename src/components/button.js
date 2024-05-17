@@ -3,10 +3,7 @@ import {Text, Image} from 'react-native'
 import {Button} from './styled-components.js'
 import Add from '../assets/icons/add.js'
 
-const MainButton = ({...props}) => {
-    console.log({...props})
-
-  
+const MainButton = ({...props}) => {  
   return (
     <Button onPress={props.onPress} bgColor={props.bgColor} willFlex={props.willFlex} style={{flexDirection: 'row', gap: 10, justifyContent: 'center'}}>
         {props.icon && (

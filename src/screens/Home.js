@@ -6,6 +6,8 @@ import { FlashList } from "@shopify/flash-list";
 const { height } = Dimensions.get('screen');
 
 import NearbyMatches from '../components/matchesCarrousel.js'
+import NearbyCoaches from '../components/coachesCarrousel.js'
+
 
 import * as Haptics from 'expo-haptics';
 
@@ -83,8 +85,8 @@ const Home = ({...props}) => {
 
         <MapCard href={'map'} enableScroll={false}/>
 
-        <View style={{marginTop: 40}}>
-          <Heading color={"#fff"}>Jugar ahoraaa</Heading>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: "flex-end", marginTop: 40}}>
+          <Heading color={"#fff"}>Buscar Profesores</Heading>
           <TouchableOpacity onPress={() => {
             sheetRef.current.expand()
             setBottomUpProps({
@@ -93,24 +95,21 @@ const Home = ({...props}) => {
               buttonTitle: 'Invitar amigos a la reserva',
               onPress: () => {
                 Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-               
               },
               loading: false,
             });
-          }
-          
-         
-
-          }>
-            <Text color={'#fff'} size={'14px'}>Ver partidos por Zona Norte</Text>
+            }}>
+            <Text color={'#fff'}>Ver todos</Text>
           </TouchableOpacity>
         </View>
 
-          <NearbyMatches />
+        <NearbyCoaches />
+
+
+       <View style={{marginBottom: 250}}></View>
+    
   
-          <View style={{flexDirection: 'row', marginTop: 20, marginBottom: 250, alignItems: 'center', gap: 20, justifyContent: "space-between"}}>
-            <MainButton bgColor={Colors.primaryGreen} ctaText={"Crear Partido"} color={Colors.darkGreen} icon={'Add'} />
-          </View>
+      
         </ScrollView>
 
          
