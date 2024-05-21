@@ -31,7 +31,7 @@ export const ContentContainer = styled.View`
 
 export const Heading = styled.Text`
   fontFamily: "Thunder";
-  fontSize: 38px;
+  fontSize: ${({ size }) => (size?+ "px" : "38px")};
   fontStyle: "normal";
   fontWeight: 700;
   textTransform: uppercase;
@@ -41,44 +41,49 @@ export const Heading = styled.Text`
 
 export const SubHeading = styled.Text`
   fontFamily: "TT Interphases Pro";
-  font-size: 19.5px;
+  font-size: ${({ size }) => (size ? size + "px" : "19.5px")};
   font-style: normal;
   font-weight: 400;  fontStyle: "normal";
   color: ${({ color }) => color || "#fff"};
-  line-height: 27.5px;
+  line-height: ${({ size }) => size * 1.5 + "px" || '27.5px'};
 `;
 
 export const Text = styled.Text`
   fontFamily: "TT Interphases Pro";
-  font-size: ${({ size }) => size || "16px"};
+  font-size: ${({ size }) => (size?+ "px" : "16px")};
   font-style: normal;
   font-weight: 400;
   color: ${({ color }) => color || "#fff"};
-  line-height: 22px;
+  line-height: ${({ size }) => size * 1.5  + "px" || '22px'};
 `;
 
 // INPUTS
 
 export const Input = styled.TextInput`
 padding: 15px 20px;
-border: 1px solid ${Colors.lightGrey};
 fontFamily: "TT Interphases Pro";
-font-size: ${({ size }) => size || "16px"};
+font-size: ${({ size }) => (size?+ "px" : "18px")};
 font-style: normal;
-font-weight: 400;
+font-weight: 600;
 border-radius: 8px;
 color: ${Colors.textGrey};
+backgroundColor : ${({ bgColor }) => (bgColor ? bgColor : '#fff')};
 `
-
 
 export const Button = styled.TouchableOpacity`
   background-color: ${({ bgColor }) => bgColor || Colors.primaryGreen};
   padding: 15px 20px;
   border-radius: 100px;
   align-items: center;
-  flex: ${({ willFlex }) => willFlex || 1};
 `;
 
+export const ButtonFlex = styled.TouchableOpacity`
+  background-color: ${({ bgColor }) => bgColor || Colors.primaryGreen};
+  padding: 15px 20px;
+  border-radius: 100px;
+  align-items: center;
+  flex: ${({ willFlex }) =>  (willFlex ? 'willFlex' :  1)};
+`;
 
 // Components
 export const BackArrow = styled.View`

@@ -16,11 +16,17 @@ export const Generals = {
 }
 
 export const Fonts = {
-    heading : {
-        fontFamily : "Thunder",
-        fontSize: 34,
-        fontStyle: "normal",
-        fontWeight: 700,
-        textTransform: "uppercase",
+    // heading : {
+    //     fontFamily : "Thunder",
+    //     fontSize: 34,
+    //     fontStyle: "normal",
+    //     fontWeight: 700,
+    //     textTransform: "uppercase",
+    // },
+    interphrases : {
+        fontFamily : "TT Interphases Pro",
+    },
+    interphrasesBold : {
+        fontFamily : "TT Interphases Pro Demi Bold",
     }
 }

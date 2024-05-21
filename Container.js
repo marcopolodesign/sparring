@@ -34,7 +34,6 @@ const ScreenContainer = ({children, ...props}) => {
     <>
     {!props.safeArea ? (
     <SafeAreaProvider style={{backgroundColor: props.bgColor, flex: 1, marginBottom: -insets.bottom, marginTop: -insets.top}}> 
-     { console.log("safearea")}
         <SafeAreaView>
           <ContentContainer bgColor={props.bgColor} style={{marginBottom: insets.bottom, marginTop: insets.top, fontFamily: 'TT Interphases Pro'}}>
             {children}

@@ -3,11 +3,12 @@ import { useState, useEffect } from 'react';
 import {  StyleSheet, Text, View, StatusBar, StatusBarIOS } from 'react-native';
 import {Stack} from 'expo-router'
 
-import {Colors} from '../../../src/components/constants.js'
-import Container from '../../../Container.js'
+import {Colors} from '../../src/components/constants.js'
+import Container from '../../Container.js'
 
 
-import Home from '../../../src/screens/Home.js';
+import Home from '../../src/screens/Home.js';
+
 
 
 export default function App() {

@@ -10,6 +10,13 @@ import profile from '../../assets/images/profile-pic.jpg'
 const Header = () => {
 
   const user = useSelector(state => state.user)
+  const backUrl = useSelector(state => state.apiUrl)
+
+  // console.log(user, 'full user')
+  // console.log(user.profilePicture.formats.thumbnail.url, 'user profile picture') 
+
+  // console.log(backUrl + user.profilePicture.formats.thumbnail.url, 'full url')
+
   return (
     <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
       <Logo />
@@ -17,9 +24,9 @@ const Header = () => {
         <Notification />
 
 
-        <Link href="(tabs)/profile" asChild>
+        <Link href="(home)/profile" asChild>
           <TouchableOpacity onPress={() => {console.log('navigate')}}>
-          <ImageBackground source={profile} style={{width: 38, height: 38, borderRadius: 100, borderWidth: 2, borderColor: '#fff', overflow: 'hidden'}} 
+          <ImageBackground source={{uri: backUrl + user.profilePicture.formats.thumbnail.url}} style={{width: 38, height: 38, borderRadius: 100, borderWidth: 2, borderColor: '#fff', overflow: 'hidden'}} 
           onPress={() => {console.log('navigate')}}>
           </ImageBackground>
           </TouchableOpacity>

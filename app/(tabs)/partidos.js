@@ -8,7 +8,7 @@ import Container from '../../Container.js'
 
 
 import Profile from '../../src/screens/Profile.js';
-import MapCard from '../../src/components/home/MapCard';
+import MapCard from '../../src/components/home/MapCard.js';
 
 export default function Map({...props}) {
 
@@ -16,7 +16,7 @@ export default function Map({...props}) {
   return (
     <Container bgColor={Colors.darkGreen}>
       <Stack.Screen options={{headerShown: false}} title="Partidos"/>
-       <MapCard href={'/'} enableScroll={true}/>
+       <MapCard href={'(tabs)'} enableScroll={true}/>
     </Container>
   );
 }

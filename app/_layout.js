@@ -3,16 +3,22 @@ import { View, Text } from 'react-native';
 import { Stack } from 'expo-router';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createStore } from 'redux';
 import { useSelector, Provider, useDispatch } from 'react-redux';
 
-import Home from '../src/screens/Home.js';
-import User from '../api/test-user.json';
 import Coach from '../api/test-coach.json';
-import Login from '../app/log-in.js';
 
-const initialState = { user: null, counter: 0, coach: null, isAuthenticated: false };
+const IP = '192.168.68.109';
+const backUrl = `http://${IP}:1337`;
+
+const initialState = {
+  user: null,
+  counter: 0,
+  coach: null,
+  isAuthenticated: false,
+  apiUrl: backUrl,
+};
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -23,7 +29,9 @@ const reducer = (state = initialState, action) => {
     case 'SET_COACH':
       return { ...state, coach: action.payload };
     case 'LOGOUT':
-      return { ...state, user: null, coach: null, isAuthenticated: false };
+      return { ...state, isAuthenticated: false };
+    case 'CHANGE_BACK_URL':
+      return { ...state, apiUrl: action.payload };
     default:
       return state;
   }
@@ -38,42 +46,60 @@ const App = ({ children, ...props }) => {
 
   useEffect(() => {
     const checkLoginStatus = async () => {
-      const token = await AsyncStorage.getItem('jwt');
-      console.log(token)
-      if (token) {
-        // Assuming you have a method to verify the token and fetch user data
-        dispatch({ type: 'SET_USER', payload: User }); // Replace with actual user data fetching logic
-        dispatch({ type: 'SET_COACH', payload: Coach }); // Replace with actual coach data fetching logic
-        console.log('User is authenticated');
+      try {
+        const user = await AsyncStorage.getItem('user');
+        if (user) {
+          console.log('user from asyncstorage', user);
+          dispatch({ type: 'SET_USER', payload: JSON.parse(user) });
+          dispatch({ type: 'SET_COACH', payload: Coach });
+        }
+      } catch (error) {
+        console.error('Error checking login status:', error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     checkLoginStatus();
-  }, []);
+  }, [dispatch]);
 
   if (loading) {
     return (
-      <View>
-        <Text>Loading...</Text>
+      <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center' }}>
+        <Text style={{ color: '#000' }}>Loading...</Text>
       </View>
     );
-  }
+  } else {
 
   return (
     <SafeAreaProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
         {isAuthenticated ? (
-          <Stack screenOptions={{ animation: 'fade', animationDuration: 250 }}>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          </Stack>
+          <>
+            {console.log('User is authenticated!!!')}
+            <Stack screenOptions={{ animation: 'fade', animationDuration: 250 }}>
+              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            </Stack>
+          </>
         ) : (
-            
-          <Login />
+          <>
+            {console.log('User is NOTTTT authenticated!!!')}
+          <Stack
+            screenOptions={{
+              // animation: 'movein',
+              animationDuration: 250,
+              headerShown: false,
+            }}
+          >
+            <Stack.Screen name="(login)/index" options={{ headerShown: false }} />
+            <Stack.Screen name="(login)/onboarding" options={{ headerShown: false }} />
+          </Stack>
+          </>
         )}
       </GestureHandlerRootView>
     </SafeAreaProvider>
   );
+}
 };
 
 const _layout = (props) => (

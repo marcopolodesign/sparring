@@ -8,7 +8,7 @@ import Container from '../../Container.js'
 
 
 import Profile from '../../src/screens/Profile.js';
-import MapCard from '../../src/components/home/MapCard';
+import MapCard from '../../src/components/home/MapCard.js';
 
 export default function Map({...props}) {
 

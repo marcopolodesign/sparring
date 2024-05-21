@@ -14,7 +14,7 @@ export default function TabLayout() {
       tabBarActiveTintColor: Colors.darkGreen
       }}>
       <Tabs.Screen
-        name="(home)/index"
+        name="index"
         options={{
           title: 'Home',
           tabBarIcon: ({ color }) => <HomeIcon color={color} />,

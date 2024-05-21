@@ -15,6 +15,7 @@ import Header from '../components/header/header.js'
 import BottomUp from '../components/BottomUp.js'
 import MainButton from '../components/button.js';
 import MapCard from '../components/home/MapCard.js';
+import Share from '../components/share.js';
 
 
 
@@ -29,11 +30,7 @@ const Home = ({...props}) => {
     loading: false,
   });
 
-
-  useEffect(() => {
-    console.log(bottomUpProps)
-  })
-
+  
   return (
     <>
     <View style={{paddingHorizontal: 20, paddingBottom: 20}}>
@@ -83,7 +80,7 @@ const Home = ({...props}) => {
           </View>
         
 
-        <MapCard href={'map'} enableScroll={false}/>
+        <MapCard href={'partidos'} enableScroll={false}/>
 
         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: "flex-end", marginTop: 40}}>
           <Heading color={"#fff"}>Buscar Profesores</Heading>
@@ -104,6 +101,8 @@ const Home = ({...props}) => {
         </View>
 
         <NearbyCoaches />
+
+        <Share />
 
 
        <View style={{marginBottom: 250}}></View>

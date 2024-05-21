@@ -178,13 +178,15 @@ const MapCard = ({...props}) => {
         }
       ]
       
-    const user = useSelector(state => state.user);
+      const user = useSelector(state => state.user)
+      const backUrl = useSelector(state => state.apiUrl)
+
 
     if (!user) {
       return null; // or a loading indicator
     }
 
-    console.log(user.avatarUrl.toString(), 'avatarUrl')
+    // console.log(user.avatarUrl.toString(), 'avatarUrl')
 
     return (
       <View style={[styles.container, {borderRadius: Generals.borderRadius, overflow: 'hidden'}]}>
@@ -231,7 +233,7 @@ const MapCard = ({...props}) => {
             }}> 
             <View style={styles.circle}>
             <Image
-            source={profile}
+            source={{uri: backUrl + user.profilePicture.formats.thumbnail.url}}
             style={styles.circle}
             />
           </View>
