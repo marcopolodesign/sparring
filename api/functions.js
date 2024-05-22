@@ -3,8 +3,8 @@ import axios from 'axios';
 // const API_BASE_URL = 'http://localhost:1337/api';
 
 
-const IP = '192.168.68.109';
-// const backUrl = 'http://localhost:1337';
+// const IP = '192.168.68.109';
+const IP = 'localhost';
 const API_BASE_URL = `http://${IP}:1337/api`;
 
 const token ='58b4f9b4afa1d92431de203407891f20eacf0fbdb7a42a3bf989186404b4d9b47fd5fa11a0a0f7e6a9535e0d70e4b38d6a91e3c7d5133388c6f8ff1b9a10d207693a4bfe58a7790d95a4e1a6464fe13cfcf0c68b53bca6f8da6a6e4d2abe6032370143e94137e4f1b71dcb2c06af3d94dc2dd43be8ea8b333f0a223c6f46376e'

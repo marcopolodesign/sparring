@@ -9,7 +9,8 @@ import { useSelector, Provider, useDispatch } from 'react-redux';
 
 import Coach from '../api/test-coach.json';
 
-const IP = '192.168.68.109';
+// const IP = '192.168.68.109';
+const IP = 'localhost';
 const backUrl = `http://${IP}:1337`;
 
 const initialState = {
@@ -84,15 +85,8 @@ const App = ({ children, ...props }) => {
         ) : (
           <>
             {console.log('User is NOTTTT authenticated!!!')}
-          <Stack
-            screenOptions={{
-              // animation: 'movein',
-              animationDuration: 250,
-              headerShown: false,
-            }}
-          >
-            <Stack.Screen name="(login)/index" options={{ headerShown: false }} />
-            <Stack.Screen name="(login)/onboarding" options={{ headerShown: false }} />
+          <Stack>
+            <Stack.Screen options={{headerShow: false}} name="(login)" />
           </Stack>
           </>
         )}

@@ -58,7 +58,7 @@ const Login = () => {
       keyboardVerticalOffset={Platform.OS == 'ios' ? -64 : 0}  
       >
 
-      <Stack.Screen options={{headerShown: false}} title="index"/>
+      <Stack.Screen options={{headerShown: false}} title="Home"/>
 
       <Container safeArea={'test'} bgColor={Colors.darkGreen}>
         

@@ -27,7 +27,7 @@ const Profile = () => {
     const handleLogout = async () => {
         await AsyncStorage.removeItem('jwt');
         dispatch({ type: 'LOGOUT' });
-        router.replace('(login)')
+        router.replace('(login)/landing')
     };
 
 
