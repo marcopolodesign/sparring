@@ -7,7 +7,6 @@ export default function Login() {
 
     <Stack
     screenOptions={{
-      // animation: 'movein',
       animationDuration: 250,
       headerShown: false,
     }}

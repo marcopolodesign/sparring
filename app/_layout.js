@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text } from 'react-native';
-import { Stack } from 'expo-router';
+import { Stack,  SplashScreen } from 'expo-router';
+// import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createStore } from 'redux';
 import { useSelector, Provider, useDispatch } from 'react-redux';
+
+import {useFonts} from 'expo-font'
 
 import Coach from '../api/test-coach.json';
 
@@ -46,6 +49,7 @@ const App = ({ children, ...props }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
+    console.log('checking')
     const checkLoginStatus = async () => {
       try {
         const user = await AsyncStorage.getItem('user');
@@ -75,21 +79,11 @@ const App = ({ children, ...props }) => {
   return (
     <SafeAreaProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
-        {isAuthenticated ? (
-          <>
-            {console.log('User is authenticated!!!')}
-            <Stack screenOptions={{ animation: 'fade', animationDuration: 250 }}>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            </Stack>
-          </>
-        ) : (
-          <>
-            {console.log('User is NOTTTT authenticated!!!')}
-          <Stack>
-            <Stack.Screen options={{headerShow: false}} name="(login)" />
+        
+          <Stack screenOptions={{ animation: 'fade', animationDuration: 250 }}>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen options={{headerShown: false}} name="(login)" />
           </Stack>
-          </>
-        )}
       </GestureHandlerRootView>
     </SafeAreaProvider>
   );
