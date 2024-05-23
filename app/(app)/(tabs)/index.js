@@ -1,15 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
-import {useSession} from '../../../api/ctx'
-
-// import {  StyleSheet, Text, View, StatusBar, StatusBarIOS } from 'react-native';
+import { useSelector } from 'react-redux';
 import {Stack} from 'expo-router'
-
 import Container from '../../../Container.js'
 
 import { StyleSheet, View, StatusBar, FlatList, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
 import {Colors} from '../../../src/components/constants.js'
 import { Heading, Text } from '../../../src/components/styled-components.js';
-import { FlashList } from "@shopify/flash-list";
 const { height } = Dimensions.get('screen');
 
 import NearbyMatches from '../../../src/components/matchesCarrousel.js'
@@ -21,7 +17,7 @@ import * as Haptics from 'expo-haptics';
 import Header from '../../../src/components/header/header.js'
 import BottomUp from '../../../src/components/BottomUp.js'
 import MainButton from '../../../src/components/button.js';
-// import MapCard from '../../../src/components/home/MapCard.js';
+import MapCard from '../../../src/components/home/MapCard.js';
 import Share from '../../../src/components/share.js';
 
 
@@ -30,7 +26,11 @@ import Share from '../../../src/components/share.js';
 
  const App = ({...props}) => {
 
-  const { signOut } = useSession();
+  const session = useSelector(state => state.session);
+  const user = JSON.parse(session);
+  const backUrl = useSelector(state => state.backUrl);
+
+
   const sheetRef = useRef(null);
 
   const [bottomUpProps, setBottomUpProps] = useState({
@@ -49,7 +49,7 @@ import Share from '../../../src/components/share.js';
         <>
         <View style={{paddingHorizontal: 20, paddingBottom: 20}}>
         <StatusBar barStyle="light-content" />
-        <Header />
+        <Header user={user} backUrl={backUrl} />
         <StatusBar style="auto" />
     </View>
       <ScrollView style={{minHeight: height, paddingHorizontal: 20, paddingTop: 30, flex: 1, paddingBottom: 100}}>
@@ -57,8 +57,7 @@ import Share from '../../../src/components/share.js';
         <View>
           <Heading color={"#fff"}>Jugar ahora</Heading>
           <TouchableOpacity onPress={() => {
-            // sheetRef.current.expand()
-            signOut()
+            sheetRef.current.expand()
             setBottomUpProps({
               title: 'CANCHA RESERVADA CORRECTAMENTE!',
               paragraph: 'PPT Pilar - Cancha 1 • 9:00 — 10:00',
@@ -94,8 +93,8 @@ import Share from '../../../src/components/share.js';
             bgColor={Colors.primaryGreen} ctaText={"Crear Partido"} color={Colors.darkGreen} icon={'Add'} />
           </View>
         
+          <MapCard href={'partidos'} enableScroll={false}/>
 
-        {/* <MapCard href={'partidos'} enableScroll={false}/> */}
 
         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: "flex-end", marginTop: 40}}>
           <Heading color={"#fff"}>Buscar Profesores</Heading>
@@ -126,16 +125,16 @@ import Share from '../../../src/components/share.js';
       
         </ScrollView>
 
-{/*          
+         
         <BottomUp
           {...bottomUpProps}
           sheetRef={sheetRef}
           
-          // onPress={()=>{
-          //   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-          //   // sheetRef.current.close();
-          // }}
-        /> */}
+          onPress={()=>{
+            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+            sheetRef.current.close();
+          }}
+        />
         </>
      </Container>
   );

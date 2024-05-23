@@ -6,17 +6,12 @@ import Logo from '../../assets/icons/logo.js';
 import Notification from '../../assets/icons/notification.js';
 import { useSelector } from 'react-redux';
 
-const Header = () => {
-  const session = useSelector(state => state.session);
-  const user = JSON.parse(session);
-  const backUrl = useSelector(state => state.backUrl);
-
-// console.log(user['id'])
+const Header = ({user, backUrl}) => {
+ 
   
   // Check if user.profilePicture and its nested properties exist
   const profilePictureUrl = user.profilePicture.formats.thumbnail.url;
 
-  // console.log('Profile Picture URL:', profilePictureUrl);
 
   if (!profilePictureUrl) {
     console.error('Profile picture URL is undefined');
@@ -24,7 +19,6 @@ const Header = () => {
   }
 
   const fullProfilePictureUrl = backUrl + profilePictureUrl;
-  console.log('Full Profile Picture URL:', fullProfilePictureUrl);
 
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>

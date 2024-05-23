@@ -17,7 +17,7 @@ export default ({ config }) => {
       ...config.ios,
       bundleIdentifier:
         'com.testing.developer',
-      googleServicesFile: './GoogleService-Info.plist',
+      // googleServicesFile: './GoogleService-Info.plist',
     },
     version: '1.10.20',
     

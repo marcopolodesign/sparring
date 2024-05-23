@@ -19,7 +19,7 @@
     },
     "ios": {
       "supportsTablet": true,
-      "icon": "./src/assets/icon.png",
+      "icon": "./assets/icon.png",
       "config": {
         "googleMapsApiKey": "AIzaSyBaSN2_IOj7PtMTMGro1BRc5qfL1NP_P0A"
       },

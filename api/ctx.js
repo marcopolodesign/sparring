@@ -7,8 +7,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { PersistGate } from 'redux-persist/integration/react';
 
 const IP = 'localhost';
-const URL = `http://${IP}:1337`;
+// const IP = '10.10.10.168' // RST IP
+// const IP = '192.168.68.109' // home IP
+// const URL = `http://${IP}:1337`;
+const URL = 'https://sea-turtle-app-rkvrr.ondigitalocean.app/api'
 
+console.log('URL:', URL);
 // Initial state
 const initialState = {
   stateUser: null,

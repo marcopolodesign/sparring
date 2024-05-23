@@ -16,7 +16,7 @@
       }
     },
     "beta": {
-      "developmentClient": true,
+      "developmentClient": false,
       "distribution": "store",
       "channel": "development",
       "ios": {

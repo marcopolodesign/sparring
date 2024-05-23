@@ -178,8 +178,9 @@ const MapCard = ({...props}) => {
         }
       ]
       
-      const user = useSelector(state => state.user)
-      const backUrl = useSelector(state => state.apiUrl)
+      const session = useSelector(state => state.session)
+      const user = JSON.parse(session)
+      const backUrl = useSelector(state => state.backUrl)
 
 
     if (!user) {
