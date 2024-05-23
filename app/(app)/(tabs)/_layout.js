@@ -1,12 +1,12 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import {Colors} from '../../src/components/constants.js'
+import {Colors} from '../../../src/components/constants.js'
 
-import HomeIcon from '../../src/assets/icons/home.js'
-import CanchasIcon from '../../src/assets/icons/canchas.js'
-import PartidosIcon from '../../src/assets/icons/partidos.js'
-import ProfesoresIcon from '../../src/assets/icons/profesores.js'
+import HomeIcon from '../../../src/assets/icons/home.js'
+import CanchasIcon from '../../../src/assets/icons/canchas.js'
+import PartidosIcon from '../../../src/assets/icons/partidos.js'
+import ProfesoresIcon from '../../../src/assets/icons/profesores.js'
 
 export default function TabLayout() {
   return (

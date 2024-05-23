@@ -7,22 +7,19 @@ import {Colors} from '../../../src/components/constants.js'
 import Container from '../../../Container.js'
 
 
-import ProfileScreen from '../../../src/screens/Profile.js';
+import Profile from '../../../src/screens/Profile.js';
 
 
-export default function Profile() {
-
-
+export default function Canchas() {
 
   return (
-    <>
-      <Tabs.Screen
-      options={{headerShown: false, href:null}}
-      title="Profile"
-   
-      />
-       <ProfileScreen bgColor={Colors.primaryGreen}/> 
-    </>
+    <Container bgColor={Colors.darkGreen}>
+ 
+        <Tabs.Screen options={{headerShown: false, hrerf: null}} title="Canchas"/>
+          <Profile bgColor={Colors.darkGreen}/> 
+    
+    </Container>
+
   );
 }
 

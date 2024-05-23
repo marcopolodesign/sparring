@@ -3,12 +3,12 @@ import {  StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import {Stack, router, useLocalSearchParams} from 'expo-router'
 import * as ImagePicker from 'expo-image-picker';
 import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
-import {Colors} from '../../src/components/constants.js'
-import Container from '../../Container.js'
-import { Heading, Input, SubHeading } from '../../src/components/styled-components.js';
-import MainButton from '../../src/components/button.js';
-import Upload from '../../src/assets/icons/upload.js';
-import {fetchUser, createUser, uploadProfilePicture} from '../../api/functions.js';
+import {Colors} from '../src/components/constants.js'
+import Container from '../Container.js'
+import { Heading, Input, SubHeading } from '../src/components/styled-components.js';
+import MainButton from '../src/components/button.js';
+import Upload from '../src/assets/icons/upload.js';
+import {fetchUser, createUser, uploadProfilePicture} from '../api/functions.js';
 import { useDispatch } from 'react-redux';
 
 

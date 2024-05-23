@@ -18,16 +18,23 @@ import profile from '../assets/images/profile-pic.jpg'
 
 
 const Profile = () => {
-    const user = useSelector(state => state.user)
-    const backUrl = useSelector(state => state.apiUrl)
+    const session = useSelector(state => state.session);
+    const user = JSON.parse(session);
+    const backUrl = useSelector(state => state.backUrl);
 
+    console.log(user)
+  
+  // console.log(user['id'])
+    
+    // Check if user.profilePicture and its nested properties exist
+    const profilePictureUrl = user.profilePicture.formats.thumbnail.url;
 
     const dispatch = useDispatch();
 
     const handleLogout = async () => {
         await AsyncStorage.removeItem('jwt');
         dispatch({ type: 'LOGOUT' });
-        router.replace('(login)/landing')
+        router.replace('sign-in')
     };
 
 

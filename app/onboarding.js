@@ -4,13 +4,13 @@ import {router} from 'expo-router'
 import {  StyleSheet, Text, View, StatusBar, StatusBarIOS } from 'react-native';
 import {Stack, Tabs} from 'expo-router'
 
-import {Colors} from '../../src/components/constants.js'
-import Container from '../../Container.js'
+import {Colors} from '../src/components/constants.js'
+import Container from '../Container.js'
 
 
-import Profile from '../../src/screens/Profile.js';
-import { Heading, Input } from '../../src/components/styled-components.js';
-import MainButton from '../../src/components/button.js';
+import Profile from '../src/screens/Profile.js';
+import { Heading, Input } from '../src/components/styled-components.js';
+import MainButton from '../src/components/button.js';
 
 
 export default function Onboarding() {

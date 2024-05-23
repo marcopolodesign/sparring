@@ -11,9 +11,9 @@ export default function Login() {
       headerShown: false,
     }}
   >
-    <Stack.Screen name="index" options={{ headerShown: false }} />
+    {/* <Stack.Screen name="index" options={{ headerShown: false }} />
     <Stack.Screen name="onboarding" options={{ headerShown: false }} />
-    <Stack.Screen name="onboarding-sport" options={{ headerShown: false }} />
+    <Stack.Screen name="onboarding-sport" options={{ headerShown: false }} /> */}
   </Stack>
 
   )

@@ -1,26 +1,37 @@
-import React, {useState, useEffect} from 'react'
+import { useState, useEffect, useRef } from 'react';
+import {useSession} from '../../../api/ctx'
+
+// import {  StyleSheet, Text, View, StatusBar, StatusBarIOS } from 'react-native';
+import {Stack} from 'expo-router'
+
+import Container from '../../../Container.js'
+
 import { StyleSheet, View, StatusBar, FlatList, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
-import {Colors} from '../components/constants.js'
-import { Heading, Text } from '../components/styled-components.js';
+import {Colors} from '../../../src/components/constants.js'
+import { Heading, Text } from '../../../src/components/styled-components.js';
 import { FlashList } from "@shopify/flash-list";
 const { height } = Dimensions.get('screen');
 
-import NearbyMatches from '../components/matchesCarrousel.js'
-import NearbyCoaches from '../components/coachesCarrousel.js'
+import NearbyMatches from '../../../src/components/matchesCarrousel.js'
+import NearbyCoaches from '../../../src/components/coachesCarrousel.js'
 
 
 import * as Haptics from 'expo-haptics';
 
-import Header from '../components/header/header.js'
-import BottomUp from '../components/BottomUp.js'
-import MainButton from '../components/button.js';
-import MapCard from '../components/home/MapCard.js';
-import Share from '../components/share.js';
+import Header from '../../../src/components/header/header.js'
+import BottomUp from '../../../src/components/BottomUp.js'
+import MainButton from '../../../src/components/button.js';
+// import MapCard from '../../../src/components/home/MapCard.js';
+import Share from '../../../src/components/share.js';
 
 
 
-const Home = ({...props}) => {
-  const sheetRef = React.useRef(null);
+// import Home from '../Home.js';
+
+ const App = ({...props}) => {
+
+  const { signOut } = useSession();
+  const sheetRef = useRef(null);
 
   const [bottomUpProps, setBottomUpProps] = useState({
     title: '',
@@ -30,10 +41,13 @@ const Home = ({...props}) => {
     loading: false,
   });
 
-  
+
   return (
-    <>
-    <View style={{paddingHorizontal: 20, paddingBottom: 20}}>
+    // <View><Text>Test</Text></View>
+    <Container bgColor={Colors.darkGreen}>
+      <Stack.Screen options={{headerShown: false}} title="Home"/>
+        <>
+        <View style={{paddingHorizontal: 20, paddingBottom: 20}}>
         <StatusBar barStyle="light-content" />
         <Header />
         <StatusBar style="auto" />
@@ -43,7 +57,8 @@ const Home = ({...props}) => {
         <View>
           <Heading color={"#fff"}>Jugar ahora</Heading>
           <TouchableOpacity onPress={() => {
-            sheetRef.current.expand()
+            // sheetRef.current.expand()
+            signOut()
             setBottomUpProps({
               title: 'CANCHA RESERVADA CORRECTAMENTE!',
               paragraph: 'PPT Pilar - Cancha 1 • 9:00 — 10:00',
@@ -80,7 +95,7 @@ const Home = ({...props}) => {
           </View>
         
 
-        <MapCard href={'partidos'} enableScroll={false}/>
+        {/* <MapCard href={'partidos'} enableScroll={false}/> */}
 
         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: "flex-end", marginTop: 40}}>
           <Heading color={"#fff"}>Buscar Profesores</Heading>
@@ -111,7 +126,7 @@ const Home = ({...props}) => {
       
         </ScrollView>
 
-         
+{/*          
         <BottomUp
           {...bottomUpProps}
           sheetRef={sheetRef}
@@ -120,10 +135,18 @@ const Home = ({...props}) => {
           //   Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
           //   // sheetRef.current.close();
           // }}
-        />
+        /> */}
         </>
-  )
+     </Container>
+  );
 }
 
-export default Home;
-
+export default App;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+});

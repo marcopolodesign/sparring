@@ -3,22 +3,20 @@ import { useState, useEffect } from 'react';
 import {  StyleSheet, Text, View, StatusBar, StatusBarIOS } from 'react-native';
 import {Stack} from 'expo-router'
 
-import {Colors} from '../../src/components/constants.js'
-import Container from '../../Container.js'
+import {Colors} from '../../../src/components/constants.js'
+import Container from '../../../Container.js'
 
 
-import Home from '../../src/screens/Home.js';
+import Profile from '../../../src/screens/Profile.js';
+import MapCard from '../../../src/components/home/MapCard.js';
 
-
-
-export default function App() {
-
+export default function Map({...props}) {
 
 
   return (
     <Container bgColor={Colors.darkGreen}>
-      <Stack.Screen options={{headerShown: false}} title="Home"/>
-       <Home bgColor={Colors.darkGreen}/> 
+      <Stack.Screen options={{headerShown: false}} title="Partidos"/>
+       <MapCard href={'(tabs)'} enableScroll={true}/>
     </Container>
   );
 }

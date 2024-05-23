@@ -5,14 +5,18 @@ import { useDispatch } from 'react-redux';
 import {Stack, Link, router} from 'expo-router';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useSharedValue } from 'react-native-reanimated';
 
-import {Colors} from '../../src/components/constants.js'
+import {Colors} from '../src/components/constants.js'
+import BottomSheet, { BottomSheetView, BottomSheetBackdrop } from '@gorhom/bottom-sheet';
 
-import {Input, SubHeading} from '../../src/components/styled-components.js'
-import Container from '../../Container.js'
-import MainButton from '../../src/components/button.js';
-import Icons from '../../src/components/icons.js';
-import { loginUser, fetchUser } from '../../api/functions.js';
+import {Input, SubHeading} from '../src/components/styled-components.js'
+import Container from '../Container.js'
+import User from '../api/test-user.json';
+import MainButton from '../src/components/button.js';
+import Icons from '../src/components/icons.js';
+import { loginUser, fetchUser } from '../api/functions.js';
+
 
 
 const Login = () => {
@@ -54,11 +58,11 @@ const Login = () => {
       keyboardVerticalOffset={Platform.OS == 'ios' ? -64 : 0}  
       >
 
-      <Stack.Screen options={{headerShown: false}} title="index"/>
+      <Stack.Screen options={{headerShown: false}} title="Home"/>
 
       <Container safeArea={'test'} bgColor={Colors.darkGreen}>
         
-        <ImageBackground source={require('../../src/assets/images/log-in-bg.jpg')} style={{flex: 1, resizeMode: "cover", justifyContent: "flex-end"}}>
+        <ImageBackground source={require('../src/assets/images/log-in-bg.jpg')} style={{flex: 1, resizeMode: "cover", justifyContent: "flex-end"}}>
 
 
         <View style={{paddingBottom: 30, paddingTop: 30, paddingHorizontal: 25, backgroundColor: "#fff", borderTopLeftRadius: 40, borderTopRightRadius: 40}}>
