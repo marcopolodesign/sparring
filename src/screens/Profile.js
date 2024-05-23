@@ -33,8 +33,9 @@ const Profile = () => {
 
     const handleLogout = async () => {
         await AsyncStorage.removeItem('jwt');
+        router.replace('/sign-in')
         dispatch({ type: 'LOGOUT' });
-        router.replace('sign-in')
+
     };
 
 
