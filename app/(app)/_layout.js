@@ -2,15 +2,6 @@ import { Redirect, Stack } from 'expo-router';
 import {Text} from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSession } from '../../api/ctx';
-
-import { Tabs } from 'expo-router';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import {Colors} from '../../src/components/constants.js'
-
-import HomeIcon from '../../src/assets/icons/home.js'
-import CanchasIcon from '../../src/assets/icons/canchas.js'
-import PartidosIcon from '../../src/assets/icons/partidos.js'
-import ProfesoresIcon from '../../src/assets/icons/profesores.js'
 import { useEffect } from 'react';
 
 
@@ -21,9 +12,6 @@ export default function AppLayout() {
   // Use useSelector at the top level of the component
   const session = useSelector(state => state.session);
 
-  useEffect(() => {
-    console.log('Session:', session);
-  }, []);
 
   // You can keep the splash screen open, or render a loading screen like we do here.
   if (isLoading) {

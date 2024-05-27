@@ -18,11 +18,14 @@ import profile from '../assets/images/profile-pic.jpg'
 
 
 const Profile = () => {
+    
     const session = useSelector(state => state.session);
     const user = JSON.parse(session);
-    const backUrl = useSelector(state => state.backUrl);
+    // const backUrl = useSelector(state => state.backUrl);
 
+    const backUrl = 'https://sea-turtle-app-rkvrr.ondigitalocean.app'
     console.log(user)
+    console.log(backUrl)
   
   // console.log(user['id'])
     
@@ -33,8 +36,11 @@ const Profile = () => {
 
     const handleLogout = async () => {
         await AsyncStorage.removeItem('jwt');
+        await AsyncStorage.removeItem('user');
+        await AsyncStorage.removeItem('session');
+        // AsyncStorage.clear()
         router.replace('/sign-in')
-        dispatch({ type: 'LOGOUT' });
+        dispatch({ type: 'RESET_STATE' });
 
     };
 
@@ -45,7 +51,7 @@ return (
             <View style={{backgroundColor: "#fff", flex: 1, marginTop: 60, alignItems: 'center', paddingHorizontal: 20}}>
             <View style={{transform: [{translateY: -80}], alignItems: "center"}}>
                 <ImageBackground 
-                    source={{uri: backUrl + user.profilePicture.formats.thumbnail.url}}
+                    source={{uri: backUrl + profilePictureUrl}}
                     style={{width: 180, height: 180, borderRadius: 100, borderWidth: 2, borderColor: '#fff', overflow: 'hidden', marginBottom: 20}} 
                     onPress={() => {console.log('navigate')}}>
                 </ImageBackground>
@@ -56,6 +62,11 @@ return (
                     <MainButton bgColor={Colors.primaryGreen} ctaText={"Agregar a amigos"} color={Colors.darkGreen} icon={'Add'} />
                     <Whapp />
                 </View>
+
+                <Text>TESTING</Text>
+                <Text style={{color: '#000'}}>{profilePictureUrl}</Text>
+                <Text style={{color: '#000'}}>{backUrl}</Text>
+                <Text style={{color: '#000'}}>{backUrl + profilePictureUrl}</Text>
 
                 <View style={{marginTop: 20, flexDirection: 'row'}}>
                     <MainButton ctaText="Logout" onPress={handleLogout} bgColor={Colors.darkGreen} color={Colors.primaryGreen} willFlex={0}/>

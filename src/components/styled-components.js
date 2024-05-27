@@ -1,3 +1,4 @@
+import {Platform} from 'react-native'
 import styled from 'styled-components/native';
 import { Dimensions } from 'react-native';
 const { height } = Dimensions.get('screen');

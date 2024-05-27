@@ -187,7 +187,6 @@ const MapCard = ({...props}) => {
       return null; // or a loading indicator
     }
 
-    // console.log(user.avatarUrl.toString(), 'avatarUrl')
 
     return (
       <View style={[styles.container, {borderRadius: Generals.borderRadius, overflow: 'hidden'}]}>

@@ -32,7 +32,7 @@ import { useSharedValue } from 'react-native-reanimated';
           </View> */}
            
         <BottomSheetView
-              style={{padding: 20, paddingBottom: 80,justifyContent: 'center', alignItems: 'center'}}
+              style={{padding: 20, paddingBottom: 150, justifyContent: 'flex-start', alignItems: 'center'}}
           >
           <View style={{ marginTop: 10, marginBottom: 0 }}>
                 <Heading style={{textAlign: 'center'}}color={Colors.darkGreen}>{props.title}</Heading>

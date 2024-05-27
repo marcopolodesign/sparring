@@ -1,5 +1,5 @@
 import React from 'react'
-import {Text, Image} from 'react-native'
+import {Text, ActivityIndicator} from 'react-native'
 import {Button} from './styled-components.js'
 import {ButtonFlex} from './styled-components.js'
 import Add from '../assets/icons/add.js'
@@ -15,6 +15,9 @@ const MainButton = ({...props}) => {
             )}            
         )}
         <Text style={{color: props.color || '#fff', fontWeight: 700, fontFamily: 'TT Interphases Pro Demi Bold', fontSize: 18}}>{props.ctaText}</Text>
+        {props.isLoading && (
+          <ActivityIndicator size="small" color="#fff" />
+        )}
       </Button>
 
     ) : (
@@ -25,9 +28,14 @@ const MainButton = ({...props}) => {
                 )}            
             )}
             <Text style={{color: props.color || '#fff', fontWeight: 700, fontFamily: 'TT Interphases Pro Demi Bold', fontSize: 18}}>{props.ctaText}</Text>
+            {props.isLoading && (
+              <ActivityIndicator size="small" color="#fff" />
+            )}
         </ButtonFlex>
     )}      
 )
 }
 
 export default MainButton;
+
+

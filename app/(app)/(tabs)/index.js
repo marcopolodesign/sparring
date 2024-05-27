@@ -2,8 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import {Stack} from 'expo-router'
 import Container from '../../../Container.js'
-
 import { StyleSheet, View, StatusBar, FlatList, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
+import { onFaceId } from '../../../api/functions.js';
 import {Colors} from '../../../src/components/constants.js'
 import { Heading, Text } from '../../../src/components/styled-components.js';
 const { height } = Dimensions.get('screen');
@@ -19,16 +19,18 @@ import BottomUp from '../../../src/components/BottomUp.js'
 import MainButton from '../../../src/components/button.js';
 import MapCard from '../../../src/components/home/MapCard.js';
 import Share from '../../../src/components/share.js';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 
 // import Home from '../Home.js';
 
- const App = ({...props}) => {
+ const App =  ({...props}) => {
 
   const session = useSelector(state => state.session);
   const user = JSON.parse(session);
   const backUrl = useSelector(state => state.backUrl);
+  const [hasFaceIDActive, setHasFaceIDActive] = useState(null)
 
 
   const sheetRef = useRef(null);
@@ -41,9 +43,23 @@ import Share from '../../../src/components/share.js';
     loading: false,
   });
 
+  useEffect(() => {
+    async function checkFaceId() {
+      const faceIDStatus = await AsyncStorage.getItem('hasFaceIDSet');
+      setHasFaceIDActive(faceIDStatus);
+      console.log('hasFaceIDActive', faceIDStatus); // This will log the correct value
+
+      if (faceIDStatus !== 'true') {
+        onFaceId(user);
+      }
+    }
+
+    checkFaceId();
+  }, [user, onFaceId]);
+
+
 
   return (
-    // <View><Text>Test</Text></View>
     <Container bgColor={Colors.darkGreen}>
       <Stack.Screen options={{headerShown: false}} title="Home"/>
         <>
@@ -93,7 +109,7 @@ import Share from '../../../src/components/share.js';
             bgColor={Colors.primaryGreen} ctaText={"Crear Partido"} color={Colors.darkGreen} icon={'Add'} />
           </View>
         
-          <MapCard href={'partidos'} enableScroll={false}/>
+          <MapCard user={user} href={'partidos'} enableScroll={false}/>
 
 
         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: "flex-end", marginTop: 40}}>
@@ -149,3 +165,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+
+// {isCompatible ? (
+//   <TouchableOpacity onPress={() => {onFaceId()}}
+//     style={{ paddingHorizontal: 20, paddingVertical: 15, backgroundColor: '#EDEAEA', borderRadius: 8, flexDirection: 'row', justifyContent: 'center', gap: 10, alignItems: 'center', marginBottom: 15 }}
+//   >
+//     <Icons icon='Face Id' color={Colors.darkGreen} />
+//     <SubHeading style={{ textAlign: 'center', fontWeight: 'bold' }} color={Colors.darkGreen}>
+//       Ingresar con Face ID
+//     </SubHeading>
+//   </TouchableOpacity>
+// ) : null}

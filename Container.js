@@ -1,4 +1,5 @@
 import {useEffect} from 'react'
+import {View,TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard,StatusBar, StatusBarIOS, Platform } from 'react-native'
 import {
     SafeAreaView,
     SafeAreaProvider,
@@ -7,7 +8,6 @@ import {
   } from 'react-native-safe-area-context';
   import * as Font from 'expo-font';
 
-  import {useFonts} from 'expo-font'
   
   import {ContentContainer} from './src/components/styled-components.js'
 
@@ -15,38 +15,22 @@ import {
 const ScreenContainer = ({children, ...props}) => {
     const insets = useSafeAreaInsets();
   
-    const fetchFonts = async () => {
-      const fonts = await Font.loadAsync({
-        'Thunder': require('./assets/fonts/Thunder.ttf'),
-        'TT Interphases Pro': require('./assets/fonts/TT_Interphases_Pro_Regular.ttf'),
-        'TT Interphases Pro Demi Bold': require('./assets/fonts/TT_Interphases_Pro_DemiBold.ttf'),
-      });
-      return await Promise.all([fonts]);
-    };
-
-    useEffect(() => {
-      fetchFonts();
-    }, []);
-
-   
-
   return (
     <>
-    {!props.safeArea ? (
-    <SafeAreaProvider style={{backgroundColor: props.bgColor, flex: 1, marginBottom: -insets.bottom, marginTop: -insets.top}}> 
-        <SafeAreaView>
-          <ContentContainer bgColor={props.bgColor} style={{marginBottom: insets.bottom, marginTop: insets.top, fontFamily: 'TT Interphases Pro'}}>
-            {children}
-          </ContentContainer>
-        </SafeAreaView>
-        </SafeAreaProvider>
-      ) : (
-        <ContentContainer bgColor={props.bgColor} style={{fontFamily: 'TT Interphases Pro'}}>
+    {!props.safeArea && (
+      <SafeAreaProvider style={{backgroundColor: props.bgColor, flex: 1, marginBottom: -insets.bottom, marginTop: -insets.top}}> 
+        <SafeAreaView style={{flex: 1}}>
+   
+      
+        <ContentContainer bgColor={props.bgColor} style={{marginBottom: insets.bottom, marginTop: insets.top, fontFamily: 'TT Interphases Pro', flex: 1}}>
           {children}
         </ContentContainer>
-      )}
+
    
-    </>
+        </SafeAreaView>
+      </SafeAreaProvider>
+    )}
+  </>
   )
 }
 

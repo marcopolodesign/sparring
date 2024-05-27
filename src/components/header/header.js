@@ -9,8 +9,9 @@ import { useSelector } from 'react-redux';
 const Header = ({user, backUrl}) => {
  
   
+  // console.log(backUrl, 'BACK URLLLL!!!')
   // Check if user.profilePicture and its nested properties exist
-  const profilePictureUrl = user.profilePicture.formats.thumbnail.url;
+  const profilePictureUrl = user?.profilePicture.formats.thumbnail.url;
 
 
   if (!profilePictureUrl) {
@@ -19,6 +20,7 @@ const Header = ({user, backUrl}) => {
   }
 
   const fullProfilePictureUrl = backUrl + profilePictureUrl;
+  // console.log(fullProfilePictureUrl, 'FULL PROFILE PICTURE URL');
 
   return (
     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>

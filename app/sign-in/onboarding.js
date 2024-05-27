@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
 import {router} from 'expo-router'
 
-import {  StyleSheet, Text, View, StatusBar, StatusBarIOS } from 'react-native';
+import {  StyleSheet, Text, View, TouchableWithoutFeedback, KeyboardAvoidingView, Keyboard,StatusBar, StatusBarIOS, Platform } from 'react-native';
 import {Stack, Tabs} from 'expo-router'
 
-import {Colors} from '../src/components/constants.js'
-import Container from '../Container.js'
+import {Colors} from '../../src/components/constants.js'
+import Container from '../../Container.js'
 
 
-import Profile from '../src/screens/Profile.js';
-import { Heading, Input } from '../src/components/styled-components.js';
-import MainButton from '../src/components/button.js';
+import Profile from '../../src/screens/Profile.js';
+import { Heading, Input } from '../../src/components/styled-components.js';
+import MainButton from '../../src/components/button.js';
 
 
 export default function Onboarding() {
@@ -36,13 +36,22 @@ export default function Onboarding() {
     };
 
     // Navigate to the next screen and pass userDetails
-    router.push({ pathname: 'onboarding-sport', params: userDetails });
+    router.push({ pathname: '/sign-in/onboarding-sport', params: userDetails });
   };
 
 
   return (
-    <Container bgColor={Colors.blue}>
-        <Stack.Screen options={{headerShown: false, hrerf: null}} title="Onboarding"/>
+  
+
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+    <KeyboardAvoidingView
+    behavior={Platform.OS === "ios" ? "padding" : "height"}
+    keyboardVerticalOffset={Platform.OS === "ios" ? -44 : 0}
+    style={{ flex: 1 }}
+      >
+      <View style={{backgroundColor: Colors.blue, flex: 1, justifyContent: 'center'}} bgColor={Colors.blue}>
+        <StatusBar barStyle="light-content" />
+        {/* <Stack.Screen options={{headerShown: true, hrerf: null}} title="Onboarding"/> */}
         <View style={{padding: 20}}>
            <Heading color={'#fff'} style={{marginBottom: 30}}>Bienvenido a la comunidad más grande de jugadores de padel, tenis, y pickleball de Argentina.</Heading>
            <View style={{gap: 15, marginBottom: 30}}>
@@ -56,7 +65,10 @@ export default function Onboarding() {
 
            <MainButton ctaText={"Siguiente"} willFlex={'true'} bgColor={Colors.primaryGreen} color={Colors.blue} onPress={() => handleNext()} />
          </View>
-    </Container>
+    </View>
+    </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
+ 
 
   );
 }

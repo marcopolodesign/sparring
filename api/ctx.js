@@ -6,21 +6,27 @@ import { persistStore, persistReducer } from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { PersistGate } from 'redux-persist/integration/react';
 
-const IP = 'localhost';
-// const IP = '10.10.10.168' // RST IP
-// const IP = '192.168.68.109' // home IP
-// const URL = `http://${IP}:1337`;
-const URL = 'https://sea-turtle-app-rkvrr.ondigitalocean.app/api'
 
-console.log('URL:', URL);
+const IP = 'localhost';
+
+// const serverURL = 'http://localhost:1337'
+const serverURL = 'https://sea-turtle-app-rkvrr.ondigitalocean.app'
+
+
+// console.log('URL:', serverURL);
 // Initial state
 const initialState = {
   stateUser: null,
   session: null,
   isLoading: false,
   counter: 0,
-  backUrl: URL,
+  backUrl: serverURL,
+  hasFaceID: null,
 };
+
+
+
+// AsyncStorage.clear();
 
 // Reducer function
 const reducer = (state = initialState, action) => {
@@ -32,7 +38,11 @@ const reducer = (state = initialState, action) => {
     case 'SET_SESSION':
       return { ...state, session: action.payload };
     case 'LOGOUT':
-      return { ...state, session: null, stateUser: null };
+      return { ...state, session: null, stateUser: null};
+      case 'SET_FACE_ID':
+        return { ...state, hasFaceID: action.payload};
+      case 'RESET_STATE':
+        return initialState;
     default:
       return state;
   }
