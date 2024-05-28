@@ -13,9 +13,7 @@ import BottomUp from '../../src/components/BottomUp.js'
 import * as Haptics from 'expo-haptics';
 
 
-
-
-const  SignIn =  () => { 
+const SignIn =  () => { 
   
   const dispatch = useDispatch();
   const [willLogin, setWillLogin] = useState(false);
@@ -28,6 +26,8 @@ const  SignIn =  () => {
   const [password, setPassword] = useState('');
 
   const sheetRef = useRef(null);
+
+  console.log(useSelector(state => state.backUrl), 'state from sign in')
 
   // Use useSelector at the top level of the component
   const session = useSelector(state => state.session);
@@ -105,8 +105,6 @@ const  SignIn =  () => {
       setIsLoading(false);
     })()
   })
-
-
 
   if (isLoading) {
     return (

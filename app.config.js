@@ -10,7 +10,7 @@ export default ({ config }) => {
       fallbackToCacheTimeout: 0,
       "url": "https://u.expo.dev/77203b3b-264f-49bd-8e04-c3737db79889"
     },
-    "runtimeVersion": "1.0.1",
+    "runtimeVersion": "1.0.2",
     // name: process.env.NODE_ENV == 'prod' ? 'UGo!' : 'UGo! Test',
     name: 'Sparring Dev',
     ios: {
@@ -21,7 +21,7 @@ export default ({ config }) => {
 
       // googleServicesFile: './GoogleService-Info.plist',
     },
-    version: '1.10.21',
+    version: '1.10.22',
     
     "extra": {
       "eas": {

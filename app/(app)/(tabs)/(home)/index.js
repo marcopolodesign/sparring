@@ -1,24 +1,24 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import {Stack} from 'expo-router'
-import Container from '../../../Container.js'
+import Container from '../../../../Container.js'
 import { StyleSheet, View, StatusBar, FlatList, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
-import { onFaceId } from '../../../api/functions.js';
-import {Colors} from '../../../src/components/constants.js'
-import { Heading, Text } from '../../../src/components/styled-components.js';
+import { onFaceId } from '../../../../api/functions.js';
+import {Colors} from '../../../../src/components/constants.js'
+import { Heading, Text } from '../../../../src/components/styled-components.js';
 const { height } = Dimensions.get('screen');
 
-import NearbyMatches from '../../../src/components/matchesCarrousel.js'
-import NearbyCoaches from '../../../src/components/coachesCarrousel.js'
+import NearbyMatches from '../../../../src/components/matchesCarrousel.js'
+import NearbyCoaches from '../../../../src/components/coachesCarrousel.js'
 
 
 import * as Haptics from 'expo-haptics';
 
-import Header from '../../../src/components/header/header.js'
-import BottomUp from '../../../src/components/BottomUp.js'
-import MainButton from '../../../src/components/button.js';
-import MapCard from '../../../src/components/home/MapCard.js';
-import Share from '../../../src/components/share.js';
+import Header from '../../../../src/components/header/header.js'
+import BottomUp from '../../../../src/components/BottomUp.js'
+import MainButton from '../../../../src/components/button.js';
+import MapCard from '../../../../src/components/home/MapCard.js';
+import Share from '../../../../src/components/share.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 

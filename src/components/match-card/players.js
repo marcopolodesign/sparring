@@ -7,14 +7,13 @@ import {Text} from '../styled-components'
 
 const Players = ({...props}) => {
   return (
-    <View style={{justifyContent: 'center', alignItems: 'center'}}>
+
+     <View style={{justifyContent: 'center', alignItems: 'center'}}>
         <View style={{flexDirection: 'row', transform: [{translateX: 10}]}}>
-            <PhotoMin size={'small'}/>
+            <PhotoMin sourceImg={props.players[0]?.profilePictureUrl} size={'small'}/>
             <PhotoMin transform={-20} size={'small'}/>
         </View>
-        <Text style={{textAlign: 'center'}} color={Colors.textGrey}>{props.player1} & {props.player2}</Text>
-
-       
+        <Text style={{textAlign: 'center'}} color={Colors.textGrey}>{props.players[0]?.firstName} & {props.players[1]?.firstName}</Text>
     </View>
   )
 }

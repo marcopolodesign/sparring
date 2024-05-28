@@ -39,7 +39,7 @@ export default function OnboardingSport() {
 
     const isEmpty = (obj) => {
         return Object.keys(obj).length === 0;
-      };
+    };
     
     console.log(userDetails)
 

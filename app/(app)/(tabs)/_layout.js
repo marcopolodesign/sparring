@@ -14,8 +14,9 @@ export default function TabLayout() {
       tabBarActiveTintColor: Colors.darkGreen
       }}>
       <Tabs.Screen
-        name="index"
+        name="(home)"
         options={{
+          headerShown: false,
           title: 'Home',
           tabBarIcon: ({ color }) => <HomeIcon color={color} />,
         }}
@@ -44,16 +45,6 @@ export default function TabLayout() {
         }}
         />
 
-
-      <Tabs.Screen
-        name="(home)/profile"
-        options={{
-          title: 'Perfil',
-          href: null,
-          tabBarIcon: ({ color }) => <FontAwesome size={28} name="cog" color={color} />,
-        }}
-        />
-
       <Tabs.Screen
         name="jugadores"
         options={{
@@ -62,6 +53,18 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <FontAwesome size={28} name="cog" color={color} />,
         }}
         />
+
+  {/* <Tabs.Screen
+        name="partido"
+        options={{
+          title: 'Jugadores',
+          presentation: 'fullScreenModal',
+          animation: 'slide_from_bottom',
+          href: null,
+          headerShown: false,
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="cog" color={color} />,
+        }}
+        /> */}
     </Tabs>
   );
 }

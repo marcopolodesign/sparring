@@ -9,8 +9,9 @@ import { PersistGate } from 'redux-persist/integration/react';
 
 const IP = 'localhost';
 
+const serverURL = 'http://192.168.68.108:1337'
 // const serverURL = 'http://localhost:1337'
-const serverURL = 'https://sea-turtle-app-rkvrr.ondigitalocean.app'
+// const serverURL = 'https://goldfish-app-25h3o.ondigitalocean.app'
 
 
 // console.log('URL:', serverURL);

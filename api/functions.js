@@ -1,17 +1,22 @@
 import axios from 'axios';
+import { format, parseISO } from 'date-fns';
+import { es } from 'date-fns/locale'
+
 import {Alert} from 'react-native';
 import * as Font from 'expo-font';
 import * as LocalAuthentication from 'expo-local-authentication';
 import { useSelector, useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {router} from 'expo-router';
 
 // const API_BASE_URL = `http://localhost:1337/api`;
-const API_BASE_URL = 'https://sea-turtle-app-rkvrr.ondigitalocean.app/api'
 
-// const token ='b403069951b818fd7064c24f35bd70b46bb9457fb2d9d3d3b75a9f49e471ef3f34a13975da1f3a32a738f263bbb45e1daeecea719fa9391af198182f9b51b032a038b6444608a922cac1228aa16bb172329ab0714e35f0ba5a186314087cc9afe5d32dbd8d90ccef6676837ff3ba839bdee91e7a03df4e5d844a2a7412e3ee4c'
+const API_BASE_URL = `http://192.168.68.108:1337/api`;
+// const API_BASE_URL = 'https://goldfish-app-25h3o.ondigitalocean.app/api'
 
-const token = 'eec292db44f8aef4b0cf027c225e06edfe4ac63e0c65fc0a8bd4b2c4ec974d681792a4f99cd7de5d8363b317bd453c053e9887df0145f6f02ca0e8ef8610fe714f9752e4e7b8ffcc72329c27ef4ab80bff301d5c378e7f7d2b058abdc743fc543a4652ea140957e669677540dbe02a42672f1378c0efdf2d2c73d2abd958ee5f'
+const token ='b403069951b818fd7064c24f35bd70b46bb9457fb2d9d3d3b75a9f49e471ef3f34a13975da1f3a32a738f263bbb45e1daeecea719fa9391af198182f9b51b032a038b6444608a922cac1228aa16bb172329ab0714e35f0ba5a186314087cc9afe5d32dbd8d90ccef6676837ff3ba839bdee91e7a03df4e5d844a2a7412e3ee4c'
+
+// PROD TOKEN
+// const token = '04b4bf677234667eda880a51ef1858959fde491a5a007bf9f00be1060271013bcfbee19c644923e1766f9a77e6cf9d2ac6e57a559bdfec9015425bdcbf89b556b5a971f7d4a6eaf0ce0ea423660fe3793afea05bf8328eb4f3e4fb20d381e6b79e2138fcb1b9000574e72dbe873c1f0698e76a016f19451185c6a4bc43f795fc'
 
 // console.log(API_BASE_URL, 'URL functions.js')
 
@@ -32,8 +37,6 @@ export const fetchFonts = async () => {
   });
   return await Promise.all([fonts]);
 };
-
-
 
 // Example function to fetch a user by ID
 export const fetchUser = async (userId) => {
@@ -65,7 +68,6 @@ export const loginUser = async (username, password) => {
     }
 };
 
-
 export const createUser = async (userDetails) => {
     try {
       const response = await axios.post(`${API_BASE_URL}/auth/local/register`, userDetails);
@@ -74,7 +76,7 @@ export const createUser = async (userDetails) => {
       console.error('Error creating user:', error);
       throw error;
     }
-  };
+};
 
 
 export const uploadProfilePicture = async (userId, profilePicture) => {
@@ -101,8 +103,7 @@ export const uploadProfilePicture = async (userId, profilePicture) => {
       console.error('Error uploading profile picture:', error);
       throw error;
     }
-  };
-
+};
 
 export const onFaceId = async (user, hasAuth) => {
   try {
@@ -190,3 +191,144 @@ export const logWithFaceId = async (user) => {
   }
 
 }
+
+export const getUserFriends = async (user) => {
+
+    const friends = user.friends_added.map(friend => friend.id);
+    const friendsReceived = user.friends_received.map(friend => friend.id);
+    console.log(friendsReceived, 'FRIENDS RECEIVED')
+    friends.push(...friendsReceived);
+    console.log(friends, 'FRIENDS')
+    let friendsEP = '';
+
+    friends.forEach((friend, index) => {
+      friendsEP += `filters[id][$in]=${friend}`;
+      if (index < friends.length - 1) {
+        friendsEP += '&'; // Only add '&' if it's not the last friend
+      }
+    });
+
+    if (!friendsEP) {
+      return [];
+    }
+
+    try {
+      const response = await axiosInstance.get(`/users?${friendsEP}&populate=*`);
+       
+      if (response.data && Array.isArray(response.data)) {
+        const usersWithThumbnails = response.data.map(user => {
+          const thumbnailUrl = user.profilePicture?.formats?.thumbnail?.url || null;
+          return {
+            ...user,
+            thumbnailUrl
+          };
+        });
+
+    
+
+        return usersWithThumbnails;
+      }
+    } catch (error) {
+      alert(`Error fetching user: ${error.message}`, error);
+      throw error;
+    }
+
+}
+
+const getUserProfilePicture = async (userId) => {
+  try {
+    const response = await axiosInstance.get(`/users/${userId}?populate=profilePicture`);
+    return response.data.profilePicture?.formats?.thumbnail?.url || null;
+  } catch (error) {
+    console.error(`Error fetching profile picture for user ${userId}: ${error.message}`);
+    return null;
+  }
+};
+
+
+export const getMatchDetails = async (matchId) => {
+  try {
+    const response = await axiosInstance.get(`/matches/${matchId}?populate=members,match_owner,location,sport`);
+    const match = response.data.data;
+
+    const formattedMatch = await formatMatchDetails(match);
+
+    console.log(JSON.stringify(formattedMatch, null, 2)); // Pretty-printing the JSON
+    return formattedMatch;
+  } catch (error) {
+    console.error(`Error fetching match: ${error.message}`, error);
+    throw error;
+  }
+};
+
+
+export const getAllMatches = async () => {
+  try {
+    const response = await axiosInstance.get(`/matches?populate=members,match_owner,location,sport`);
+    const matches = response.data.data;
+
+    // Process each match to include profile picture URLs
+    const formattedMatches = await Promise.all(matches.map(formatMatchDetails));
+
+    console.log(JSON.stringify(formattedMatches, null, 2)); // Pretty-printing the JSON
+    return formattedMatches;
+  } catch (error) {
+    console.error(`Error fetching matches: ${error.message}`, error);
+    throw error;
+  }
+};
+
+
+
+const formatMatchDetails = async (match) => {
+  const matchDate = parseISO(match.attributes.Date);
+
+  // Helper function to capitalize the first letter
+  const capitalizeFirstLetter = (string) => {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  };
+
+  const formattedDate = format(matchDate, 'EEEE "de" MMMM', { locale: es });
+  const capitalizedDate = capitalizeFirstLetter(formattedDate);
+
+  // Fetch profile picture URLs for members and match owner
+  const matchOwner = match.attributes.match_owner?.data;
+  const matchOwnerProfilePictureUrl = matchOwner ? await getUserProfilePicture(matchOwner.id) : null;
+
+  const members = await Promise.all(match.attributes.members.data.map(async (member) => {
+    const profilePictureUrl = await getUserProfilePicture(member.id);
+    return {
+      id: member.id,
+      username: member.attributes.username,
+      email: member.attributes.email,
+      firstName: member.attributes.firstName,
+      lastName: member.attributes.lastName,
+      profilePictureUrl,
+    };
+  }));
+
+  return {
+    id: match.id,
+    date: capitalizedDate, // Capitalized date in Spanish
+    time: format(matchDate, 'HH:mm', { locale: es }), // Format time in Spanish
+    createdAt: match.attributes.createdAt,
+    updatedAt: match.attributes.updatedAt,
+    publishedAt: match.attributes.publishedAt,
+    description: match.attributes.description,
+    location: match.attributes.location,
+    sport: match.attributes.sport,
+    match_owner: matchOwner ? {
+      id: matchOwner.id,
+      username: matchOwner.attributes.username,
+      email: matchOwner.attributes.email,
+      firstName: matchOwner.attributes.firstName,
+      lastName: matchOwner.attributes.lastName,
+      profilePictureUrl: matchOwnerProfilePictureUrl, // Add profile picture URL for match owner
+    } : null,
+    members,
+  };
+};
+
+export const isEmpty = (obj) => {
+  return Object.keys(obj).length === 0;
+};
