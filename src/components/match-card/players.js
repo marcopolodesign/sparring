@@ -11,7 +11,9 @@ const Players = ({...props}) => {
      <View style={{justifyContent: 'center', alignItems: 'center'}}>
         <View style={{flexDirection: 'row', transform: [{translateX: 10}]}}>
             <PhotoMin sourceImg={props.players[0]?.profilePictureUrl} size={'small'}/>
-            <PhotoMin transform={-20} size={'small'}/>
+            {props.players[1] &&
+              <PhotoMin sourceImg={props.players[1]?.profilePictureUrl} transform={-20} size={'small'}/>
+            }
         </View>
         <Text style={{textAlign: 'center'}} color={Colors.textGrey}>{props.players[0]?.firstName} & {props.players[1]?.firstName}</Text>
     </View>

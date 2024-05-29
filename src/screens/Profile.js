@@ -1,7 +1,9 @@
+import {useState} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { View, Text, TouchableOpacity, ImageBackground, ScrollView } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import * as ImagePicker from 'expo-image-picker';
+import { manipulateAsync, FlipType, SaveFormat } from 'expo-image-manipulator';
 import { Link, router } from 'expo-router';
 import { Heading, SubHeading, Button, ViewJustifyCenter, BorderView } from '../components/styled-components.js'
 import { Colors, Generals } from '../../src/components/constants.js'
@@ -24,13 +26,11 @@ const Profile = () => {
     const session = useSelector(state => state.session);
     const user = JSON.parse(session);
     const backUrl = useSelector(state => state.backUrl);
+    const [image, setImage] = useState({});
+    const [profileImage, setProfileImage] = useState(backUrl + user?.profilePicture.formats.thumbnail.url);
 
-    console.log(backUrl)
-  
-  // console.log(user['id'])
-    
     // Check if user.profilePicture and its nested properties exist
-    const profilePictureUrl = user.profilePicture.formats.thumbnail.url;
+    const profilePictureUrl = user?.profilePicture.formats.thumbnail.url;
 
     const dispatch = useDispatch();
 
@@ -42,7 +42,6 @@ const Profile = () => {
         router.replace('/sign-in')
         dispatch({ type: 'RESET_STATE' });
     };
-
        
     const userData= [{
         title: 'Partidos',
@@ -55,7 +54,31 @@ const Profile = () => {
         data: 2024
     }]
 
+    const pickImage = async () => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+          mediaTypes: ImagePicker.MediaTypeOptions.Images,
+          allowsEditing: true,
+          aspect: [4, 3],
+          quality: 1,
+        });
     
+        if (!result.canceled) {
+          console.log('below is result')
+          console.log(result);
+          console.log(result.assets[0].uri)
+    
+          // console.log (result[uri])
+          const resizedPhoto = await manipulateAsync(
+            result.assets[0].localUri || result.assets[0].uri,
+            [{ resize: { width: 400, height: 400 } }], // resize to width of 300 and preserve aspect ratio
+            { compress: 1, format: SaveFormat.JPEG }
+          )
+        //   console.log(resizedPhoto, "resized");
+          setImage(resizedPhoto.uri);
+          setProfileImage(resizedPhoto.uri);
+        }
+      };
+
 
 
 return (
@@ -64,11 +87,13 @@ return (
         <PageHeader />
             <View style={{backgroundColor: "#fff", flex: 1, marginTop: 60, alignItems: 'center', paddingHorizontal: 20}}>
             <View style={{transform: [{translateY: -80}], alignItems: "center"}}>
+            <TouchableOpacity onPress={() => pickImage() }>
                 <ImageBackground 
-                    source={{uri: backUrl + profilePictureUrl}}
+                    source={{uri: profileImage}}
                     style={{width: 180, height: 180, borderRadius: 100, borderWidth: 2, borderColor: '#fff', overflow: 'hidden', marginBottom: 20}} 
                     onPress={() => {console.log('navigate')}}>
                 </ImageBackground>
+            </TouchableOpacity>
                 <Heading color={Colors.darkGreen}>{user.firstName} {user.lastName&&user.lastName}
                 </Heading>
                 <SubHeading style={{textAlign: 'center'}} color={Colors.textGrey}>{user.description}</SubHeading>

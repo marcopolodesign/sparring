@@ -27,7 +27,7 @@ const SignIn =  () => {
 
   const sheetRef = useRef(null);
 
-  console.log(useSelector(state => state.backUrl), 'state from sign in')
+  const testUrl = useSelector(state => state.backUrl)
 
   // Use useSelector at the top level of the component
   const session = useSelector(state => state.session);
@@ -189,6 +189,9 @@ const SignIn =  () => {
                       Primera Vez? Registrarse
                     </SubHeading>
                   </Link>
+
+                  <Text style={{fontSize: 11, textAlign: 'center', color: '#eee'}}>{testUrl}</Text>
+
                 </>
               )}
             </View>

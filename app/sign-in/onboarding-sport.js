@@ -134,7 +134,7 @@ export default function OnboardingSport() {
                 source={{ uri: image }}
                 style={{
                   width: '100%',
-                  height: 210,
+                  height: 380,
                   resizeMode: 'cover',
                   borderRadius: 12,
                   marginBottom: 30,
@@ -144,7 +144,7 @@ export default function OnboardingSport() {
               />
               </TouchableOpacity>
             ) : (
-              <TouchableOpacity onPress={() => pickImage() } style={{backgroundColor: '#fff', borderRadius: 8, justifyContent: 'center', alignItems: 'center', height: 200, marginBottom: 30,borderColor: '#fff', borderWidth: 2}}>
+              <TouchableOpacity onPress={() => pickImage() } style={{backgroundColor: '#fff', borderRadius: 8, justifyContent: 'center', alignItems: 'center', height: 380, marginBottom: 30,borderColor: '#fff', borderWidth: 2}}>
                   <Upload />
                   <SubHeading color={Colors.darkGreen} style={{marginTop: 10, fontWeight: 'normal'}} size={'16px'}>Subí una foto de perfil</SubHeading>
               </TouchableOpacity>
@@ -153,7 +153,7 @@ export default function OnboardingSport() {
 
             </View>
 
-            <MainButton isLoading={isUpdating} ctaText={!setIsUpdating ? "Finalizar" : "Enviando"} willFlex={'true'} bgColor={Colors.primaryGreen} color={Colors.blue} onPress={() => handleSubmitUser()} />
+            <MainButton isLoading={isUpdating} ctaText={!isUpdating ? "Finalizar" : "Enviando"} willFlex={'true'} bgColor={Colors.primaryGreen} color={Colors.blue} onPress={() => handleSubmitUser()} />
           </View>
       </Container>
         <BottomUp

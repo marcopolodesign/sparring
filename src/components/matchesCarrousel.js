@@ -32,46 +32,15 @@ const matchesCarrousel = () => {
         loadMatch();
     }, []);
 
-    const DATA = [
-        {
-          player1: "Emiliano",
-          player2: "Juan",
-          player3: "Mateo",
-          player4: "Ignacio",
-        },
-        {
-            player1: "Martin",
-            player2: "Mateo",
-            player3: "Pedro",
-            player4: "Carlos",
-        },
-        {
-            player1: "Gabriel",
-            player2: "Tato",
-            player3: "Maxi",
-            player4: "Gustavo",
-        },
-        {
-            player1: "Emiliano",
-            player2: "Juan",
-            player3: "Mateo",
-            player4: "Ignacio",
-        },
-        {
-            player1: "Emiliano",
-            player2: "Juan",
-            player3: "Mateo",
-            player4: "Ignacio",
-        },
-        {
-            player1: "Emiliano",
-            player2: "Juan",
-            player3: "Mateo",
-            player4: "Ignacio",
-        },
-    ];
 
     const openMatches = (match) => {
+
+        if (matches.lenght > 0) {
+            return (
+                <Text>There are no matches available</Text>
+            )
+        }
+
         return(
             <View id={match.id} style={{padding: 15, backgroundColor: '#fff', borderRadius: 8, flex: 1, width: width * 0.78, marginLeft: 20}}>
 
@@ -99,7 +68,6 @@ const matchesCarrousel = () => {
                         }} />
                         {/* <Players player1={item.player3} player2={item.player4} /> */}
                 </ViewJustifyCenter>
-                
             </View>
         )
     }

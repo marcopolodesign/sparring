@@ -8,15 +8,17 @@ import * as LocalAuthentication from 'expo-local-authentication';
 import { useSelector, useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// const API_BASE_URL = `http://localhost:1337/api`;
 
-const API_BASE_URL = `http://192.168.68.108:1337/api`;
-// const API_BASE_URL = 'https://goldfish-app-25h3o.ondigitalocean.app/api'
-
-const token ='b403069951b818fd7064c24f35bd70b46bb9457fb2d9d3d3b75a9f49e471ef3f34a13975da1f3a32a738f263bbb45e1daeecea719fa9391af198182f9b51b032a038b6444608a922cac1228aa16bb172329ab0714e35f0ba5a186314087cc9afe5d32dbd8d90ccef6676837ff3ba839bdee91e7a03df4e5d844a2a7412e3ee4c'
-
+const API_BASE_URL = 'https://goldfish-app-25h3o.ondigitalocean.app/api'
 // PROD TOKEN
-// const token = '04b4bf677234667eda880a51ef1858959fde491a5a007bf9f00be1060271013bcfbee19c644923e1766f9a77e6cf9d2ac6e57a559bdfec9015425bdcbf89b556b5a971f7d4a6eaf0ce0ea423660fe3793afea05bf8328eb4f3e4fb20d381e6b79e2138fcb1b9000574e72dbe873c1f0698e76a016f19451185c6a4bc43f795fc'
+const token = '04b4bf677234667eda880a51ef1858959fde491a5a007bf9f00be1060271013bcfbee19c644923e1766f9a77e6cf9d2ac6e57a559bdfec9015425bdcbf89b556b5a971f7d4a6eaf0ce0ea423660fe3793afea05bf8328eb4f3e4fb20d381e6b79e2138fcb1b9000574e72dbe873c1f0698e76a016f19451185c6a4bc43f795fc'
+
+// const API_BASE_URL = `http://localhost:1337/api`;
+// const API_BASE_URL = `http://192.168.68.108:1337/api`;
+
+// const token ='b403069951b818fd7064c24f35bd70b46bb9457fb2d9d3d3b75a9f49e471ef3f34a13975da1f3a32a738f263bbb45e1daeecea719fa9391af198182f9b51b032a038b6444608a922cac1228aa16bb172329ab0714e35f0ba5a186314087cc9afe5d32dbd8d90ccef6676837ff3ba839bdee91e7a03df4e5d844a2a7412e3ee4c'
+
+
 
 // console.log(API_BASE_URL, 'URL functions.js')
 
@@ -288,7 +290,7 @@ const formatMatchDetails = async (match) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   };
 
-  const formattedDate = format(matchDate, 'EEEE "de" MMMM', { locale: es });
+  const formattedDate = format(matchDate, "EEEE d 'de' MMMM", { locale: es });
   const capitalizedDate = capitalizeFirstLetter(formattedDate);
 
   // Fetch profile picture URLs for members and match owner

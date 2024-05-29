@@ -99,7 +99,7 @@ const Match = () => {
               backgroundColor: Colors.darkGreen,
               paddingHorizontal: 20,
               paddingVertical: 25,
-              marginTop: 30,
+              marginTop: 0,
               alignItems: 'flex-start',
             }}
           >

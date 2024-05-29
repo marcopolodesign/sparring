@@ -49,6 +49,7 @@ export const Heading = styled.Text`
   fontWeight: 700;
   textTransform: uppercase;
   color: ${({ color }) => color || "#fff"};
+  textAlign: ${({ textCenter }) => (textCenter ? textCenter : 'left')};
 `;
 
 
