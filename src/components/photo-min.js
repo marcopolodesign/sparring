@@ -1,24 +1,36 @@
 import React from 'react'
+import {useSelector } from 'react-redux'
 import { ImageBackground } from 'react-native'
 import profile from '../assets/images/profile-pic.jpg'
 
 
-const PhotoMin = ({ width, height, size, border, transform }) => {
+const PhotoMin = ({ width, height, size, border, transform, sourceImg, zIndexPosition }) => {
     if (size === 'small') {
-        width = 50;
-        height = 50;
+        width = 40;
+        height = 40;
+    } else if (size === 'invite') {
+        width = 45;
+        height = 45;
     }
+    // const backUrl = useSelector((state) => state.backUrl);
 
+    const profilePicture  = sourceImg ? {uri:  sourceImg} : profile;
     return (
         <ImageBackground
-            source={profile}
+            source={profilePicture}
+            imageStyle={{
+                resizeMode: "cover",
+              }}
+
             style={{
                 width: width,
                 height: height,
                 borderRadius: 100,
                 borderWidth: 2,
                 borderColor: border ? border : '#fff',
+                backgroundPosition: 'center',
                 overflow: 'hidden',
+                zIndex: zIndexPosition ? zIndexPosition : 0,
                 transform: transform ? [{translateX: transform}] : undefined,
             }}
             onPress={() => {

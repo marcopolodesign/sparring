@@ -3,10 +3,33 @@
     "version": ">= 7.8.2"
   },
   "build": {
-    "development": {
+    "simulator": {
       "developmentClient": true,
       "distribution": "internal",
       "channel": "development",
+      "ios": {
+        "simulator": true
+      },
+      "env": {
+        "NODE_ENV": "development"
+      }
+    },
+    "development": {
+        "developmentClient": true,
+        "distribution": "internal",
+        "channel": "development",
+        "ios": {
+          "simulator": false,
+          "autoIncrement": "version"
+        },
+      "env": {
+        "NODE_ENV": "development"
+      }
+    },
+    "beta": {
+      "developmentClient": false,
+      "distribution": "store",
+      "channel": "testflight",
       "ios": {
         "simulator": false,
         "autoIncrement": "version"
@@ -14,7 +37,8 @@
     "env": {
       "NODE_ENV": "development"
     }
-    },
+  },
+
     "preview": {
       "distribution": "internal",
       "channel": "preview"

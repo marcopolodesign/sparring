@@ -14,7 +14,7 @@ import { useSharedValue } from 'react-native-reanimated';
       
         <BottomSheet
         backgroundStyle={{backgroundColor: "#fff", borderTopLeftRadius: 40, borderTopRightRadius: 40}}
-        containerStyle={{flexDirection: 'column', justifyContent: 'center'}} 
+        containerStyle={{flexDirection: 'column', justifyContent: 'center', zIndex: 55}} 
         ref={props.sheetRef}
         snapPoints={snapPoints}
         initialSnapIndex={0}
@@ -22,7 +22,10 @@ import { useSharedValue } from 'react-native-reanimated';
         index={-1}
         enableDynamicSizing={true}
         contentHeight={animatedContentHeight}
-        backdropComponent={BottomSheetBackdrop}      
+        // backdropComponent={BottomSheetBackdrop}
+        backdropComponent={(props) => (
+          <BottomSheetBackdrop containerStyle={{zIndex: 5}} {...props}  />
+        )}      
         >
           {/* <View style={{paddingVertical : 10}}>
           <View style={{ top: 5}}>
@@ -32,7 +35,7 @@ import { useSharedValue } from 'react-native-reanimated';
           </View> */}
            
         <BottomSheetView
-              style={{padding: 20, paddingBottom: 80,justifyContent: 'center', alignItems: 'center'}}
+              style={{padding: 20, paddingBottom: 150, justifyContent: 'flex-start', alignItems: 'center'}}
           >
           <View style={{ marginTop: 10, marginBottom: 0 }}>
                 <Heading style={{textAlign: 'center'}}color={Colors.darkGreen}>{props.title}</Heading>
