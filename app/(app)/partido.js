@@ -89,10 +89,9 @@ const Match = () => {
       />
 
     
-
       <ScrollView style={{  flex: 1 }}>
         <PageHeader />
-        <View style={{ padding: 20, zIndex: 3  }}>
+        <View style={{ padding: 20, zIndex: 3, gap: 20,  }}>
           <View
             style={{
               borderRadius: Generals.borderRadius,
@@ -104,19 +103,26 @@ const Match = () => {
             }}
           >
             <Heading color={Colors.primaryGreen}>
-              {matchOwner.firstName} va a jugar al {match.sport.sport} en {match.location.address} , el {match.date} a las {match.time}HS
+              {matchOwner.firstName} va a jugar al {match.sport.sport} en {match.location.address.split(',')[0]}, el {match.date} a las {match.time}HS
             </Heading>
-            <Span bgColor={'#fff'} />
-            <SubHeading size={'16px'} color={'#fff'}>
-              {match.description}
-            </SubHeading>
-            <Span bgColor={'#fff'} />
 
-            <MatchOwner user={matchOwner} source={matchOwner.profilePictureUrl} textColor={Colors.primaryGreen} hasArrow={'true'} />
+            {match.description && (
+              <>
+              <Span bgColor={'#fff'} />
+              <SubHeading size={'16px'} color={'#fff'}>
+                {match.description}
+              </SubHeading>
+              <Span bgColor={'#fff'} />
+              </>
+            )}
+
+            <MatchOwner user={matchOwner} source={matchOwner.profilePictureUrl} textColor={Colors.primaryGreen} hasArrow={'true'} 
+            
+            />
           </View>
 
           <BorderView
-            style={{ marginVertical: 20, alignItems: 'center', flexDirection: 'row', justifyContent: 'center', gap: 10 }}
+            style={{ marginVertical: 10, alignItems: 'center', flexDirection: 'row', justifyContent: 'center', gap: 10 }}
           >
             <PaddleRaquet />
             <SubHeading size={'16px'} color={Colors.textGrey}>
@@ -124,6 +130,37 @@ const Match = () => {
             </SubHeading>
           </BorderView>
 
+
+            <BorderView style={{ gap: 20, flex: 1}}>
+              <SubHeading style={{ fontWeight: 'bold' }} color={'#000'} size={'16px'}>
+                Jugadores
+              </SubHeading>
+
+              <View style={{ flex: 1, width: '100%', justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}>
+                <ViewJustifyCenter style={{ gap: 10 }}>
+                  {members.map((member, index) => (
+                    <MatchPlayers key={index} user={member} source={member.profilePictureUrl} textColor={Colors.textGrey} />
+                  ))}
+                </ViewJustifyCenter>
+                <Text style={{ padding: 5, backgroundColor: Colors.lightGrey, color: Colors.darkGreen }}>VS</Text>
+                <SignUp
+                  onPress={() => {
+                    partidoRef.current.expand();
+                    setBottomUpProps({
+                      title: 'Ya estás anotado!',
+                      paragraph: `${match.location.address} • ${match.date} — ${match.time}`,
+                      buttonTitle: 'Cerrar',
+                      onPress: () => {
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                      },
+                      loading: false,
+                    });
+                  }}
+                />
+              </View>
+            </BorderView>
+
+          
           <ViewJustifyCenter style={{ gap: 20, flex: 1 }}>
             <BorderView style={{ alignItems: 'center', gap: 10 }}>
               <Calendar color={'#000'} />
@@ -134,39 +171,19 @@ const Match = () => {
             <BorderView style={{ alignItems: 'center', gap: 10 }}>
               <LocationPin color={'#000'} />
               <SubHeading textCenter size={'16px'} color={Colors.textGrey}>
-                {match?.location?.address}
+                {match?.time}
               </SubHeading>
             </BorderView>
           </ViewJustifyCenter>
 
-          <BorderView style={{ gap: 20, flex: 1, marginVertical: 20 }}>
-            <SubHeading style={{ fontWeight: 'bold' }} color={'#000'} size={'16px'}>
-              Jugadores
-            </SubHeading>
+          <BorderView style={{ alignItems: 'center', gap: 10, flexDirection: 'row', justifyContent: 'center' }}>
+              <LocationPin color={'#000'} />
+              <SubHeading textCenter size={'16px'} color={Colors.textGrey}>
+                {match?.location?.address?.split(',')[0]}
+              </SubHeading>
+            </BorderView>
 
-            <View style={{ flex: 1, width: '100%', justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}>
-              <ViewJustifyCenter style={{ gap: 10 }}>
-                {members.map((member, index) => (
-                  <MatchPlayers key={index} user={member} source={member.profilePictureUrl} textColor={Colors.textGrey} />
-                ))}
-              </ViewJustifyCenter>
-              <Text style={{ padding: 5, backgroundColor: Colors.lightGrey, color: Colors.darkGreen }}>VS</Text>
-              <SignUp
-                onPress={() => {
-                  partidoRef.current.expand();
-                  setBottomUpProps({
-                    title: 'Ya estás anotado!',
-                    paragraph: `${match.location.address} • ${match.date} — ${match.time}`,
-                    buttonTitle: 'Cerrar',
-                    onPress: () => {
-                      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                    },
-                    loading: false,
-                  });
-                }}
-              />
-            </View>
-          </BorderView>
+       
         </View>
 
 

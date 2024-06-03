@@ -33,7 +33,7 @@ export default function Root() {
 
     <SessionProvider>
       <GestureHandlerRootView style={{ flex: 1 }}>
-        <Slot />
+        <Slot backBehavior="history"/>
      </GestureHandlerRootView>
     </SessionProvider>
   );

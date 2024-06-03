@@ -17,9 +17,9 @@ const ScreenContainer = ({children, ...props}) => {
   
   return (
     <>
-    {!props.safeArea && (
-      <SafeAreaProvider style={{backgroundColor: props.bgColor, flex: 1, marginBottom: -insets.bottom, marginTop: -insets.top}}> 
-        <SafeAreaView style={{flex: 1}}>
+    {!props.safeArea ? (
+      <SafeAreaProvider style={{paddingHorizontal: props.hasPadding ? 20 : 0, backgroundColor: props.bgColor, flex: 1, marginBottom: -insets.bottom, marginTop: -insets.top, }}> 
+        <SafeAreaView style={{flex: 1, paddingVertical: 20}}>
    
       
         <ContentContainer bgColor={props.bgColor} style={{marginBottom: insets.bottom, marginTop: insets.top, fontFamily: 'TT Interphases Pro', flex: 1}}>
@@ -29,6 +29,10 @@ const ScreenContainer = ({children, ...props}) => {
    
         </SafeAreaView>
       </SafeAreaProvider>
+    ) : (
+      <ContentContainer bgColor={props.bgColor} style={{flex: 1, fontFamily: 'TT Interphases Pro'}}>
+        {children}
+      </ContentContainer>
     )}
   </>
   )

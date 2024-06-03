@@ -27,7 +27,7 @@ const  Socials = ({user}) => {
     }]
 
     return (
-        <View style={{ marginVertical: 20, paddingLeft: 20, alignSelf: 'flex-start', justifyContent: 'space-between', flex: 1 }}>
+        <View style={{ marginVertical: 20, alignSelf: 'flex-start', justifyContent: 'space-between', flex: 1 }}>
         <SubHeading color={'#000'}>Conectá con {user.firstName} {user.lastName}</SubHeading>
         <View style={{ gap: 10, justifyContent: 'stretch', width: '100%', marginTop: 10 }}>
             {userSocials.map((social, index) => (

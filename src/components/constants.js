@@ -9,11 +9,14 @@ export const Colors = {
     blue : "#1660B1",
     lightBlue: '#699FEF',
     textGrey: "#545454",
-    lightGrey: "#D9D9D9"
+    lightGrey: "#D9D9D9",
+    white: '#FFF',
 }   
 
 export const Generals = {
     borderRadius: 13,
+    modalBorderRadius: 40,
+
 }
 
 export const Fonts = {

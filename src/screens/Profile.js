@@ -86,37 +86,42 @@ return (
         <ScrollView style={{flex: 1}}>
         <PageHeader />
             <View style={{backgroundColor: "#fff", flex: 1, marginTop: 60, alignItems: 'center', paddingHorizontal: 20}}>
-            <View style={{transform: [{translateY: -80}], alignItems: "center"}}>
-            <TouchableOpacity onPress={() => pickImage() }>
-                <ImageBackground 
-                    source={{uri: profileImage}}
-                    style={{width: 180, height: 180, borderRadius: 100, borderWidth: 2, borderColor: '#fff', overflow: 'hidden', marginBottom: 20}} 
-                    onPress={() => {console.log('navigate')}}>
-                </ImageBackground>
-            </TouchableOpacity>
+            <View style={{transform: [{translateY: -80}], alignItems: "center", flex: 1}}>
+                <TouchableOpacity onPress={() => pickImage() }>
+                    <ImageBackground 
+                        source={{uri: profileImage}}
+                        style={{width: 180, height: 180, borderRadius: 100, borderWidth: 2, borderColor: '#fff', overflow: 'hidden', marginBottom: 20}} 
+                        onPress={() => {console.log('navigate')}}>
+                    </ImageBackground>
+                </TouchableOpacity>
                 <Heading color={Colors.darkGreen}>{user.firstName} {user.lastName&&user.lastName}
                 </Heading>
                 <SubHeading style={{textAlign: 'center'}} color={Colors.textGrey}>{user.description}</SubHeading>
                 <View style={{flexDirection: 'row', marginTop: 20, alignItems: 'center', gap: 20, justifyContent: "space-between"}}>
                     <MainButton bgColor={Colors.primaryGreen} ctaText={"Agregar a amigos"} color={Colors.darkGreen} icon={'Add'} />
-                    <Whapp />
-                </View>
+                    <TouchableOpacity onPress={() => {
+                        router.push({  pathname: '/cancha', 
+                        params: {courtId: 1} });
+                    }}>
+                        <Whapp />
+                    </TouchableOpacity>
+            </View>
 
 
-                <ViewJustifyCenter style={{marginVertical: 20, flexDirection: 'row', gap: 10, paddingHorizontal: 20, textAlign: 'center'}}>
+                <ViewJustifyCenter style={{marginTop: 20, flexDirection: 'row', gap: 10, flex: 1, textAlign: 'center'}}>
                     {userData.map((data, index) => (
                         <BorderView style={{alignItems: 'center'}} key={index}>
-                            <Heading style={{textAlign: 'center'}} color={Colors.darkGreen}>{data.data}</Heading>
-                            <SubHeading style={{marginTop: 5}} color={Colors.textGrey}>{data.title}</SubHeading>
+                            <Heading size={'36px'} style={{textAlign: 'center', flex: 1}} color={Colors.darkGreen}>{data.data}</Heading>
+                            <SubHeading numberOfLines={1} size={'16px'}style={{marginTop: 5, flex: 1}} color={Colors.textGrey}>{data.title}</SubHeading>
                         </BorderView>
                     ))}
                 </ViewJustifyCenter>
 
                 {user.location && 
-                <BorderView style={{marginVertical: 20, flexDirection: 'row', gap: 10, paddingHorizontal: 20, textAlign: 'center'}}>
+                <BorderView style={{flex: 1, marginVertical: 10, flexDirection: 'row', gap: 10, paddingHorizontal: 20, justifyContent: 'center', alignItems: 'center'}}>
                 
                     <LocationIcon color={'#000'}/>
-                    <SubHeading color={Colors.textGrey}>{user.location}</SubHeading>
+                    <SubHeading color={Colors.textGrey}>{user.address}</SubHeading>
 
                 </BorderView>
                 }
@@ -129,8 +134,7 @@ return (
                     <MainButton ctaText="Logout" onPress={handleLogout} bgColor={Colors.darkGreen} color={Colors.primaryGreen} willFlex={0}/>
                 </View>
 
-             
-                <Text style={{color: '#000'}}>{backUrl}</Text>
+                <Text style={{color: '#bbb', marginTop: 10}}>{backUrl}</Text>
                 <View style={{marginBottom: 100}}></View>
 
             </View>

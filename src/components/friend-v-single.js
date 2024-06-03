@@ -1,6 +1,6 @@
 import {View, TouchableOpacity} from 'react-native';
 import {useSelector} from 'react-redux';
-import { Link } from 'expo-router';
+import { router } from 'expo-router';
 import {Colors} from './constants.js';
 import { SubHeading, ThumbImage } from './styled-components.js'
 
@@ -8,12 +8,14 @@ const FriendBubble = ({MapKey, source, friend, textColor, user}) => {
     const backUrl = useSelector(state => state.backUrl);
 
     return (
-<View key={MapKey} style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
-    <Link 
-    href="/"   
-    asChild                 
-    style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}>
-        <TouchableOpacity>
+    <View key={MapKey} style={{flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+        <TouchableOpacity style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'column' }}
+            onPress={()=> {
+                router.push({
+                    pathname: '(app)/perfil', 
+                    params: {playerID: user.id}
+                })
+            }}>
            <ThumbImage source={{ uri: backUrl + source}} />
             {friend ? (
            <SubHeading 
@@ -30,9 +32,10 @@ const FriendBubble = ({MapKey, source, friend, textColor, user}) => {
         
             )}
         </TouchableOpacity>
-    </Link>
-</View>
+    </View>
     )
 }
 
 export default FriendBubble;
+
+

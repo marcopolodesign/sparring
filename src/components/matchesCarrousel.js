@@ -43,6 +43,7 @@ const matchesCarrousel = () => {
 
         return(
             <View id={match.id} style={{padding: 15, backgroundColor: '#fff', borderRadius: 8, flex: 1, width: width * 0.78, marginLeft: 20}}>
+                {console.log(JSON.stringify(match[0], null, 2))}
 
                { console.log(match.id)}
                 
@@ -50,9 +51,9 @@ const matchesCarrousel = () => {
                 <ViewJustifyCenter>
                     <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
                         <PaddleRaquet />
-                        <Text size={'18px'} color={'black'}>{match.sport.sport}</Text>
+                        <Text size={'18px'} color={'black'}>{match.sport?.sport}</Text>
                     </View>
-                    <Text size={'18px'} color={'#A8A8A8'}>Mañana, 14:30 — 16:00</Text>
+                    <Text size={'18px'} color={'#A8A8A8'}>{match.time}</Text>
                 </ViewJustifyCenter>
 
                 <Span bgColor={Colors.lightGrey}/>

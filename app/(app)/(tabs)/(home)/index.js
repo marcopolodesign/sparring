@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import {Stack} from 'expo-router'
+import {Stack, router} from 'expo-router'
 import Container from '../../../../Container.js'
 import { StyleSheet, View, StatusBar, FlatList, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
 import { onFaceId } from '../../../../api/functions.js';
@@ -67,7 +67,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
         <StatusBar barStyle="light-content" />
         <Header user={user} backUrl={backUrl} />
         <StatusBar style="auto" />
-    </View>
+        </View>
       <ScrollView style={{minHeight: height, paddingHorizontal: 20, paddingTop: 30, flex: 1, paddingBottom: 100}}>
         
         <View>
@@ -88,23 +88,24 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
           </TouchableOpacity>
         </View>
 
-          <NearbyMatches />
+        <NearbyMatches />
   
           <View style={{flexDirection: 'row', marginTop: 20, marginBottom: 40, alignItems: 'center', gap: 20, justifyContent: "space-between"}}>
             <MainButton
               onPress={() => {
-                sheetRef.current.expand()
-                setBottomUpProps({
-                  title: 'Proximamente disponible!!!!',
-                  paragraph: 'Estás con ganas de jugar?',
-                  buttonTitle: 'Anotate a la beta!',
-                  onPress: () => {
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                    console.log('presssssin')
-                    loading: true
-                  },
-                  loading: false,
-                });
+                router.push({  params: {newMatchSport: 'Paddle'}, pathname: '(app)/createMatch'})
+                // sheetRef.current.expand()
+                // setBottomUpProps({
+                //   title: 'Proximamente disponible!!!!',
+                //   paragraph: 'Estás con ganas de jugar?',
+                //   buttonTitle: 'Anotate a la beta!',
+                //   onPress: () => {
+                //     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                //     console.log('presssssin')
+                //     loading: true
+                //   },
+                //   loading: false,
+                // });
               }}
             bgColor={Colors.primaryGreen} ctaText={"Crear Partido"} color={Colors.darkGreen} icon={'Add'} />
           </View>

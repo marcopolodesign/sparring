@@ -80,7 +80,6 @@ export const createUser = async (userDetails) => {
     }
 };
 
-
 export const uploadProfilePicture = async (userId, profilePicture) => {
     const formData = new FormData();
     formData.append('files', {
@@ -247,7 +246,6 @@ const getUserProfilePicture = async (userId) => {
   }
 };
 
-
 export const getMatchDetails = async (matchId) => {
   try {
     const response = await axiosInstance.get(`/matches/${matchId}?populate=members,match_owner,location,sport`);
@@ -255,14 +253,13 @@ export const getMatchDetails = async (matchId) => {
 
     const formattedMatch = await formatMatchDetails(match);
 
-    console.log(JSON.stringify(formattedMatch, null, 2)); // Pretty-printing the JSON
+    // console.log(JSON.stringify(formattedMatch, null, 2)); // Pretty-printing the JSON
     return formattedMatch;
   } catch (error) {
     console.error(`Error fetching match: ${error.message}`, error);
     throw error;
   }
 };
-
 
 export const getAllMatches = async () => {
   try {
@@ -279,8 +276,6 @@ export const getAllMatches = async () => {
     throw error;
   }
 };
-
-
 
 const formatMatchDetails = async (match) => {
   const matchDate = parseISO(match.attributes.Date);
@@ -329,6 +324,60 @@ const formatMatchDetails = async (match) => {
     } : null,
     members,
   };
+};
+
+export const getCoaches = async () => {
+  try {
+    const response = await axiosInstance.get(`${API_BASE_URL}/coaches`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching coaches:', error);
+    throw error;
+  }
+};
+
+
+export const fetchCourts = async (courtId) => {
+  console.log(`${API_BASE_URL}/courts/?populate=*`)
+  try {
+    const response = await axiosInstance.get(`${API_BASE_URL}/courts/?populate=*`);
+    return response.data.data;
+  } catch (error) {
+    console.error('Error fetching court details:', error);
+    throw error;
+  }
+};
+
+export const fetchCourtDetails = async (courtId) => {
+  console.log(`${API_BASE_URL}/courts/${courtId}?populate=*`)
+  try {
+    const response = await axiosInstance.get(`${API_BASE_URL}/courts/${courtId}?populate=*`);
+    return response.data.data;
+  } catch (error) {
+    console.error('Error fetching court details:', error);
+    throw error;
+  }
+};
+
+export const createMatch = async (matchData) => {
+
+
+  console.log(JSON.stringify(matchData, null, 2))
+  
+  const payload = {
+    data: {
+      ...matchData,
+    }
+  };
+
+  try {
+    const response = await axiosInstance.post(`${API_BASE_URL}/matches`, payload);
+    return response.data;
+  } catch (error) {
+    console.log(error)
+    console.error('Error creating matchHHHHH:', error.data);
+    throw error;
+  }
 };
 
 export const isEmpty = (obj) => {

@@ -33,7 +33,7 @@ const Friends =  ({user, backUrl}) => {
     return (
       <>
       {!isEmpty(friends) ? (
-        <View style={{ marginVertical: 20, paddingLeft: 20, alignSelf: 'flex-start', justifyContent: 'space-between', flex: 1 }}>
+        <View style={{ marginVertical: 20, alignSelf: 'flex-start', justifyContent: 'space-between', flex: 1 }}>
         <SubHeading color={'#000'}>Sparrings de {user.firstName} {user.lastName}</SubHeading>
         <View style={{ gap: 15, width: '100%', marginTop: 10, flexDirection: 'row', flexWrap: 'wrap' }}>
             {friends.map((friend, index) => (

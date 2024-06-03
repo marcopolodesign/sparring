@@ -44,7 +44,7 @@ export const ContentContainer = styled.View`
 
 export const Heading = styled.Text`
   fontFamily: "Thunder";
-  fontSize: ${({ size }) => (size?+ "px" : "38px")};
+  fontSize: ${({ size }) => (size ? size : "38px")};
   fontStyle: "normal";
   fontWeight: 700;
   textTransform: uppercase;
