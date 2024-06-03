@@ -37,7 +37,10 @@ export const ContentContainer = styled.View`
   alignItems: 'center';
   justifyContent: 'center';
   flex: 1;
+  `
 
+  export const EndingView = styled.View`
+    marginBottom: 50px;
   `
 
 // TEXTS

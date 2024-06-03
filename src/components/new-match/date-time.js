@@ -75,7 +75,6 @@ const dateTime = ({ newMatchDate, newMatch, setNewMatch }) => {
           <View style={{ position: 'absolute', top: height / 9, left: 20, zIndex: 10, borderRadius: Generals.borderRadius, overflow: 'hidden' }}>
             <DateTimePicker
               value={new Date()}
-              // minimumDate={new Date()}
               mode="date"
               display="inline"
               onChange={handleDateChange}
