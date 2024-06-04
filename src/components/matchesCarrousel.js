@@ -2,7 +2,7 @@ import {useState, useEffect, useRef} from 'react'
 import {router} from 'expo-router'
 import {View, ScrollView, FlatList} from 'react-native';
 import {Colors} from '../components/constants.js';
-import { Heading, Text, ViewJustifyCenter, Span } from '../components/styled-components.js';
+import { Heading, SubHeading, Text, ViewJustifyCenter, Span } from '../components/styled-components.js';
 import { Dimensions } from 'react-native';
 import PaddleRaquet from '../assets/icons/paddle-raquet.js';
 import PhotoMin from './photo-min.js';
@@ -11,11 +11,17 @@ import SignUp from './match-card/SignUp.js';
 const { height, width } = Dimensions.get('screen');
 import * as Haptics from 'expo-haptics';
 import { getAllMatches } from '../../api/functions.js';
+import { useSelector } from 'react-redux';
+
 
 const matchesCarrousel = () => {
 
     const [isLoading, setIsLoading] = useState(true);
     const [matches, setMatches] = useState([]);
+
+
+    const session = useSelector((state) => state.session);
+    const user = JSON.parse(session);
 
 
     useEffect(() => {
@@ -32,22 +38,28 @@ const matchesCarrousel = () => {
         loadMatch();
     }, []);
 
-
+// OFF STATE MATCHES
+{/* <View style={{padding: 15, backgroundColor: '#fff', borderRadius: 8, flex: 1, width: width * 0.78, marginLeft: 20}}>
+<SubHeading size={'18px'} color={'#000'}>No hay partidos disponibles</SubHeading>
+</View> */}
     const openMatches = (match) => {
 
         if (matches.lenght > 0) {
             return (
-                <Text>There are no matches available</Text>
+                <Text stlye={{color: '#fff'}}>There are no matches available</Text>
             )
         }
 
-        return(
-            <View id={match.id} style={{padding: 15, backgroundColor: '#fff', borderRadius: 8, flex: 1, width: width * 0.78, marginLeft: 20}}>
-                {console.log(JSON.stringify(match[0], null, 2))}
+         // Do not render the match if the number of members is equal to or greater than the amount of players
+            if (match.members.length >= match.ammount_players || match.match_owner.id === user.id) {
+                 return  null;            
+            }
+  
 
-               { console.log(match.id)}
-                
-                {console.log(match.members[1]?.firstName)}
+        return(
+            <>
+            {/* {match.members.length > match.ammount_players &&  */}
+            <View id={match.id} style={{padding: 15, backgroundColor: '#fff', borderRadius: 8, flex: 1, width: width * 0.78, marginLeft: 20}}>
                 <ViewJustifyCenter>
                     <View style={{flexDirection: 'row', alignItems: 'center', gap: 8}}>
                         <PaddleRaquet />
@@ -61,7 +73,7 @@ const matchesCarrousel = () => {
                 <ViewJustifyCenter>
                         <Players players={match.members}  />
                         <Text style={{padding: 5, backgroundColor: Colors.lightGrey, color: Colors.darkGreen}}>VS</Text>
-                        <SignUp onPress={() => {
+                        <SignUp players={match.ammount_players} match={match} user={user} onPress={() => {
                             router.push({
                                 pathname: '(app)/partido', 
                                 params: {idMatch: match.id}
@@ -70,6 +82,8 @@ const matchesCarrousel = () => {
                         {/* <Players player1={item.player3} player2={item.player4} /> */}
                 </ViewJustifyCenter>
             </View>
+            {/* } */}
+            </>
         )
     }
 

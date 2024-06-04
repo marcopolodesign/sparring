@@ -263,7 +263,7 @@ export const getMatchDetails = async (matchId) => {
 
 export const getAllMatches = async () => {
   try {
-    const response = await axiosInstance.get(`/matches?populate=members,match_owner,location,sport`);
+    const response = await axiosInstance.get(`/matches/?populate=*`);
     const matches = response.data.data;
 
     // Process each match to include profile picture URLs
@@ -314,6 +314,7 @@ const formatMatchDetails = async (match) => {
     description: match.attributes.description,
     location: match.attributes.location,
     sport: match.attributes.sport,
+    ammount_players: match.attributes.ammount_players,
     match_owner: matchOwner ? {
       id: matchOwner.id,
       username: matchOwner.attributes.username,

@@ -15,8 +15,8 @@ export const ContentContainer = styled.View`
   `;
 
   export const ViewJustifyCenter = styled.View`
-  flexDirection: row;
-  justifyContent: space-between;
+  flexDirection: ${({ flexCol }) => (flexCol ? 'column' : 'row')};
+  justifyContent: ${({ justifyCenter }) => (justifyCenter ? 'center' : 'space-between')};
   alignItems: center;
   `;
 
@@ -58,7 +58,7 @@ export const Heading = styled.Text`
 
 export const SubHeading = styled.Text`
   fontFamily: "TT Interphases Pro";
-  font-size: ${({ size }) => (size ? size + "px" : "19.5px")};
+  font-size: ${({ size }) => (size ? size  : "19.5px")};
   font-style: normal;
   font-weight: 400;  fontStyle: "normal";
   color: ${({ color }) => color || "#fff"};
