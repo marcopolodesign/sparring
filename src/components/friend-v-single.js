@@ -14,8 +14,8 @@ const FriendBubble = ({ MapKey, source, friend, textColor, user, spots, newMatch
 
 if (spots) {
   useEffect(() => {
-    console.log(selectedFriends, 'SELECTED AMIGOS SELECTFRIENDS');
-    console.log(selectedFriends[0])
+    // console.log(selectedFriends, 'SELECTED AMIGOS SELECTFRIENDS');
+    // console.log(selectedFriends[0])
 
    
      spots !=2 ? setIsSelected(selectedFriends.includes(friend.id)) : setIsSelected(selectedFriends[0] === friend.id)

@@ -16,11 +16,7 @@ const SignUp = forwardRef((props, ref) => {
         if (ref) {
           ref.current.expand();
         } else {
-          router.push({
-            path: '/partidos',
-            params: { idMatch: props.match.id },
-          })
-          
+         props.onPress()
         }
       }}
     >
@@ -32,9 +28,11 @@ const SignUp = forwardRef((props, ref) => {
           </View>
         </View>
 
-        {props.match?.match_owner != user.id && 
+        {props.match?.match_owner.id != user.id ?
           <SubHeading size={'16px'} color={Colors.blue}>Anotarse</SubHeading>
-          }
+        :           
+          <SubHeading size={'16px'} color={Colors.blue}>Ver detalles</SubHeading>
+        }
 
         </ViewJustifyCenter>
       ) : (
@@ -42,9 +40,16 @@ const SignUp = forwardRef((props, ref) => {
        <View style={{ width: 40, height: 40, borderWidth: 1, borderColor: Colors.blue, borderRadius: 100, borderStyle: 'dashed', justifyContent: 'center', alignItems: 'center', transform: [{ translateX: props.match?.match_owner != user.id ? -0 : -15 }], backgroundColor: '#fff' }}>
           <SubHeading size={'20px'} color={Colors.blue}>+</SubHeading>
         </View>
-          {props.match?.match_owner != user.id && 
-          <SubHeading size={'16px'} color={Colors.blue}>Anotarse</SubHeading>
-          }
+        {props.match?.match_owner.id != user.id ?(
+          <>
+           <SubHeading size={'16px'} color={Colors.blue}>Anotarse</SubHeading>
+           </>
+        )
+        
+         
+        :           
+          <SubHeading size={'16px'} color={Colors.blue}>Ver detalles</SubHeading>
+        }
         </ViewJustifyCenter>
       )}
     </TouchableOpacity>

@@ -19,7 +19,7 @@ const serverURL = 'https://sparring.nyc3.cdn.digitaloceanspaces.com/'
 const initialState = {
   stateUser: null,
   session: null,
-  isLoading: false,
+  isLoading: true,
   counter: 0,
   backUrl: serverURL,
   hasFaceID: null,
@@ -42,6 +42,8 @@ const reducer = (state = initialState, action) => {
       return { ...state, session: null, stateUser: null};
       case 'SET_FACE_ID':
         return { ...state, hasFaceID: action.payload};
+      case 'SET_IS_READY':
+        return { ...state, isLoading: false};
       case 'RESET_STATE':
         return initialState;
     default:

@@ -3,7 +3,7 @@
     "name": "sparring-app",
     "slug": "sparring-app",
     "scheme": "sparring-app",
-    "version": "1.10.24",
+    "version": "1.10.25",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",

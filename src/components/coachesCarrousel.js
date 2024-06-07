@@ -19,7 +19,7 @@ const CoachesCarousel = () => {
       try {
         const data = await getCoaches();
         setCoaches(data);
-        console.log(JSON.stringify(coaches, null,2))
+        // console.log(JSON.stringify(coaches, null,2))
       } catch (error) {
         console.error('Error fetching coaches:', error);
       } finally {
@@ -33,7 +33,6 @@ const CoachesCarousel = () => {
   const renderCoachItem = ({ item }) => {
     return (
       <View style={{ padding: 15, backgroundColor: '#fff', borderRadius: 8, width: width * 0.78, marginLeft: 20, position: 'relative' }}>
-        {console.log(item.profilePicture?.formats?.thumbnail?.url)}
         <View style={{ position: 'absolute', backgroundColor: Colors.primaryGreen, height: "30%", width: width * 0.78, top: 0, left: 0, borderTopRightRadius: 8, borderTopLeftRadius: 8 }}></View>
         <View>
           <ImageBackground

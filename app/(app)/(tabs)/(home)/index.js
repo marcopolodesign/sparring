@@ -11,8 +11,9 @@ const { height } = Dimensions.get('screen');
 import NearbyMatches from '../../../../src/components/matchesCarrousel.js'
 import NearbyCoaches from '../../../../src/components/coachesCarrousel.js'
 
-
 import * as Haptics from 'expo-haptics';
+
+import Loading from '../../../../src/components/loading.js';
 
 import Header from '../../../../src/components/header/header.js'
 import BottomUp from '../../../../src/components/BottomUp.js'
@@ -20,6 +21,7 @@ import MainButton from '../../../../src/components/button.js';
 import MapCard from '../../../../src/components/home/MapCard.js';
 import Share from '../../../../src/components/share.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import OwnMatches from '../../../../src/components/ownMatches.js';
 
 
 
@@ -27,11 +29,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
  const App =  ({...props}) => {
 
+  // const childIsLoading = useSelector(state => state.isLoading);
+  const [childIsLoading, setChildIsLoading] = useState(true)
+  console.log('childIsLoading', childIsLoading)
   const session = useSelector(state => state.session);
   const user = JSON.parse(session);
+  // console.log('user', JSON.stringify(user, "USERRRR", 2));
   const backUrl = useSelector(state => state.backUrl);
   const [hasFaceIDActive, setHasFaceIDActive] = useState(null)
-
+  const [hasMatches, setHasMatches] = useState(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   const sheetRef = useRef(null);
 
@@ -47,20 +54,32 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
     async function checkFaceId() {
       const faceIDStatus = await AsyncStorage.getItem('hasFaceIDSet');
       setHasFaceIDActive(faceIDStatus);
-      console.log('hasFaceIDActive', faceIDStatus); // This will log the correct value
+      // console.log('hasFaceIDActive', faceIDStatus); // This will log the correct value
 
       if (faceIDStatus !== 'true') {
         onFaceId(user);
       }
+      user.matches.length > 0 && setHasMatches(true)
     }
 
     checkFaceId();
   }, [user, onFaceId]);
 
 
+  
+
 
   return (
-    <Container bgColor={Colors.darkGreen}>
+    <>
+    {childIsLoading && 
+        (
+            <Loading color={Colors.blue}
+            title={'Cargando'}
+            SubTitle={' Ya sos parte de nuestra comunidad. Estamos cargando recomendaciones para que ya puedas conectar con otros jugadores'}
+            loader
+            />
+        )} 
+    <Container bgColor={Colors.darkGreen}> 
       <Stack.Screen options={{headerShown: false}} title="Home"/>
         <>
         <View style={{paddingHorizontal: 20, paddingBottom: 20}}>
@@ -69,26 +88,40 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
         <StatusBar style="auto" />
         </View>
       <ScrollView style={{minHeight: height, paddingHorizontal: 20, paddingTop: 30, flex: 1, paddingBottom: 100}}>
-        
-        <View>
-          <Heading color={"#fff"}>Jugar ahora</Heading>
-          <TouchableOpacity onPress={() => {
-            sheetRef.current.expand()
-            setBottomUpProps({
-              title: 'CANCHA RESERVADA CORRECTAMENTE!',
-              paragraph: 'PPT Pilar - Cancha 1 • 9:00 — 10:00',
-              buttonTitle: 'Invitar amigos a la reserva',
-              onPress: () => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-              },
-              loading: false,
-            });
-            }}>
-            <Text color={'#fff'} size={'14px'}>Ver partidos por Zona Norte</Text>
-          </TouchableOpacity>
-        </View>
 
-        <NearbyMatches />
+      {hasMatches && (
+          <View style={{marginBottom: 30}}>
+            <View>
+                <Heading style={{marginBottom:-10}}color={"#fff"}>Mis Partidos</Heading>
+             </View>
+          <OwnMatches setChildIsLoading={setChildIsLoading}/>
+          </View>
+          )}
+        
+        {user.matches.length > 0 && (
+          <>
+            <View>
+              <Heading color={"#fff"}>Jugar ahora</Heading>
+              <TouchableOpacity onPress={() => {
+                sheetRef.current.expand()
+                setBottomUpProps({
+                  title: 'CANCHA RESERVADA CORRECTAMENTE!',
+                  paragraph: 'PPT Pilar - Cancha 1 • 9:00 — 10:00',
+                  buttonTitle: 'Invitar amigos a la reserva',
+                  onPress: () => {
+                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                  },
+                  loading: false,
+                });
+                }}>
+                <Text color={'#fff'} size={'14px'}>Ver partidos por Zona Norte</Text>
+              </TouchableOpacity>
+            </View>
+            <NearbyMatches />
+          </>
+        )
+          }
+   
   
           <View style={{flexDirection: 'row', marginTop: 20, marginBottom: 40, alignItems: 'center', gap: 20, justifyContent: "space-between"}}>
             <MainButton
@@ -154,6 +187,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
         />
         </>
      </Container>
+    </>
   );
 }
 
