@@ -15,6 +15,7 @@ import LocationPin from '../../../src/assets/icons/location-pin.js';
 import SearchIcon from '../../../src/assets/icons/search.js'
 import HistoryIcon from '../../../src/assets/icons/history.js'
 import MapIcon from '../../../src/assets/icons/map-icon.js'
+import Loading from '../../../src/components/loading.js';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -89,13 +90,21 @@ const CourtScreen = () => {
 
   if (isLoading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center' }}>
-        <Text>Loading...</Text>
-      </View>
+      <>
+      <Loading LoadingBgColor={Colors.darkGreen || "#0F5CCD"}
+      title={'Buscando canchas'}
+      SubTitle={'Mostrando más de 423 canchas'}
+      loader
+      />
+      <Stack.Screen options={{ headerShown: false }} title="Canchas" />
+      </>
     );
   }
 
   return (
+    <>
+    
+
     <Container safeArea bgColor={Colors.darkGreen}>
       <Stack.Screen options={{ headerShown: false }} title="Canchas" />
       <View style={styles.header}>
@@ -132,12 +141,13 @@ const CourtScreen = () => {
             //   item.attributes.location.latitude,
             //   item.attributes.location.longitude
             // ).toFixed(0);
+            const courtCover = item.attributes.cover?.data?.attributes?.formats?.medium?.url;
 
             return (
               <TouchableOpacity key={index}
               onPress={() => { router.push({  pathname: '/cancha', 
               params: {courtId: item.id} }) }}>
-              <ImageBackground key={index} source={{ uri: item.attributes.cover.data.attributes.formats.medium.url }} style={styles.courtImage}>
+              <ImageBackground key={index} source={{ uri: courtCover }} style={styles.courtImage}>
                 <View style={styles.courtDetails}>
                   <Heading>{item.attributes.name}</Heading>
               
@@ -169,6 +179,8 @@ const CourtScreen = () => {
         }}
       >
        {courts.map((court) => (
+        <>
+
             <Marker
               key={court.id}
               coordinate={{
@@ -181,12 +193,13 @@ const CourtScreen = () => {
               }}
             >
               <MapMarker
-                uri={court.attributes.cover.data.attributes.formats.thumbnail.url}
+                uri={court.attributes.cover?.data?.attributes?.formats?.medium?.url}
                 title={court.attributes.name}
                 id={court.id}
                 isSelected={selectedMarker === court.id}
               />
             </Marker>
+            </>
           ))}
       </MapView>
       {!isMapActive && 
@@ -200,6 +213,7 @@ const CourtScreen = () => {
       </TouchableOpacity>
       }
     </Container>
+    </>
   );
 };
 

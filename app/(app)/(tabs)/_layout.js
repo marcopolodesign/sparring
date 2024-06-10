@@ -1,4 +1,5 @@
 import React from 'react';
+import { View } from 'react-native';
 import { Tabs } from 'expo-router';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import {Colors} from '../../../src/components/constants.js'
@@ -8,10 +9,19 @@ import CanchasIcon from '../../../src/assets/icons/canchas.js'
 import PartidosIcon from '../../../src/assets/icons/partidos.js'
 import ProfesoresIcon from '../../../src/assets/icons/profesores.js'
 
+import PartidosHeader from '../../../src/components/partidos/PartidosHeader.js'
+import { Heading } from '../../../src/components/styled-components.js';
+import AddMatch from '../../../src/assets/icons/add-match.js';
+
 export default function TabLayout() {
+
+
+
+
+
   return (
     <Tabs screenOptions={{
-      tabBarActiveTintColor: Colors.darkGreen
+      tabBarActiveTintColor: Colors.darkGreen,
       }}>
       <Tabs.Screen
         name="(home)"
@@ -30,9 +40,12 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="partidos"
+        name="(partidos)"
+        
         options={{
+          header: () => <PartidosHeader />,  
           title: 'Partidos',
+          // headerShown: false,
           tabBarIcon: ({ color }) => <PartidosIcon color={color} />,
         }}
       />
@@ -66,6 +79,7 @@ export default function TabLayout() {
         }}
         /> */}
     </Tabs>
+
   );
 }
 

@@ -9,6 +9,8 @@ import { Heading, SubHeading, Span, BorderView } from '../../src/components/styl
 import { fetchCourtDetails } from '../../api/functions.js';
 import MapMarker from '../../src/components/mapMarker.js';
 
+
+
 const { width } = Dimensions.get('screen');
 
 const CourtScreen = () => {
@@ -42,7 +44,7 @@ const CourtScreen = () => {
   }
 
   const renderItem = ({ item }) => (
-    <Image source={{ uri: item.attributes.formats.medium.url }} style={{ width, height: 250 }} />
+    <Image source={{ uri: item.attributes?.formats?.medium?.url }} style={{ width, height: 250 }} />
   );
 
   const handleScroll = (event) => {
@@ -73,7 +75,7 @@ const CourtScreen = () => {
           }}
         >
           <MapMarker
-                uri={court.cover.data.attributes.formats.medium.url}
+                uri={court.cover?.data?.attributes?.formats?.medium?.url}
                 title={court.name}
                 id={court.id}
                 // isSelected={selectedMarker === court.id}
@@ -112,7 +114,7 @@ const CourtScreen = () => {
         onScroll={handleScroll}
       />
       <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: 10, borderRadius: Generals.borderRadius }}>
-        {court.gallery.data.map((_, index) => (
+        {court.gallery?.data?.map((_, index) => (
           <View
             key={index}
             style={{

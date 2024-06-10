@@ -97,8 +97,9 @@ const AnimatedScreen = (props) => {
   });
 
   return (
-    <View style={styles.container}>
-      <View style={styles.background} />
+    <View style={[styles.container]}>
+      <View style={[styles.background, {backgroundColor: props.LoadingBgColor ? props.LoadingBgColor : '#0F5CCD',
+  }]} />
       <Animated.View style={[styles.stripe, stripeStyle]} />
       <Animated.View style={[headingStyle]}>
         <Heading style={[styles.title, { textAlign: 'center' }]}>{props.title}
@@ -126,7 +127,6 @@ export default AnimatedScreen;
 const styles = StyleSheet.create({
   container: {
     // flex: 1,
-    backgroundColor: '#0F5CCD',
     justifyContent: 'center',
     alignItems: 'center',
     position: "absolute", 

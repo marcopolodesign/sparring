@@ -43,6 +43,17 @@ export const ContentContainer = styled.View`
     marginBottom: 50px;
   `
 
+
+  export const PopOptions = styled.TouchableOpacity`
+  padding: 30px 20px;
+  border: 1px solid #EDEAEA;
+  borderRadius: ${Generals.borderRadius}px;
+  backgroundColor: ${({ BgColor}) => (BgColor ? BgColor : '#fff')};
+  color: ${({ color}) => (color ? color : Colors.textGrey)};
+  flex: 1;
+  justifyContent: center;
+  alignItems: center;`
+
 // TEXTS
 
 export const Heading = styled.Text`
@@ -60,7 +71,7 @@ export const SubHeading = styled.Text`
   fontFamily: "TT Interphases Pro";
   font-size: ${({ size }) => (size ? size  : "19.5px")};
   font-style: normal;
-  font-weight: 400;  fontStyle: "normal";
+  font-weight: ${({ isBold }) => (isBold ? 'bold' : 'normal')};
   color: ${({ color }) => color || "#fff"};
   line-height: ${({ size }) => size * 1.5 + "px" || '27.5px'};
   textAlign: ${({ textCenter }) => (textCenter ? textCenter : 'left')};

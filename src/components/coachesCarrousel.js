@@ -31,17 +31,26 @@ const CoachesCarousel = () => {
   }, []);
 
   const renderCoachItem = ({ item }) => {
+
+// 
+const getRandomColor = () => {
+  const colors = Object.values(Colors);
+  const randomIndex = Math.floor(Math.random() * colors.length);
+  randomIndex === 0 || colors[randomIndex] === '#FFF' ? randomIndex + 1 : randomIndex;
+  return colors[randomIndex];
+};
+
     return (
-      <View style={{ padding: 15, backgroundColor: '#fff', borderRadius: 8, width: width * 0.78, marginLeft: 20, position: 'relative' }}>
-        <View style={{ position: 'absolute', backgroundColor: Colors.primaryGreen, height: "30%", width: width * 0.78, top: 0, left: 0, borderTopRightRadius: 8, borderTopLeftRadius: 8 }}></View>
+      <View style={{ padding: 20, backgroundColor: '#fff', borderRadius: 8, width: width * 0.68, marginLeft: 20, position: 'relative' }}>
+        <View style={{ position: 'absolute', backgroundColor: getRandomColor(), height: "30%", width: width * 0.68, top: 0, left: 0, borderTopRightRadius: 8, borderTopLeftRadius: 8 }}></View>
         <View>
           <ImageBackground
             source={{ uri: backUrl + item.profilePicture?.formats?.thumbnail?.url }}
-            style={{ width: 160, height: 160, borderRadius: 100, borderWidth: 2, borderColor: '#fff', overflow: 'hidden', marginBottom: 20 }}
+            style={{ width: 150, height: 150, borderRadius: 100, borderWidth: 2, borderColor: '#fff', overflow: 'hidden', marginBottom: 20 }}
           />
         </View>
-        <View style={{ marginTop: 25 }}>
-          <SubHeading size={'22px'} color={Colors.darkGreen} weight={'bold'}>{item.firstName} {item.lastName}</SubHeading>
+        <View style={{ marginTop: 15 }}>
+          <SubHeading size={'22px'} color={Colors.darkGreen} isBold >{item.firstName} {item.lastName}</SubHeading>
           <SubHeading size={'16px'} color={Colors.textGrey} weight={'bold'}>{item.description || 'Doy clases hace más de 10 años a adultos, niños y adolescentes desde nivel inicial hasta avanzado'}</SubHeading>
         </View>
       </View>

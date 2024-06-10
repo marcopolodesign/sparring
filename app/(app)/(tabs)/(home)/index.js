@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import {Stack, router} from 'expo-router'
+import {Stack, router, useLocalSearchParams} from 'expo-router'
 import Container from '../../../../Container.js'
 import { StyleSheet, View, StatusBar, FlatList, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
 import { onFaceId } from '../../../../api/functions.js';
 import {Colors} from '../../../../src/components/constants.js'
-import { Heading, Text } from '../../../../src/components/styled-components.js';
+import { Heading, SubHeading, Text, ViewJustifyCenter } from '../../../../src/components/styled-components.js';
 const { height } = Dimensions.get('screen');
 
 import NearbyMatches from '../../../../src/components/matchesCarrousel.js'
@@ -17,6 +17,7 @@ import Loading from '../../../../src/components/loading.js';
 
 import Header from '../../../../src/components/header/header.js'
 import BottomUp from '../../../../src/components/BottomUp.js'
+import BottomSelect from '../../../../src/components/BottomSelect.js'
 import MainButton from '../../../../src/components/button.js';
 import MapCard from '../../../../src/components/home/MapCard.js';
 import Share from '../../../../src/components/share.js';
@@ -25,11 +26,7 @@ import OwnMatches from '../../../../src/components/ownMatches.js';
 
 
 
-// import Home from '../Home.js';
-
  const App =  ({...props}) => {
-
-  // const childIsLoading = useSelector(state => state.isLoading);
   const [childIsLoading, setChildIsLoading] = useState(true)
   console.log('childIsLoading', childIsLoading)
   const session = useSelector(state => state.session);
@@ -38,9 +35,15 @@ import OwnMatches from '../../../../src/components/ownMatches.js';
   const backUrl = useSelector(state => state.backUrl);
   const [hasFaceIDActive, setHasFaceIDActive] = useState(null)
   const [hasMatches, setHasMatches] = useState(null)
-  const [isLoading, setIsLoading] = useState(true)
 
   const sheetRef = useRef(null);
+  const countryBottomSheetRef = useRef(null)
+
+  const {succesMessage} = useLocalSearchParams();
+  const {LoadingBgColor} = useLocalSearchParams();
+
+  console.log('succesMessage', succesMessage)
+  console.log('LoadingBgColor', LoadingBgColor)
 
   const [bottomUpProps, setBottomUpProps] = useState({
     title: '',
@@ -49,6 +52,8 @@ import OwnMatches from '../../../../src/components/ownMatches.js';
     onPress: () => {},
     loading: false,
   });
+
+
 
   useEffect(() => {
     async function checkFaceId() {
@@ -66,18 +71,15 @@ import OwnMatches from '../../../../src/components/ownMatches.js';
   }, [user, onFaceId]);
 
 
-  
-
-
   return (
     <>
     {childIsLoading && 
         (
-            <Loading color={Colors.blue}
-            title={'Cargando'}
-            SubTitle={' Ya sos parte de nuestra comunidad. Estamos cargando recomendaciones para que ya puedas conectar con otros jugadores'}
-            loader
-            />
+          <Loading LoadingBgColor={LoadingBgColor || "#0F5CCD"}
+          title={succesMessage || 'Cargando'}
+          SubTitle={'Estamos cargando tus partidos!'}
+          loader
+          />
         )} 
     <Container bgColor={Colors.darkGreen}> 
       <Stack.Screen options={{headerShown: false}} title="Home"/>
@@ -89,45 +91,62 @@ import OwnMatches from '../../../../src/components/ownMatches.js';
         </View>
       <ScrollView style={{minHeight: height, paddingHorizontal: 20, paddingTop: 30, flex: 1, paddingBottom: 100}}>
 
-      {hasMatches && (
-          <View style={{marginBottom: 30}}>
-            <View>
-                <Heading style={{marginBottom:-10}}color={"#fff"}>Mis Partidos</Heading>
-             </View>
-          <OwnMatches setChildIsLoading={setChildIsLoading}/>
-          </View>
-          )}
-        
-        {user.matches.length > 0 && (
-          <>
-            <View>
-              <Heading color={"#fff"}>Jugar ahora</Heading>
-              <TouchableOpacity onPress={() => {
-                sheetRef.current.expand()
-                setBottomUpProps({
-                  title: 'CANCHA RESERVADA CORRECTAMENTE!',
-                  paragraph: 'PPT Pilar - Cancha 1 • 9:00 — 10:00',
-                  buttonTitle: 'Invitar amigos a la reserva',
-                  onPress: () => {
-                    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                  },
-                  loading: false,
-                });
-                }}>
-                <Text color={'#fff'} size={'14px'}>Ver partidos por Zona Norte</Text>
-              </TouchableOpacity>
+        {hasMatches ?  (
+            <View style={{marginBottom: 0}}>
+              <ViewJustifyCenter>
+                  <Heading style={{marginBottom:0}}color={"#fff"}>Mis Partidos</Heading>
+                  <TouchableOpacity onPress={() => {
+                    // router.push({pathname: '(app)/partidos'})
+                    sheetRef.current.expand()
+                    setBottomUpProps({
+                      title: 'CANCHA RESERVADA CORRECTAMENTE!',
+                      paragraph: 'PPT Pilar - Cancha 1 • 9:00 — 10:00',
+                      buttonTitle: 'Invitar amigos a la reserva',
+                      onPress: () => {
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                      },
+                      loading: false,
+                    });
+                    }}>
+                    <SubHeading isBold color={'#fff'} size={'16px'}>Buscar más partidos</SubHeading>
+                  </TouchableOpacity>
+              </ViewJustifyCenter>
+            <OwnMatches setChildIsLoading={setChildIsLoading}/>
             </View>
-            <NearbyMatches />
-          </>
-        )
-          }
-   
-  
+        )  : (
+          // {user.matches.length > 0 && 
+            (
+              <>
+                <View>
+                  <Heading color={"#fff"}>Jugar ahora</Heading>
+                  <TouchableOpacity onPress={() => {
+                    sheetRef.current.expand()
+                    setBottomUpProps({
+                      title: 'CANCHA RESERVADA CORRECTAMENTE!',
+                      paragraph: 'PPT Pilar - Cancha 1 • 9:00 — 10:00',
+                      buttonTitle: 'Invitar amigos a la reserva',
+                      onPress: () => {
+                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                      },
+                      loading: false,
+                    });
+                    }}>
+                    <Text color={'#fff'} size={'14px'}>Ver partidos por Zona Norte</Text>
+                  </TouchableOpacity>
+                </View>
+                <NearbyMatches />
+              </>
+            ) 
+            // }
+            )
+            }
+          
+      
+    
           <View style={{flexDirection: 'row', marginTop: 20, marginBottom: 40, alignItems: 'center', gap: 20, justifyContent: "space-between"}}>
             <MainButton
               onPress={() => {
-                router.push({  params: {newMatchSport: 'Paddle'}, pathname: '(app)/createMatch'})
-                // sheetRef.current.expand()
+                countryBottomSheetRef.current.expand()
                 // setBottomUpProps({
                 //   title: 'Proximamente disponible!!!!',
                 //   paragraph: 'Estás con ganas de jugar?',
@@ -135,6 +154,7 @@ import OwnMatches from '../../../../src/components/ownMatches.js';
                 //   onPress: () => {
                 //     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
                 //     console.log('presssssin')
+                      // router.push({  params: {newMatchSport: 'Paddle'}, pathname: '(app)/createMatch'})
                 //     loading: true
                 //   },
                 //   loading: false,
@@ -145,34 +165,28 @@ import OwnMatches from '../../../../src/components/ownMatches.js';
         
           <MapCard user={user} href={'partidos'} enableScroll={false}/>
 
+          <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: "center", marginTop: 40}}>
+            <Heading color={"#fff"}>Buscar Profesores</Heading>
+            <TouchableOpacity onPress={() => {
+              sheetRef.current.expand()
+              setBottomUpProps({
+                title: 'CANCHA RESERVADA CORRECTAMENTE!',
+                paragraph: 'PPT Pilar - Cancha 1 • 9:00 — 10:00',
+                buttonTitle: 'Invitar amigos a la reserva',
+                onPress: () => {
+                  Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                },
+                loading: false,
+              });
+              }}>
+              <SubHeading size={'16px'} isBold color={'#fff'}>Ver todos</SubHeading>
+            </TouchableOpacity>
+          </View>
 
-        <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: "flex-end", marginTop: 40}}>
-          <Heading color={"#fff"}>Buscar Profesores</Heading>
-          <TouchableOpacity onPress={() => {
-            sheetRef.current.expand()
-            setBottomUpProps({
-              title: 'CANCHA RESERVADA CORRECTAMENTE!',
-              paragraph: 'PPT Pilar - Cancha 1 • 9:00 — 10:00',
-              buttonTitle: 'Invitar amigos a la reserva',
-              onPress: () => {
-                Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-              },
-              loading: false,
-            });
-            }}>
-            <Text color={'#fff'}>Ver todos</Text>
-          </TouchableOpacity>
-        </View>
+          <NearbyCoaches />
 
-        <NearbyCoaches />
-
-        <Share />
-
-
-       <View style={{marginBottom: 250}}></View>
-    
-  
-      
+          <Share />
+          <View style={{marginBottom: 250}}></View>
         </ScrollView>
 
          
@@ -185,6 +199,10 @@ import OwnMatches from '../../../../src/components/ownMatches.js';
             sheetRef.current.close();
           }}
         />
+
+
+          <BottomSelect selection hasTabs ref={countryBottomSheetRef} />
+
         </>
      </Container>
     </>
@@ -200,15 +218,3 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
-
-
-// {isCompatible ? (
-//   <TouchableOpacity onPress={() => {onFaceId()}}
-//     style={{ paddingHorizontal: 20, paddingVertical: 15, backgroundColor: '#EDEAEA', borderRadius: 8, flexDirection: 'row', justifyContent: 'center', gap: 10, alignItems: 'center', marginBottom: 15 }}
-//   >
-//     <Icons icon='Face Id' color={Colors.darkGreen} />
-//     <SubHeading style={{ textAlign: 'center', fontWeight: 'bold' }} color={Colors.darkGreen}>
-//       Ingresar con Face ID
-//     </SubHeading>
-//   </TouchableOpacity>
-// ) : null}

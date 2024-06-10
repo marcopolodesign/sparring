@@ -4,7 +4,6 @@ import { View, Text, TextInput, Dimensions, StyleSheet, TouchableOpacity } from 
 import { router, useLocalSearchParams } from 'expo-router';
 import MapView, { Marker } from 'react-native-maps';
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete';
-import axios from 'axios';
 import Constants from 'expo-constants';
 import * as Location from 'expo-location';
 import {createMatch} from '../../api/functions.js'
@@ -17,6 +16,8 @@ import { ViewJustifyCenter, Heading, SubHeading, Button } from '../../src/compon
 import MatchDateTime from '../../src/components/new-match/date-time.js';
 import PhotoMin from '../../src/components/photo-min.js';
 import InviteMembers from '../../src/components/new-match/invite-members.js';
+import BottomSelect from '../../src/components/BottomSelect.js';
+import Loading from '../../src/components/loading.js';
 
 // Icons
 import Arrow from '../../src/assets/icons/arrow.js';
@@ -36,6 +37,7 @@ const CreateMatch = () => {
   const user = JSON.parse(session);
   const mapRef = useRef(null);
   const inviteRef = useRef(null)
+  const countryBottomSheetRef = useRef(null);
 
   const profilePictureUrl = user?.profilePicture.formats.thumbnail.url;
 
@@ -77,6 +79,12 @@ const CreateMatch = () => {
     })();
   }, []);
 
+  const succesMessage = {
+    title : 'Partido creado con éxito!',
+    bgColor : Colors.orange
+  }
+  
+
 
   const handleTypeChange = () => {
     const newType = newMatch.ammount_players === 2 ? 4 : 2;
@@ -89,6 +97,7 @@ const CreateMatch = () => {
     const lat = details.geometry.location.lat;
     const lng = details.geometry.location.lng;
     setLocation({ latitude: lat, longitude: lng });
+    console.log(location)
     mapRef.current.animateToRegion({
       latitude: lat,
       longitude: lng,
@@ -111,9 +120,9 @@ const CreateMatch = () => {
     try {
     const response = await createMatch(newMatch);
       console.log('Match created:', response);
-      alert('Success', 'Match created successfully');
+      // alert('Success', 'Match created successfully');
 
-      router.push('/')
+      router.push({pathname: '/', params: {succesMessage: 'Partido creado con éxito!', LoadingBgColor: Colors.orange}})
     } catch (error) {
       console.error('Error creating match:', error.message);
       alert('Error', 'Failed to create match');
@@ -122,9 +131,11 @@ const CreateMatch = () => {
 
   if (isLoading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center' }}>
-        <Text>Loading...</Text>
-      </View>
+      <Loading LoadingBgColor={"#0F5CCD"}
+          title={'Cargando'}
+          SubTitle={`Listo para crear un partido de ${newMatch.name}?`}
+          loader
+      />
     );
   }
 
@@ -132,10 +143,12 @@ const CreateMatch = () => {
     <>
     <Container hasPadding bgColor={Colors.primaryGreen}>
       <ViewJustifyCenter style={{ justifyContent: 'flex-start', gap: 10, marginBottom: 20 }}>
-        <Heading color={Colors.darkGreen}>Nuevo partido de {newMatch?.name}</Heading>
-        <View style={{ transform: [{ rotate: '-90deg' }] }}>
-          <Arrow />
-        </View>
+        <TouchableOpacity style={{ flexDirection: 'row', gap: 15 }} onPress={() => countryBottomSheetRef.current.expand()} >
+          <Heading color={Colors.darkGreen}>Nuevo partido de {newMatch?.name}</Heading>
+          <View style={{ transform: [{ rotate: '-90deg' }] }}>
+            <Arrow />
+          </View>
+        </TouchableOpacity>
       </ViewJustifyCenter>
 
       <View style={styles.inputContainer}>
@@ -203,9 +216,14 @@ const CreateMatch = () => {
       </Button>
 
 
+
     </Container>
 
+
     <InviteMembers ref={inviteRef} user={user} newMatch={newMatch} setNewMatch={setNewMatch}/>
+
+    <BottomSelect newMatch={newMatch} setNewMatch={setNewMatch} selection ref={countryBottomSheetRef} />
+
 
     </>
   );
