@@ -35,6 +35,8 @@ const BottomUp = forwardRef((props, ref) => {
                     sport: sport
                 }
             })
+
+            props.setChosenSport(sport)
         }
       },
     })

@@ -32,6 +32,11 @@ const CreateMatch = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [location, setLocation] = useState(null);
   const { newMatchSport } = useLocalSearchParams();
+
+  const [chosenSport, setChosenSport] = useState(newMatchSport);
+
+
+  console.log(chosenSport, 'CHOSEN')
   
   const session = useSelector((state) => state.session);
   const user = JSON.parse(session);
@@ -60,6 +65,8 @@ const CreateMatch = () => {
     members: [user.id]
   });
 
+
+
   useEffect(() => {
     console.log( JSON.stringify(newMatch, null, 2));
     (async () => {
@@ -76,8 +83,16 @@ const CreateMatch = () => {
         longitudeDelta: (width / height) * 0.00522,
       });
       setIsLoading(false);
+      console.log(newMatchSport, 'NMS')
     })();
-  }, []);
+
+  }, [newMatchSport]);
+
+
+  setTimeout(() => {
+    if (chosenSport === 'select') {
+      countryBottomSheetRef.current.expand()
+    } }, 2000)
 
   const succesMessage = {
     title : 'Partido creado con éxito!',
@@ -222,7 +237,7 @@ const CreateMatch = () => {
 
     <InviteMembers ref={inviteRef} user={user} newMatch={newMatch} setNewMatch={setNewMatch}/>
 
-    <BottomSelect newMatch={newMatch} setNewMatch={setNewMatch} selection ref={countryBottomSheetRef} />
+    <BottomSelect newMatch={newMatch} setChosenSport={setChosenSport} setNewMatch={setNewMatch} selection ref={countryBottomSheetRef} />
 
 
     </>

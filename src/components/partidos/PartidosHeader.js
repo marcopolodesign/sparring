@@ -17,7 +17,7 @@ export default function PartidosHeader() {
               <AddMatch />
             </View>
             <Heading textCenter>Partidos</Heading>
-          <AddMatch onPress={()=> { router.push({  params: {newMatchSport: 'Paddle'}, pathname: '(app)/createMatch'})}} />
+          <AddMatch onPress={()=> { router.push({  params: {newMatchSport: 'select'}, pathname: '(app)/createMatch'})}} />
           </View>
           
     </>
