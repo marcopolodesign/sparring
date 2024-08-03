@@ -15,10 +15,6 @@ import AddMatch from '../../../src/assets/icons/add-match.js';
 
 export default function TabLayout() {
 
-
-
-
-
   return (
     <Tabs screenOptions={{
       tabBarActiveTintColor: Colors.darkGreen,
@@ -28,6 +24,7 @@ export default function TabLayout() {
         options={{
           headerShown: false,
           title: 'Home',
+          // href: null,
           tabBarIcon: ({ color }) => <HomeIcon color={color} />,
         }}
       />
@@ -35,6 +32,7 @@ export default function TabLayout() {
         name="canchas"
         options={{
           title: 'Canchas',
+          // href: null,
           tabBarIcon: ({ color }) => <CanchasIcon color={color} />,
         }}
       />
@@ -45,6 +43,7 @@ export default function TabLayout() {
         options={{
           header: () => <PartidosHeader />,  
           title: 'Partidos',
+          // href: null,
           // headerShown: false,
           tabBarIcon: ({ color }) => <PartidosIcon color={color} />,
         }}
@@ -52,8 +51,10 @@ export default function TabLayout() {
 
     <Tabs.Screen
         name="profesores"
+        
         options={{
           title: 'Profesores',
+          // href: null,
           tabBarIcon: ({ color }) => <ProfesoresIcon color={color} />,
         }}
         />
@@ -67,17 +68,17 @@ export default function TabLayout() {
         }}
         />
 
-  {/* <Tabs.Screen
-        name="partido"
+  <Tabs.Screen
+        name="indexxxx-e"
         options={{
-          title: 'Jugadores',
+          title: 'Map',
           presentation: 'fullScreenModal',
           animation: 'slide_from_bottom',
           href: null,
           headerShown: false,
           tabBarIcon: ({ color }) => <FontAwesome size={28} name="cog" color={color} />,
         }}
-        /> */}
+        />
     </Tabs>
 
   );

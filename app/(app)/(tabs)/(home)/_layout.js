@@ -22,7 +22,7 @@ export default function Home() {
     }}
   >
     <Stack.Screen name="index" options={{ headerShown: false}} />
-    <Stack.Screen name="profile" />
+    {/* <Stack.Screen name="profile" /> */}
     {/* <Stack.Screen name="onboarding-sport" options={{ headerShown: false }} /> */}
   </Stack>
 

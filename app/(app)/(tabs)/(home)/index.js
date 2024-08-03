@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import {Stack, router, useLocalSearchParams} from 'expo-router'
 import Container from '../../../../Container.js'
-import { StyleSheet, View, StatusBar, FlatList, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, StatusBar, FlatList, Dimensions, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
 import { onFaceId } from '../../../../api/functions.js';
 import {Colors} from '../../../../src/components/constants.js'
 import { Heading, SubHeading, Text, ViewJustifyCenter } from '../../../../src/components/styled-components.js';
@@ -23,10 +23,12 @@ import MapCard from '../../../../src/components/home/MapCard.js';
 import Share from '../../../../src/components/share.js';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import OwnMatches from '../../../../src/components/ownMatches.js';
+import Constants from 'expo-constants';
 
 
 
  const App =  ({...props}) => {
+  const [refreshing, setRefreshing] = useState(false);
   const [childIsLoading, setChildIsLoading] = useState(true)
   console.log('childIsLoading', childIsLoading)
   const session = useSelector(state => state.session);
@@ -53,6 +55,17 @@ import OwnMatches from '../../../../src/components/ownMatches.js';
     loading: false,
   });
 
+
+  useEffect(() => {
+    console.log('Environment:', Constants.expoConfig.extra.envName);
+  }, []);
+  
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
 
 
   useEffect(() => {
@@ -89,7 +102,12 @@ import OwnMatches from '../../../../src/components/ownMatches.js';
         <Header user={user} backUrl={backUrl} />
         <StatusBar style="auto" />
         </View>
-      <ScrollView style={{minHeight: height, paddingHorizontal: 20, paddingTop: 30, flex: 1, paddingBottom: 100}}>
+      <ScrollView 
+    refreshControl={
+      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+
+      style={{minHeight: height, paddingHorizontal: 20, paddingTop: 30, flex: 1, paddingBottom: 100}}>
+
 
         {hasMatches ?  (
             <View style={{marginBottom: 0}}>
@@ -163,7 +181,7 @@ import OwnMatches from '../../../../src/components/ownMatches.js';
             bgColor={Colors.primaryGreen} ctaText={"Crear Partido"} color={Colors.darkGreen} icon={'Add'} />
           </View>
         
-          <MapCard user={user} href={'partidos'} enableScroll={false}/>
+          <MapCard user={user} href={'map'} enableScroll={false}/>
 
           <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: "center", marginTop: 40}}>
             <Heading color={"#fff"}>Buscar Profesores</Heading>
@@ -188,8 +206,7 @@ import OwnMatches from '../../../../src/components/ownMatches.js';
           <Share />
           <View style={{marginBottom: 250}}></View>
         </ScrollView>
-
-         
+    
         <BottomUp
           {...bottomUpProps}
           sheetRef={sheetRef}
@@ -199,10 +216,7 @@ import OwnMatches from '../../../../src/components/ownMatches.js';
             sheetRef.current.close();
           }}
         />
-
-
-          <BottomSelect selection hasTabs ref={countryBottomSheetRef} />
-
+        <BottomSelect selection hasTabs ref={countryBottomSheetRef} />
         </>
      </Container>
     </>

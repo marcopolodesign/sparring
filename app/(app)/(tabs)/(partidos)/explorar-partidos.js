@@ -5,7 +5,7 @@ import {Stack} from 'expo-router'
 
 import {Colors} from '../../../../src/components/constants.js'
 import Container from '../../../../Container.js'
-import { Heading, Span, SubHeading } from '../../../../src/components/styled-components.js';
+// import { Heading, Span, SubHeading } from '../../../../src/components/styled-components';
 
 import NearbyMatches from '../../../../src/components/matchesCarrousel.js'
 // icons

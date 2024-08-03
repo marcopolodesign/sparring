@@ -1,6 +1,6 @@
-import {useState, useEffect, useRef} from 'react'
+import {useState, useEffect, useRef, useCallback} from 'react'
 import {router} from 'expo-router'
-import {View, ScrollView, FlatList, StyleSheet} from 'react-native';
+import {View, ScrollView, FlatList, StyleSheet, RefreshControl} from 'react-native';
 import {Colors} from '../components/constants.js';
 import { Heading, SubHeading, Text, ViewJustifyCenter, Span } from '../components/styled-components.js';
 import { Dimensions } from 'react-native';
@@ -16,7 +16,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 const matchesCarrousel = ({...props}) => {
-
+    const [refreshing, setRefreshing] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
     const [matches, setMatches] = useState([]);
     const session = useSelector((state) => state.session);
@@ -26,9 +26,13 @@ const matchesCarrousel = ({...props}) => {
 
     const isPartidosView = props.partidosView;
 
+    const onRefresh = useCallback(() => {
+        setRefreshing(true);
+        LoadMatches()
+      }, []);
 
 
-    useEffect(() => {
+    const LoadMatches = () => {
         if (!hasMatch) {
             const loadMatch = async () => {
             try {
@@ -36,6 +40,7 @@ const matchesCarrousel = ({...props}) => {
                 setMatches(match);
                 // console.log('Match from matchesCarrousel.js:', JSON.stringify(match, null, 2));   
                 setIsLoading(false);
+                setRefreshing(false);
             } catch (error) {
                 console.error('Error fetching match:', error.message);
             }
@@ -44,7 +49,12 @@ const matchesCarrousel = ({...props}) => {
         } else {
             setMatches(user.matches)
             setIsLoading(false);
+            setRefreshing(false);
         }
+    }
+
+    useEffect(() => {
+      LoadMatches();
     }, []);
 
     const matchContent = (match)=> (  
@@ -189,6 +199,11 @@ if (isLoading) {
             data={matches}
             contentContainerStyle={isPartidosView ? styles.flatChild : styles.flatChildHome}
             renderItem={({ item }) => openMatches(item)}
+            refreshControl={
+                isPartidosView ?
+                    <RefreshControl tintColor={Colors.primaryGreen} refreshing={refreshing} onRefresh={onRefresh} />
+                    : null 
+              }
         />
     </View>
   )
