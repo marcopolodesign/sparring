@@ -30,7 +30,7 @@ const ScreenContainer = ({children, ...props}) => {
         </SafeAreaView>
       </SafeAreaProvider>
     ) : (
-      <ContentContainer bgColor={props.bgColor} style={{flex: 1, fontFamily: 'TT Interphases Pro'}}>
+      <ContentContainer bgColor={props.bgColor} style={[{flex: 1, fontFamily: 'TT Interphases Pro'}, props.styles]}>
         {children}
       </ContentContainer>
     )}

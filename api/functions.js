@@ -148,7 +148,7 @@ export const onFaceId = async (user, hasAuth) => {
           
           AsyncStorage.setItem('hasFaceID', JSON.stringify(user));
           AsyncStorage.setItem('hasFaceIDSet', 'true');
-          console.log('Uer from onFaceID', user)
+          // console.log('Uer from onFaceID', user)
         }
       },
     ]);
@@ -161,7 +161,7 @@ export const onFaceId = async (user, hasAuth) => {
 
 export const logWithFaceId = async (user) => { 
   try {
-    console.log(user, 'user from logWithFaceId')
+    // console.log(user, 'user from logWithFaceId')
     const isCompatible = await LocalAuthentication.hasHardwareAsync();
     
     if (!isCompatible) {
@@ -180,7 +180,7 @@ export const logWithFaceId = async (user) => {
       fallbackLabel: 'Use Passcode',
     });
     const loggedUser = await fetchUser(user.id);
-    console.log('User logged in:', loggedUser);
+    // console.log('User logged in:', loggedUser);
 
     return true
     // AsyncStorage.setItem('user', JSON.stringify(loggedUser));
@@ -197,9 +197,9 @@ export const getUserFriends = async (user) => {
 
     const friends = user.friends_added.map(friend => friend.id);
     const friendsReceived = user.friends_received.map(friend => friend.id);
-    console.log(friendsReceived, 'FRIENDS RECEIVED')
+    // console.log(friendsReceived, 'FRIENDS RECEIVED')
     friends.push(...friendsReceived);
-    console.log(friends, 'FRIENDS')
+    // console.log(friends, 'FRIENDS')
     let friendsEP = '';
 
     friends.forEach((friend, index) => {
@@ -246,6 +246,30 @@ const getUserProfilePicture = async (userId) => {
   }
 };
 
+export const getMultipleMatchDetails = async (matchIds) => {
+  if (!Array.isArray(matchIds) || matchIds.length === 0) {
+    return [];
+  }
+
+  // Construct the filter query with $in operator
+  const filters = matchIds.map((id, index) => `filters[id][$in][${index}]=${id}`).join('&');
+  
+  try {
+    const response = await axiosInstance.get(`/matches?${filters}&populate=*`);
+
+    // console.log(`/matches?${filters}&populate=members,match_owner,location,sport`)
+    const matches = response.data.data;
+
+    // Format the matches
+    const formattedMatches = await Promise.all(matches.map(match => formatMatchDetails(match)));
+    
+    return formattedMatches;
+  } catch (error) {
+    console.error('Error fetching multiple matches:', error);
+    throw error;
+  }
+};
+
 export const getMatchDetails = async (matchId) => {
   try {
     const response = await axiosInstance.get(`/matches/${matchId}?populate=members,match_owner,location,sport`);
@@ -263,13 +287,13 @@ export const getMatchDetails = async (matchId) => {
 
 export const getAllMatches = async () => {
   try {
-    const response = await axiosInstance.get(`/matches?populate=members,match_owner,location,sport`);
+    const response = await axiosInstance.get(`/matches/?populate=*`);
     const matches = response.data.data;
 
     // Process each match to include profile picture URLs
     const formattedMatches = await Promise.all(matches.map(formatMatchDetails));
 
-    console.log(JSON.stringify(formattedMatches, null, 2)); // Pretty-printing the JSON
+    // console.log(JSON.stringify(formattedMatches, null, 2)); // Pretty-printing the JSON
     return formattedMatches;
   } catch (error) {
     console.error(`Error fetching matches: ${error.message}`, error);
@@ -314,6 +338,7 @@ const formatMatchDetails = async (match) => {
     description: match.attributes.description,
     location: match.attributes.location,
     sport: match.attributes.sport,
+    ammount_players: match.attributes.ammount_players,
     match_owner: matchOwner ? {
       id: matchOwner.id,
       username: matchOwner.attributes.username,
@@ -380,6 +405,27 @@ export const createMatch = async (matchData) => {
   }
 };
 
+export const addMemberToMatch = async (matchId, userId) => {
+  try {
+    console.log(matchId, 'MATCH ID IN ADDMEMBER')
+    console.log(userId, 'USER ID IN ADDMEMBER');
+    const response = await getMatchDetails(matchId)
+      const match = response;
+      const members = match?.members || [];
+      console.log(JSON.stringify(match, null, 2))
+      console.log(members, 'ADD MEMBER TO MATCH MEMBERS')
+      const data = {
+        match,
+        members: [...members, userId],
+      };
+      return axiosInstance.put(`${API_BASE_URL}/matches/${matchId}`, { data });
+    
+  } catch (error) {
+    console.error('Error adding member to match:', error);
+    throw error;
+  }
+
+}
 export const isEmpty = (obj) => {
   return Object.keys(obj).length === 0;
 };

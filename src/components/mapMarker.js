@@ -2,15 +2,16 @@ import { Image, View, StyleSheet, TouchableOpacity } from 'react-native'
 import React, { Component } from 'react'
 import { SvgXml } from 'react-native-svg';
 import {router} from 'expo-router'
-import { SubHeading } from './styled-components';
+import { Heading, SubHeading } from './styled-components';
 import {Colors, Generals} from './constants';
 
 export default CustomMarker = ({ uri, title, isSelected, id }) => (
+    
     <View style={styles.markerContainer}>
-        <Image source={{ uri }} style={styles.markerImage} />
-            <View style={{marginTop: -13, zIndex: 2}}>
-        <BottomMarker />
-        </View>
+        <Image source={{ uri }} style={[styles.markerImage, {backgroundColor: Colors.primaryGreen}]} />
+        <View style={{marginTop: -13, zIndex: 2}}>
+            <BottomMarker />
+            </View>
        
 
         {isSelected &&

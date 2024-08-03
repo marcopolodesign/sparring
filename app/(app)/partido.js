@@ -9,7 +9,7 @@ import PageHeader from '../../src/components/header/page-header.js'
 import { BorderView, Heading, Span, SubHeading, ViewJustifyCenter } from '../../src/components/styled-components.js'
 import { ScrollView } from 'react-native-gesture-handler'
 import MatchOwner from '../../src/components/friend-h-single.js'
-import { getMatchDetails } from '../../api/functions.js'
+import { getMatchDetails, addMemberToMatch } from '../../api/functions.js'
 const { height, width } = Dimensions.get('screen');
 import * as Haptics from 'expo-haptics'
 
@@ -47,6 +47,7 @@ const Match = () => {
       
         const match = await getMatchDetails(params.idMatch);
         setMatch(match);
+        // console.log('Match from partidos.js:', JSON.stringify(match, null, 2));
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching match:', error.message);
@@ -78,6 +79,7 @@ const Match = () => {
 
   return (
     <Container bgColor={Colors.lightBlue}>
+      
       <Stack.Screen
         options={{
           headerShown: false,
@@ -89,9 +91,13 @@ const Match = () => {
       />
 
     
-      <ScrollView style={{  flex: 1 }}>
-        <PageHeader />
-        <View style={{ padding: 20, zIndex: 3, gap: 20,  }}>
+      <ScrollView 
+      contentContainerStyle={{flexGrow: 1}}
+      style={{ flex: 1, position: 'relative', minHeight: height}}>
+        <PageHeader canEdit/>
+        <View style={{ padding: 20, zIndex: 3, gap: 20}}>
+
+          {matchOwner.id != user.id && (
           <View
             style={{
               borderRadius: Generals.borderRadius,
@@ -103,7 +109,7 @@ const Match = () => {
             }}
           >
             <Heading color={Colors.primaryGreen}>
-              {matchOwner.firstName} va a jugar al {match.sport.sport} en {match.location.address.split(',')[0]}, el {match.date} a las {match.time}HS
+              {matchOwner.firstName} va a jugar al {match.sport.sport} en {match.location?.address.split(',')[0]}, el {match.date} a las {match.time}HS
             </Heading>
 
             {match.description && (
@@ -120,13 +126,15 @@ const Match = () => {
             
             />
           </View>
+          )}
 
           <BorderView
-            style={{ marginVertical: 10, alignItems: 'center', flexDirection: 'row', justifyContent: 'center', gap: 10 }}
+            style={{ marginVertical: 10, alignItems: 'center', flexDirection: 'row', justifyContent: 'center', gap: 10, backgroundColor: '#fff' }}
           >
             <PaddleRaquet />
             <SubHeading size={'16px'} color={Colors.textGrey}>
-              {match.sport.sport} • Intermedio
+              {match.sport.sport} • {match.ammount_players === 2 ? 'Singles' : 
+            'Dobles' } • Intermedio 
             </SubHeading>
           </BorderView>
 
@@ -137,26 +145,64 @@ const Match = () => {
               </SubHeading>
 
               <View style={{ flex: 1, width: '100%', justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}>
-                <ViewJustifyCenter style={{ gap: 10 }}>
-                  {members.map((member, index) => (
-                    <MatchPlayers key={index} user={member} source={member.profilePictureUrl} textColor={Colors.textGrey} />
-                  ))}
-                </ViewJustifyCenter>
-                <Text style={{ padding: 5, backgroundColor: Colors.lightGrey, color: Colors.darkGreen }}>VS</Text>
-                <SignUp
-                  onPress={() => {
-                    partidoRef.current.expand();
-                    setBottomUpProps({
-                      title: 'Ya estás anotado!',
-                      paragraph: `${match.location.address} • ${match.date} — ${match.time}`,
-                      buttonTitle: 'Cerrar',
-                      onPress: () => {
-                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                      },
-                      loading: false,
-                    });
-                  }}
-                />
+                { match.ammount_players > 2 ? (
+                  // Case Doubles
+                  <>
+                  <ViewJustifyCenter style={{ gap: 10 }}>
+                  {members.slice(0, 2).map((member, index) => (
+                      <MatchPlayers key={index} user={member} source={member.profilePictureUrl} textColor={Colors.textGrey} />
+                    ))}
+                  </ViewJustifyCenter>
+                  <Text style={{ padding: 5, backgroundColor: Colors.lightGrey, color: Colors.darkGreen }}>VS</Text>
+
+
+                  {match.ammount_players > match.members.length ? (
+                    <SignUp
+                      onPress={() => {
+                        partidoRef.current.expand();
+                        setBottomUpProps({
+                          title: 'Ya estás anotado!',
+                          paragraph: `${match.location.address} • ${match.date} — ${match.time}`,
+                          buttonTitle: 'Cerrar',
+                          onPress: () => {
+                            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                          },
+                          loading: false,
+                        });
+                      }}
+                    />) 
+                    : (
+                      members.slice(2, 4).map((member, index) => (
+                        <MatchPlayers key={index} user={member} source={member.profilePictureUrl} textColor={Colors.textGrey} />
+                      ))
+                    ) }
+                  </>
+                ) : 
+                // Case Singles
+                <>
+                   <MatchPlayers user={members[0]} source={members[0].profilePictureUrl} textColor={Colors.textGrey} />
+                   <Text style={{ padding: 5, backgroundColor: Colors.lightGrey, color: Colors.darkGreen }}>VS</Text>
+                  
+                   {match.ammount_players > match.members.length ? (
+                    <SignUp
+                      onPress={ async () => {
+                        await addMemberToMatch(match.id, user.id);
+                        partidoRef.current.expand();
+                        setBottomUpProps({
+                          title: 'Ya estás anotado!',
+                          paragraph: `${match.location.address} • ${match.date} — ${match.time}`,
+                          buttonTitle: 'Cerrar',
+                          onPress: () => {
+                            Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                          },
+                          loading: false,
+                        });
+                      }}
+                    />) : 
+                    <MatchPlayers user={members[1]} source={members[1].profilePictureUrl} textColor={Colors.textGrey} /> }
+                </>}
+
+                
               </View>
             </BorderView>
 
@@ -189,7 +235,7 @@ const Match = () => {
 
         <View style={{marginBottom: 100}}></View>
         <View
-          style={{ position: 'absolute', width: '100%', bottom: 0, left: 0, zIndex: 1, backgroundColor: '#f9f9f9', height: '86%' }}
+            style={{ position: 'absolute', width: '100%', bottom: '-0%', left: 0, zIndex: 1, backgroundColor: '#f9f9f9', height: '89%', alignSelf: 'flex-end', alignItems: 'flex-end', justifyContent: 'flex-end' }}
         /> 
       </ScrollView>
 

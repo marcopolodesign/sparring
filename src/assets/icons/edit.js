@@ -1,0 +1,18 @@
+
+import * as React from 'react';
+import { SvgXml } from 'react-native-svg';
+
+export default (props) => {
+    const color = props.color || 'white';
+    return (
+      <SvgXml
+        width={19}
+        height={19}
+        xml={`<svg width="19" height="19" viewBox="0 0 19 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 3.9997L15 6.9997M10 17.9997H18M2 13.9997L1 17.9997L5 16.9997L16.586 5.4137C16.9609 5.03864 17.1716 4.53003 17.1716 3.9997C17.1716 3.46937 16.9609 2.96075 16.586 2.5857L16.414 2.4137C16.0389 2.03876 15.5303 1.82812 15 1.82812C14.4697 1.82813 13.9611 2.03876 13.586 2.4137L2 13.9997Z" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        `}
+      />
+    );
+    
+}

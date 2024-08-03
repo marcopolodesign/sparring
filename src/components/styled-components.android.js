@@ -11,7 +11,7 @@ const {width} = Dimensions.get('window');
 export const ContentContainer = styled.View`
   flex: 1;
   backgroundColor : ${({ bgColor }) => bgColor || '#fff'};
-  minHeight: ${height}px;
+  minHeight: ${height};
   `;
 
   export const ViewJustifyCenter = styled.View`
@@ -73,7 +73,6 @@ export const SubHeading = styled.Text`
   font-style: normal;
   font-weight: ${({ isBold }) => (isBold ? 'bold' : 'normal')};
   color: ${({ color }) => color || "#fff"};
-  line-height: ${({ size }) => size * 1.5 + "px" || '27.5px'};
   textAlign: ${({ textCenter }) => (textCenter ? textCenter : 'left')};
 `;
 
@@ -83,7 +82,6 @@ export const Text = styled.Text`
   font-style: normal;
   font-weight: 400;
   color: ${({ color }) => color || "#fff"};
-  line-height: ${({ size }) => size * 1.5  + "px" || '22px'};
 `;
 
 // INPUTS

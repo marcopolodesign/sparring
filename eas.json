@@ -1,7 +1,9 @@
 {
-  "cli": {
-    "version": ">= 7.8.2"
-  },
+ "cli": { 
+    "version": ">= 7.2.0",
+    "appVersionSource": "remote" 
+  }
+ ,
   "build": {
     "simulator": {
       "developmentClient": true,
@@ -11,7 +13,7 @@
         "simulator": true
       },
       "env": {
-        "NODE_ENV": "development"
+        "ENV": "dev"
       }
     },
     "development": {
@@ -20,10 +22,10 @@
         "channel": "development",
         "ios": {
           "simulator": false,
-          "autoIncrement": "version"
+          "autoIncrement": true
         },
       "env": {
-        "NODE_ENV": "development"
+        "ENV": "dev"
       }
     },
     "beta": {
@@ -32,12 +34,25 @@
       "channel": "testflight",
       "ios": {
         "simulator": false,
-        "autoIncrement": "version"
+        "autoIncrement": true
       },
     "env": {
-      "NODE_ENV": "development"
+      "ENV": "beta"
     }
   },
+
+  "sparringBeta": {
+    "developmentClient": false,
+    "distribution": "store",
+    "channel": "sparring-beta-testflight",
+    "ios": {
+      "simulator": false,
+      "autoIncrement": true
+    },
+  "env": {
+    "ENV": "sparringBeta"
+  }
+},
 
     "preview": {
       "distribution": "internal",

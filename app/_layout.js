@@ -1,8 +1,10 @@
 import {useEffect, useState} from 'react'
 import { Slot } from 'expo-router';
-import { SessionProvider } from '../api/ctx';
+import { SessionProvider, useSession } from '../api/ctx';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { fetchFonts } from '../api/functions';
+import Loading from '../src/components/loading.js';
+import {Colors} from '../src/components/constants.js'
 
 export default function Root() {
   // Set up the auth context and render our layout inside of it.
@@ -26,7 +28,7 @@ export default function Root() {
   }, [])
 
   if (!appReady) {
-    return null;
+    return  null;
   }
 
   return (

@@ -1,24 +1,59 @@
-import React from 'react'
-import {TouchableOpacity, View} from 'react-native'
-import {Colors} from '../constants'
-import { Text } from '../styled-components';
+import { View, Text, TouchableOpacity } from 'react-native';
+import React, { forwardRef } from 'react';
 import {router} from 'expo-router'
+import { useSelector } from 'react-redux';
+import { Colors } from '../../components/constants.js';
+import { SubHeading, ViewJustifyCenter } from '../../components/styled-components.js';
 
-const SignUp = ({...props}) => {
+const SignUp = forwardRef((props, ref) => {
+
+  const session = useSelector((state) => state.session);
+  const user = JSON.parse(session);
+
   return (
-    <TouchableOpacity activeOpacity={'0.75'}
-    style={{justifyContent: 'center', alignItems: 'center'}}
-    onPress={props.onPress}
+    <TouchableOpacity
+      onPress={() => {
+        if (ref) {
+          ref.current.expand();
+        } else {
+         props.onPress()
+        }
+      }}
     >
-        <View style={{flexDirection: 'row', transform: [{translateX: 10}]}}>
-            <View style={{width: 45, height: 45, borderWidth: 1, borderColor: Colors.blue, borderRadius: 100, borderStyle: 'dashed', justifyContent: 'center', alignItems: "center"}}></View>
-            <View style={{width: 45, height: 45, borderWidth: 1, borderColor: Colors.blue, borderRadius: 100, borderStyle: 'dashed', justifyContent: 'center', alignItems: "center", transform: [{translateX: -20,}], backgroundColor: '#fff'}}>
-                <Text size={'20px'} color={Colors.blue}>+</Text>
-            </View>
+      {props.players === 4 ? (
+        <ViewJustifyCenter flexCol justifyCenter>
+        <View style={{ width: 40, height: 40, borderWidth: 1, borderColor: Colors.blue, borderRadius: 100, borderStyle: 'dashed', justifyContent: 'center', alignItems: 'center', transform: [{ translateX: props.match?.match_owner != user.id ? -15 : 0 }], zIndex: 4, backgroundColor: '#fff' }}>
+          <View style={{ width: 40, height: 40, borderWidth: 1, borderColor: Colors.blue, borderRadius: 100, borderStyle: 'dashed', justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff', zIndex: 3, transform: [{ translateX: props.match?.match_owner != user.id ? 30 : 0 }] }}>
+            <SubHeading size={'20px'} color={Colors.blue}>+</SubHeading>
+          </View>
         </View>
-        <Text style={{textAlign: 'center'}} color={Colors.blue}>Anotarse</Text>
+
+        {props.match?.match_owner.id != user.id ?
+          <SubHeading size={'16px'} color={Colors.blue}>Anotarse</SubHeading>
+        :           
+          <SubHeading size={'16px'} color={Colors.blue}>Ver detalles</SubHeading>
+        }
+
+        </ViewJustifyCenter>
+      ) : (
+        <ViewJustifyCenter flexCol justifyCenter>
+       <View style={{ width: 40, height: 40, borderWidth: 1, borderColor: Colors.blue, borderRadius: 100, borderStyle: 'dashed', justifyContent: 'center', alignItems: 'center', transform: [{ translateX: props.match?.match_owner != user.id ? -0 : -15 }], backgroundColor: '#fff' }}>
+          <SubHeading size={'20px'} color={Colors.blue}>+</SubHeading>
+        </View>
+        {props.match?.match_owner.id != user.id ?(
+          <>
+           <SubHeading size={'16px'} color={Colors.blue}>Anotarse</SubHeading>
+           </>
+        )
+        
+         
+        :           
+          <SubHeading size={'16px'} color={Colors.blue}>Ver detalles</SubHeading>
+        }
+        </ViewJustifyCenter>
+      )}
     </TouchableOpacity>
-  )
-}
+  );
+});
 
 export default SignUp;

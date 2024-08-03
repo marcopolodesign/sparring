@@ -35,7 +35,7 @@ import { useSharedValue } from 'react-native-reanimated';
           </View> */}
            
         <BottomSheetView
-              style={{padding: 20, paddingBottom: 150, justifyContent: 'flex-start', alignItems: 'center'}}
+              style={{padding: 20, paddingBottom: 180, justifyContent: 'flex-start', alignItems: 'center'}}
           >
           <View style={{ marginTop: 10, marginBottom: 0 }}>
                 <Heading style={{textAlign: 'center'}}color={Colors.darkGreen}>{props.title}</Heading>
@@ -47,7 +47,6 @@ import { useSharedValue } from 'react-native-reanimated';
                 )}
 
                 {props.buttonTitle && (
-
                   <MainButton
                     bgColor={Colors.primaryGreen}
                     color={Colors.darkGreen}
