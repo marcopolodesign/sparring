@@ -69,7 +69,7 @@ export default function TabLayout() {
         />
 
   <Tabs.Screen
-        name="indexxxx-e"
+        name="map"
         options={{
           title: 'Map',
           presentation: 'fullScreenModal',
