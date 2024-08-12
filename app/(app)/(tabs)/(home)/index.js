@@ -181,7 +181,7 @@ import Constants from 'expo-constants';
             bgColor={Colors.primaryGreen} ctaText={"Crear Partido"} color={Colors.darkGreen} icon={'Add'} />
           </View>
         
-          <MapCard user={user} href={'map'} enableScroll={false}/>
+          <MapCard user={user} href={'(tabs)/map'} enableScroll={false}/>
 
           <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: "center", marginTop: 40}}>
             <Heading color={"#fff"}>Buscar Profesores</Heading>
