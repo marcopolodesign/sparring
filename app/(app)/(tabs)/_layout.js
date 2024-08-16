@@ -22,6 +22,8 @@ export default function TabLayout() {
   return (
     <Tabs screenOptions={{
       tabBarActiveTintColor: Colors.darkGreen,
+      headerShown: false,
+      href: null,
       }}>
       <Tabs.Screen
         name="(home)"
@@ -71,6 +73,17 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <FontAwesome size={28} name="cog" color={color} />,
         }}
         />
+
+<Tabs.Screen
+        name="map"
+        options={{
+          title: 'Mapa',
+          href: null,
+          href: null,
+          tabBarIcon: ({ color }) => <FontAwesome size={28} name="cog" color={color} />,
+        }}
+        />
+
 
   {/* <Tabs.Screen
         name="partido"
