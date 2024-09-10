@@ -251,19 +251,22 @@ export const getMultipleMatchDetails = async (matchIds) => {
     return [];
   }
 
+  console.log(matchIds, 'MATCHIDS')
+
   // Construct the filter query with $in operator
   const filters = matchIds.map((id, index) => `filters[id][$in][${index}]=${id}`).join('&');
   
   try {
-    const response = await axiosInstance.get(`/matches?${filters}&populate=*`);
+    const response = await axiosInstance.get(`/own-matches?${filters}&populate=*`);
+    // console.log(JSON.stringify(response.data, 'MATCHESSSSS', 2))
 
-    // console.log(`/matches?${filters}&populate=members,match_owner,location,sport`)
-    const matches = response.data.data;
+    console.log(`/own-matches?${filters}&populate=*`)
+    // const matches = response.data.data;
+   
 
-    // Format the matches
-    const formattedMatches = await Promise.all(matches.map(match => formatMatchDetails(match)));
+    // // Format the matches
     
-    return formattedMatches;
+    return response.data;
   } catch (error) {
     console.error('Error fetching multiple matches:', error);
     throw error;
@@ -288,6 +291,7 @@ export const getMatchDetails = async (matchId) => {
 export const getAllMatches = async () => {
   try {
     const response = await axiosInstance.get(`/matches/?populate=*`);
+    // console.log(response, 'TEST')
     const matches = response.data.data;
 
     // Process each match to include profile picture URLs
@@ -316,7 +320,9 @@ const formatMatchDetails = async (match) => {
   const matchOwner = match.attributes.match_owner?.data;
   const matchOwnerProfilePictureUrl = matchOwner ? await getUserProfilePicture(matchOwner.id) : null;
 
-  const members = await Promise.all(match.attributes.members.data.map(async (member) => {
+  // Helper function to fetch member details
+  const fetchMemberDetails = async (member) => {
+    if (!member) return null;
     const profilePictureUrl = await getUserProfilePicture(member.id);
     return {
       id: member.id,
@@ -326,7 +332,13 @@ const formatMatchDetails = async (match) => {
       lastName: member.attributes.lastName,
       profilePictureUrl,
     };
-  }));
+  };
+
+  // Get the individual members if they exist
+  const member_1 = match.attributes.member_1 ? await fetchMemberDetails(match.attributes.member_1.data) : null;
+  const member_2 = match.attributes.member_2 ? await fetchMemberDetails(match.attributes.member_2.data) : null;
+  const member_3 = match.attributes.member_3 ? await fetchMemberDetails(match.attributes.member_3.data) : null;
+  const member_4 = match.attributes.member_4 ? await fetchMemberDetails(match.attributes.member_4.data) : null;
 
   return {
     id: match.id,
@@ -347,7 +359,12 @@ const formatMatchDetails = async (match) => {
       lastName: matchOwner.attributes.lastName,
       profilePictureUrl: matchOwnerProfilePictureUrl, // Add profile picture URL for match owner
     } : null,
-    members,
+    members: {
+      member_1,
+      member_2,
+      member_3,
+      member_4
+    },
   };
 };
 

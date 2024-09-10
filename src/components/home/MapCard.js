@@ -4,7 +4,7 @@ import MapView, { Marker } from 'react-native-maps';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSelector } from 'react-redux';
 import { Link, router } from 'expo-router';
-import { getAllMatches } from '../../../api/functions';
+// import { getAllMatches } from '../../../api/functions';
 import MapMarker from '../../../src/components/mapMarker';
 import { Generals, Colors } from '../constants';
 import { Heading } from '../styled-components';
@@ -20,18 +20,19 @@ const MapCard = ({ ...props }) => {
   const [zoomedMarkers, setZoomedMarkers] = useState([]);
   const mapviewRef = useRef(null);
 
-  const LoadMatches = async () => {
-    try {
-      const match = await getAllMatches();
-      setMatches(match);
-      setIsLoading(false);
-    } catch (error) {
-      console.error('Error fetching match:', error.message);
-    }
-  };
+  // const LoadMatches = async () => {
+  //   try {
+  //     const match = await getAllMatches();
+  //     setMatches(match);
+  //     setIsLoading(false);
+  //   } catch (error) {
+  //     console.error('Error fetching match:', error.message);
+  //   }
+  // };
 
 useEffect(() => {
-    LoadMatches();
+    // LoadMatches();
+    setIsLoading(false);
   }, []);
 
   
@@ -63,7 +64,7 @@ useEffect(() => {
           alignItems: 'center',
         }}
       >
-        <Heading color={Colors.darkGreen}>Explorar Mapa {matches && matches[0].id}</Heading>
+        <Heading color={Colors.darkGreen}>Explorar Mapa</Heading>
         <Link href={props.href}>
           <Text>{props.screenText ? props.screenText : 'Pantalla completa'}</Text>
         </Link>
@@ -88,7 +89,7 @@ useEffect(() => {
         // onRegionChangeComplete={handleRegionChangeComplete}
       >
 
-        {matches.map((match) => {
+        {/* {matches.map((match) => {
           return (
             <Marker
               key={match.id}
@@ -107,7 +108,7 @@ useEffect(() => {
             </Marker>
         )
         })
-        }
+        } */}
 
         <Marker
           coordinate={{

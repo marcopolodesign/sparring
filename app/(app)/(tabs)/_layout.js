@@ -15,10 +15,6 @@ import AddMatch from '../../../src/assets/icons/add-match.js';
 
 export default function TabLayout() {
 
-
-
-
-
   return (
     <Tabs screenOptions={{
       tabBarActiveTintColor: Colors.darkGreen,
@@ -41,7 +37,6 @@ export default function TabLayout() {
 
       <Tabs.Screen
         name="(partidos)"
-        
         options={{
           header: () => <PartidosHeader />,  
           title: 'Partidos',

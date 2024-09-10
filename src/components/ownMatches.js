@@ -35,8 +35,8 @@ const OwnMatches = ({ ...props }) => {
 
       setMatches(fetchedUserMatches); // Ensure user.matches is correctly set here
       setUserMatches(fetchedUserMatches);
-      console.log(fetchedUserMatches, 'FETCHED MATCHES');
-      console.log(fetchedUserMatches.length, 'LENGTHHHH');
+      // console.log(fetchedUserMatches, 'FETCHED MATCHES');
+      // console.log(fetchedUserMatches.length, 'LENGTHHHH');
 
       setIsLoading(false);
       
@@ -48,13 +48,21 @@ const OwnMatches = ({ ...props }) => {
       // dispatch({ type: 'SET_IS_READY'});
 
     } catch (error) {
-      console.error('Error fetching matches:', error.message);
+      console.error('Error fetching OWN matches:', error.message);
     }
   };
 
   useEffect(() => {
     fetchUserMatches();
   }, []);
+
+  if (!user.matches) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center' }}>
+        <Text>Loading...</Text>
+      </View>
+    )
+  }
 
   const matchContent = (match) => (
     <View id={match.id} style={[isPartidosView ? styles.flatContent : styles.flatContentHome, {   padding: 15, backgroundColor: '#fff', borderWidth: 2, borderColor: '#fff', borderRadius: 8, flex: 1}]}>
@@ -76,7 +84,7 @@ const OwnMatches = ({ ...props }) => {
         {match.ammount_players > 2 ? (
           <>
             {/* Case Doubles */}
-            <Players spots={match.ammount_players} players={match.members} />
+            <Players spots={match.ammount_players} players={match.members.slice(0,2)} />
             <Text style={{ padding: 5, backgroundColor: Colors.lightGrey, color: Colors.darkGreen }}>VS</Text>
 
             {match.ammount_players > match.members.length ? (
@@ -91,10 +99,8 @@ const OwnMatches = ({ ...props }) => {
                   });
                 }}
               />
-            ) : (
-              match.members.slice(2, 4).map((member, index) => (
-                <Players key={index} user={member} source={member.profilePictureUrl} textColor={Colors.textGrey} />
-              ))
+            ) : ( 
+              <Players players={match.members.slice(2,4)} spots={match.ammount_players} textColor={Colors.textGrey} />
             )}
           </>
         ) : (
@@ -117,8 +123,8 @@ const OwnMatches = ({ ...props }) => {
               />
             ) : match.members.length >= 2 ? (
               <>
-                {console.log(match.members.length, 'LENGTHHHH')}
-                {console.log(match.members)}
+                {/* {console.log(match.members.length, 'LENGTHHHH')} */}
+                {/* {console.log(match.members)} */}
                 <Players user={match.members} spots={match.ammount_players} players={match.members} source={match.members.profilePictureUrl} textColor={Colors.textGrey} />
               </>
             ) : null}
@@ -129,9 +135,9 @@ const OwnMatches = ({ ...props }) => {
   );
 
   const openMatches = (match) => {
-    if (userMatches.length < 0) {
-      return <Text style={{ color: '#fff' }}>There are no matches available</Text>;
-    }
+    // if (userMatches.length < 0) {
+    //   return <Text style={{ color: '#fff' }}>There are no matches available</Text>;
+    // }
 
     return match.members.length >= match.ammount_players ? (
       <TouchableOpacity

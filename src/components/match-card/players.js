@@ -11,7 +11,9 @@ const Players = ({...props}) => {
     <>
 {props.spots > 2 ? (
   // Case Doubles
+  
      <View style={{justifyContent: 'center', alignItems: 'center'}}>
+      {console.log(JSON.stringify(props.players[0], 'ESTAS ACA', 2))}
         <View style={{flexDirection: 'row', transform: [{translateX: 10}]}}>
             <PhotoMin sourceImg={props.players[0]?.profilePictureUrl} size={'small'}/>
             {props.players[1] &&
@@ -24,7 +26,7 @@ const Players = ({...props}) => {
     ) : (
       // Case Singles
        <View style={{justifyContent: 'center', alignItems: 'center'}}>
-        {console.log(props.spots, 'SPOTSSSSS PLAYERS IMG')}
+        {/* {console.log(props.spots, 'SPOTSSSSS PLAYERS IMG')} */}
         <View style={{flexDirection: 'row', transform: [{translateX: 10}]}}>
             <PhotoMin 
               transform={-10}

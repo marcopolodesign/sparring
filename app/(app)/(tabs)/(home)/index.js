@@ -30,7 +30,7 @@ import Constants from 'expo-constants';
  const App =  ({...props}) => {
   const [refreshing, setRefreshing] = useState(false);
   const [childIsLoading, setChildIsLoading] = useState(true)
-  console.log('childIsLoading', childIsLoading)
+  // console.log('childIsLoading', childIsLoading)
   const session = useSelector(state => state.session);
   const user = JSON.parse(session);
   // console.log('user', JSON.stringify(user, "USERRRR", 2));
@@ -44,8 +44,8 @@ import Constants from 'expo-constants';
   const {succesMessage} = useLocalSearchParams();
   const {LoadingBgColor} = useLocalSearchParams();
 
-  console.log('succesMessage', succesMessage)
-  console.log('LoadingBgColor', LoadingBgColor)
+  // console.log('succesMessage', succesMessage)
+  // console.log('LoadingBgColor', LoadingBgColor)
 
   const [bottomUpProps, setBottomUpProps] = useState({
     title: '',
@@ -68,32 +68,36 @@ import Constants from 'expo-constants';
   }, []);
 
 
+  // useEffect(() => {
+  //   async function checkFaceId() {
+  //     const faceIDStatus = await AsyncStorage.getItem('hasFaceIDSet');
+  //     setHasFaceIDActive(faceIDStatus);
+  //     // console.log('hasFaceIDActive', faceIDStatus); // This will log the correct value
+
+  //     if (faceIDStatus !== 'true') {
+  //       onFaceId(user);
+  //     }
+  //   }
+
+  //   checkFaceId();
+  // }, [user, onFaceId]);
+
   useEffect(() => {
-    async function checkFaceId() {
-      const faceIDStatus = await AsyncStorage.getItem('hasFaceIDSet');
-      setHasFaceIDActive(faceIDStatus);
-      // console.log('hasFaceIDActive', faceIDStatus); // This will log the correct value
-
-      if (faceIDStatus !== 'true') {
-        onFaceId(user);
-      }
       user.matches.length > 0 && setHasMatches(true)
-    }
-
-    checkFaceId();
-  }, [user, onFaceId]);
+  }, []);
+  
 
 
   return (
     <>
-    {childIsLoading && 
+    {/* {childIsLoading && 
         (
           <Loading LoadingBgColor={LoadingBgColor || "#0F5CCD"}
           title={succesMessage || 'Cargando'}
           SubTitle={'Estamos cargando tus partidos!'}
           loader
           />
-        )} 
+        )}  */}
     <Container bgColor={Colors.darkGreen}> 
       <Stack.Screen options={{headerShown: false}} title="Home"/>
         <>
@@ -105,12 +109,10 @@ import Constants from 'expo-constants';
       <ScrollView 
     refreshControl={
       <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
-
       style={{minHeight: height, paddingHorizontal: 20, paddingTop: 30, flex: 1, paddingBottom: 100}}>
-
-
         {hasMatches ?  (
             <View style={{marginBottom: 0}}>
+              {console.log('HAS MATCHES')}
               <ViewJustifyCenter>
                   <Heading style={{marginBottom:0}}color={"#fff"}>Mis Partidos</Heading>
                   <TouchableOpacity onPress={() => {
@@ -129,7 +131,7 @@ import Constants from 'expo-constants';
                     <SubHeading isBold color={'#fff'} size={'16px'}>Buscar más partidos</SubHeading>
                   </TouchableOpacity>
               </ViewJustifyCenter>
-            <OwnMatches setChildIsLoading={setChildIsLoading}/>
+            <OwnMatches  setChildIsLoading={setChildIsLoading} />
             </View>
         )  : (
           // {user.matches.length > 0 && 
@@ -152,7 +154,7 @@ import Constants from 'expo-constants';
                     <Text color={'#fff'} size={'14px'}>Ver partidos por Zona Norte</Text>
                   </TouchableOpacity>
                 </View>
-                <NearbyMatches />
+                {/* <NearbyMatches /> */}
               </>
             ) 
             // }
