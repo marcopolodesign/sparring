@@ -60,9 +60,7 @@ const CreateMatch = () => {
     }, 
     sport:{
       sport: newMatchSport
-    }, 
-    match_owner: user.id, 
-    members: [user.id]
+    },
   });
 
 
@@ -133,7 +131,7 @@ const CreateMatch = () => {
   const handleCreateMatch = async () => {
     console.log(JSON.stringify(newMatch, null, 2))
     try {
-    const response = await createMatch(newMatch);
+    const response = await createMatch(newMatch, user.id);
       console.log('Match created:', response);
       // alert('Success', 'Match created successfully');
 

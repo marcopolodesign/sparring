@@ -8,14 +8,12 @@ import * as LocalAuthentication from 'expo-local-authentication';
 import { useSelector, useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
+//Prod
 const API_BASE_URL = 'https://goldfish-app-25h3o.ondigitalocean.app/api'
-// PROD TOKEN
 const token = '04b4bf677234667eda880a51ef1858959fde491a5a007bf9f00be1060271013bcfbee19c644923e1766f9a77e6cf9d2ac6e57a559bdfec9015425bdcbf89b556b5a971f7d4a6eaf0ce0ea423660fe3793afea05bf8328eb4f3e4fb20d381e6b79e2138fcb1b9000574e72dbe873c1f0698e76a016f19451185c6a4bc43f795fc'
 
-// const API_BASE_URL = `http://localhost:1337/api`;
 // const API_BASE_URL = `http://192.168.68.108:1337/api`;
-
+// const API_BASE_URL = `http://localhost:1337/api`;
 // const token ='b403069951b818fd7064c24f35bd70b46bb9457fb2d9d3d3b75a9f49e471ef3f34a13975da1f3a32a738f263bbb45e1daeecea719fa9391af198182f9b51b032a038b6444608a922cac1228aa16bb172329ab0714e35f0ba5a186314087cc9afe5d32dbd8d90ccef6676837ff3ba839bdee91e7a03df4e5d844a2a7412e3ee4c'
 
 
@@ -251,22 +249,26 @@ export const getMultipleMatchDetails = async (matchIds) => {
     return [];
   }
 
-  console.log(matchIds, 'MATCHIDS')
+  console.log(matchIds, 'MATCHIDS');
 
   // Construct the filter query with $in operator
   const filters = matchIds.map((id, index) => `filters[id][$in][${index}]=${id}`).join('&');
   
   try {
     const response = await axiosInstance.get(`/own-matches?${filters}&populate=*`);
-    // console.log(JSON.stringify(response.data, 'MATCHESSSSS', 2))
 
-    console.log(`/own-matches?${filters}&populate=*`)
-    // const matches = response.data.data;
-   
+    console.log(`/own-matches?${filters}&populate=*`);
 
-    // // Format the matches
-    
-    return response.data;
+    // Clean up the matches, remove null members
+    const cleanedMatches = response.data.map((match) => {
+      return {
+        ...match,
+        members: match.members ? match.members.filter(Boolean) : [], // Filter out null/undefined members
+      };
+    });
+
+    // Return cleaned matches
+    return cleanedMatches;
   } catch (error) {
     console.error('Error fetching multiple matches:', error);
     throw error;
@@ -275,13 +277,16 @@ export const getMultipleMatchDetails = async (matchIds) => {
 
 export const getMatchDetails = async (matchId) => {
   try {
-    const response = await axiosInstance.get(`/matches/${matchId}?populate=members,match_owner,location,sport`);
-    const match = response.data.data;
+    const response = await axiosInstance.get(`/partidos/${matchId}`);
+    const match = response.data;
 
-    const formattedMatch = await formatMatchDetails(match);
+    console.log(match, 'MATCH DETAILS')
 
-    // console.log(JSON.stringify(formattedMatch, null, 2)); // Pretty-printing the JSON
-    return formattedMatch;
+    // Format the match and clean the members array
+    // const formattedMatch = await formatMatchDetails(match);
+    // formattedMatch.members = formattedMatch.members.filter(Boolean); // Filter out null/undefined members
+
+    return match;
   } catch (error) {
     console.error(`Error fetching match: ${error.message}`, error);
     throw error;
@@ -290,15 +295,18 @@ export const getMatchDetails = async (matchId) => {
 
 export const getAllMatches = async () => {
   try {
-    const response = await axiosInstance.get(`/matches/?populate=*`);
-    // console.log(response, 'TEST')
-    const matches = response.data.data;
+    const response = await axiosInstance.get(`/partidos`);
+    const matches = response.data;
 
-    // Process each match to include profile picture URLs
-    const formattedMatches = await Promise.all(matches.map(formatMatchDetails));
+    // Clean the members array for each match
+    const cleanedMatches = matches.map((match) => {
+      return {
+        ...match,
+        members: match.members ? match.members.filter(Boolean) : [], // Filter out null/undefined members
+      };
+    });
 
-    // console.log(JSON.stringify(formattedMatches, null, 2)); // Pretty-printing the JSON
-    return formattedMatches;
+    return cleanedMatches;
   } catch (error) {
     console.error(`Error fetching matches: ${error.message}`, error);
     throw error;
@@ -340,6 +348,13 @@ const formatMatchDetails = async (match) => {
   const member_3 = match.attributes.member_3 ? await fetchMemberDetails(match.attributes.member_3.data) : null;
   const member_4 = match.attributes.member_4 ? await fetchMemberDetails(match.attributes.member_4.data) : null;
 
+  // Dynamically construct the members object, excluding null members
+  const members = {};
+  if (member_1) members.member_1 = member_1;
+  if (member_2) members.member_2 = member_2;
+  if (member_3) members.member_3 = member_3;
+  if (member_4) members.member_4 = member_4;
+
   return {
     id: match.id,
     date: capitalizedDate, // Capitalized date in Spanish
@@ -359,12 +374,7 @@ const formatMatchDetails = async (match) => {
       lastName: matchOwner.attributes.lastName,
       profilePictureUrl: matchOwnerProfilePictureUrl, // Add profile picture URL for match owner
     } : null,
-    members: {
-      member_1,
-      member_2,
-      member_3,
-      member_4
-    },
+    members: members, // Only include non-null members
   };
 };
 
@@ -401,29 +411,51 @@ export const fetchCourtDetails = async (courtId) => {
   }
 };
 
-export const createMatch = async (matchData) => {
+export const createMatch = async (matchData, id) => {
+  // Ensure match_owner is always member_1
+  const matchOwner = id; // Assuming 'user' is the logged-in user
+
+  // Initialize member_1, member_2, member_3, and member_4
+  const member_1 = matchOwner;
+  // let member_2 = null;
+  // let member_3 = null;
+  // let member_4 = null;
+
+  // Initialize the members array and include member_1
+  const members = [member_1]; 
 
 
-  console.log(JSON.stringify(matchData, null, 2))
-  
+  // Construct the payload based on the matchData
   const payload = {
     data: {
       ...matchData,
-    }
+      match_owner:  matchOwner, // Populate match_owner with the logged-in user
+      member_1: member_1,      // Explicitly set member_1
+      // member_2: member_2,      // Set member_2 as null initially
+      // member_3: member_3,      // Set member_3 as null initially if applicable
+      // member_4: member_4,      // Set member_4 as null initially if applicable
+      members: members, 
+      // couples: [],                               // Empty couples initially
+      // tournament: { data: [] },                  // Empty tournament array if not part of a tournament
+    },
   };
 
+  // Debug log to check the structure of the payload
+  console.log(JSON.stringify(payload, null, 2));
+
   try {
+    // POST request to create the match
     const response = await axiosInstance.post(`${API_BASE_URL}/matches`, payload);
     return response.data;
   } catch (error) {
-    console.log(error)
-    console.error('Error creating matchHHHHH:', error.data);
+    console.error('Error creating match:', error.response ? error.response.data : error.message);
     throw error;
   }
 };
 
 export const addMemberToMatch = async (matchId, userId) => {
   try {
+ 
     console.log(matchId, 'MATCH ID IN ADDMEMBER')
     console.log(userId, 'USER ID IN ADDMEMBER');
     const response = await getMatchDetails(matchId)

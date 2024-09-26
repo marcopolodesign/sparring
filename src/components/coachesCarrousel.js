@@ -36,7 +36,7 @@ const CoachesCarousel = () => {
 const getRandomColor = () => {
   const colors = Object.values(Colors);
   const randomIndex = Math.floor(Math.random() * colors.length);
-  randomIndex === 0 || colors[randomIndex] === '#FFF' ? randomIndex + 1 : randomIndex;
+  randomIndex === 0 || colors[randomIndex] === '#FFF' || colors[randomIndex] === '#163300' ? randomIndex + 1 : randomIndex;
   return colors[randomIndex];
 };
 

@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { router } from 'expo-router';
-import { View, ScrollView, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, ScrollView, FlatList, TouchableOpacity, StyleSheet, RefreshControl } from 'react-native';
 import { Colors } from '../components/constants.js';
 import { Heading, SubHeading, Text, ViewJustifyCenter, Span } from '../components/styled-components.js';
 import { Dimensions } from 'react-native';
@@ -18,6 +18,7 @@ const OwnMatches = ({ ...props }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [matches, setMatches] = useState([]);
   const [userMatches, setUserMatches] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
 
   const session = useSelector((state) => state.session);
   const user = JSON.parse(session);
@@ -30,9 +31,9 @@ const OwnMatches = ({ ...props }) => {
 
   const fetchUserMatches = async () => {
     try {
-      const matchIds = user.matches.map((match) => match.id);
+      const matchIds = user.matches?.map((match) => match.id);
       const fetchedUserMatches = await getMultipleMatchDetails(matchIds);
-
+      
       setMatches(fetchedUserMatches); // Ensure user.matches is correctly set here
       setUserMatches(fetchedUserMatches);
       // console.log(fetchedUserMatches, 'FETCHED MATCHES');
@@ -55,6 +56,13 @@ const OwnMatches = ({ ...props }) => {
   useEffect(() => {
     fetchUserMatches();
   }, []);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    // LoadMatches()
+    console.log('testing refresh ownmatches')
+  }, []);
+
 
   if (!user.matches) {
     return (
@@ -84,7 +92,7 @@ const OwnMatches = ({ ...props }) => {
         {match.ammount_players > 2 ? (
           <>
             {/* Case Doubles */}
-            <Players spots={match.ammount_players} players={match.members.slice(0,2)} />
+            <Players isOwner spots={match.ammount_players} players={match.members.slice(0,2)} matchProp={match}/>
             <Text style={{ padding: 5, backgroundColor: Colors.lightGrey, color: Colors.darkGreen }}>VS</Text>
 
             {match.ammount_players > match.members.length ? (
@@ -100,16 +108,20 @@ const OwnMatches = ({ ...props }) => {
                 }}
               />
             ) : ( 
-              <Players players={match.members.slice(2,4)} spots={match.ammount_players} textColor={Colors.textGrey} />
+              <Players players={match.members.slice(2,4)} spots={match.ammount_players} textColor={Colors.textGrey} matchProp={match}/>
             )}
           </>
         ) : (
           // Case Singles
           <>
-            <Players isOwner spots={match.ammount_players} players={match.members} />
+          {/* {console.log(match.members, 'MEMBERS')}
+          {console.log(match.ammount_players)}
+          {console.log(match.members.length, 'LENGTHHH!!H')}
+          {console.log(match.id, 'MATCH ID')} */}
+            <Players isOwner spots={match.ammount_players} players={match.members[0]} matchProp={match} />
             <Text style={{ padding: 5, backgroundColor: Colors.lightGrey, color: Colors.darkGreen }}>VS</Text>
 
-            {match.ammount_players > match.members.length ? (
+            {match.ammount_players > match.members?.length ? (
               <SignUp
                 players={match.ammount_players}
                 match={match}
@@ -121,11 +133,11 @@ const OwnMatches = ({ ...props }) => {
                   });
                 }}
               />
-            ) : match.members.length >= 2 ? (
+            ) : match.members?.length >= 2 ? (
               <>
                 {/* {console.log(match.members.length, 'LENGTHHHH')} */}
                 {/* {console.log(match.members)} */}
-                <Players user={match.members} spots={match.ammount_players} players={match.members} source={match.members.profilePictureUrl} textColor={Colors.textGrey} />
+                <Players user={match.members} spots={match.ammount_players} players={match.members} source={match.members.profilePictureUrl} textColor={Colors.textGrey} matchProp={match} />
               </>
             ) : null}
           </>
@@ -139,7 +151,7 @@ const OwnMatches = ({ ...props }) => {
     //   return <Text style={{ color: '#fff' }}>There are no matches available</Text>;
     // }
 
-    return match.members.length >= match.ammount_players ? (
+    return match.members?.length >= match.ammount_players ? (
       <TouchableOpacity
         onPress={() => {
           router.push({
@@ -184,6 +196,9 @@ const OwnMatches = ({ ...props }) => {
           data={matches}
           contentContainerStyle={isPartidosView ? styles.flatChild : styles.flatChildHome}
           renderItem={({ item }) => openMatches(item)}
+          refreshControl={
+            <RefreshControl tintColor={Colors.primaryGreen} refreshing={refreshing} onRefresh={onRefresh} />
+           }
       />
     </View>
   );

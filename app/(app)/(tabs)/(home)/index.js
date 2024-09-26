@@ -1,9 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import {Stack, router, useLocalSearchParams} from 'expo-router'
 import Container from '../../../../Container.js'
 import { StyleSheet, View, StatusBar, FlatList, Dimensions, TouchableOpacity, ScrollView, RefreshControl } from 'react-native';
-import { onFaceId } from '../../../../api/functions.js';
+import { onFaceId, fetchUser } from '../../../../api/functions.js';
 import {Colors} from '../../../../src/components/constants.js'
 import { Heading, SubHeading, Text, ViewJustifyCenter } from '../../../../src/components/styled-components.js';
 const { height } = Dimensions.get('screen');
@@ -28,12 +28,14 @@ import Constants from 'expo-constants';
 
 
  const App =  ({...props}) => {
+  const dispatch = useDispatch();
   const [refreshing, setRefreshing] = useState(false);
   const [childIsLoading, setChildIsLoading] = useState(true)
   // console.log('childIsLoading', childIsLoading)
   const session = useSelector(state => state.session);
   const user = JSON.parse(session);
-  // console.log('user', JSON.stringify(user, "USERRRR", 2));
+  console.log('user', JSON.stringify(user, "USERRRR", 2));
+  const userId = user.id;
   const backUrl = useSelector(state => state.backUrl);
   const [hasFaceIDActive, setHasFaceIDActive] = useState(null)
   const [hasMatches, setHasMatches] = useState(null)
@@ -60,8 +62,12 @@ import Constants from 'expo-constants';
     console.log('Environment:', Constants.expoConfig.extra.envName);
   }, []);
   
-  const onRefresh = useCallback(() => {
+  const onRefresh = useCallback(async () => {
     setRefreshing(true);
+    const refreshedUser = await fetchUser(userId);
+    dispatch({ type: 'SET_USER', payload: JSON.stringify(refreshedUser) });
+    dispatch({ type: 'SET_SESSION', payload: JSON.stringify(refreshedUser) });
+
     setTimeout(() => {
       setRefreshing(false);
     }, 2000);
@@ -108,7 +114,7 @@ import Constants from 'expo-constants';
         </View>
       <ScrollView 
     refreshControl={
-      <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      <RefreshControl tintColor={Colors.primaryGreen} refreshing={refreshing} onRefresh={onRefresh} />}
       style={{minHeight: height, paddingHorizontal: 20, paddingTop: 30, flex: 1, paddingBottom: 100}}>
         {hasMatches ?  (
             <View style={{marginBottom: 0}}>
@@ -116,17 +122,18 @@ import Constants from 'expo-constants';
               <ViewJustifyCenter>
                   <Heading style={{marginBottom:0}}color={"#fff"}>Mis Partidos</Heading>
                   <TouchableOpacity onPress={() => {
-                    // router.push({pathname: '(app)/partidos'})
-                    sheetRef.current.expand()
-                    setBottomUpProps({
-                      title: 'CANCHA RESERVADA CORRECTAMENTE!',
-                      paragraph: 'PPT Pilar - Cancha 1 • 9:00 — 10:00',
-                      buttonTitle: 'Invitar amigos a la reserva',
-                      onPress: () => {
-                        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                      },
-                      loading: false,
-                    });
+                    router.push({pathname: '/(tabs)/explorar-partidos'})
+                    // sheetRef.current.expand()
+                    // setBottomUpProps({
+                    //   title: 'CANCHA RESERVADA CORRECTAMENTE!',
+                    //   paragraph: 'PPT Pilar - Cancha 1 • 9:00 — 10:00',
+                    //   buttonTitle: 'Invitar amigos a la reserva',
+                    //   onPress: () => {
+                    //     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+                    //   },
+                    //   loading: false,
+                    // });
+
                     }}>
                     <SubHeading isBold color={'#fff'} size={'16px'}>Buscar más partidos</SubHeading>
                   </TouchableOpacity>
@@ -140,6 +147,8 @@ import Constants from 'expo-constants';
                 <View>
                   <Heading color={"#fff"}>Jugar ahora</Heading>
                   <TouchableOpacity onPress={() => {
+                      router.push({pathname: 'app/tabs/partidos/explorar-partidos'})
+
                     sheetRef.current.expand()
                     setBottomUpProps({
                       title: 'CANCHA RESERVADA CORRECTAMENTE!',
@@ -154,7 +163,7 @@ import Constants from 'expo-constants';
                     <Text color={'#fff'} size={'14px'}>Ver partidos por Zona Norte</Text>
                   </TouchableOpacity>
                 </View>
-                {/* <NearbyMatches /> */}
+                <NearbyMatches />
               </>
             ) 
             // }
@@ -206,7 +215,7 @@ import Constants from 'expo-constants';
           <NearbyCoaches />
 
           <Share />
-          <View style={{marginBottom: 250}}></View>
+          <View style={{paddingBottom: 300}}></View>
         </ScrollView>
     
         <BottomUp

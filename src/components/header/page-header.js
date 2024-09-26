@@ -10,6 +10,8 @@ const PageHeader = ({...props}) => {
   return (
     <View style={{paddingRight: 20, paddingLeft: 20, zIndex: 3, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
         {/* <Link href="(tabs)" asChild> */}
+
+        {console.log(props.canEdit, 'CAN EDIT')}
             <TouchableOpacity onPress={() => {
               router.back()
               console.log('navigateeee')

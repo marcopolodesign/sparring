@@ -12,9 +12,9 @@ const PhotoMin = ({ width, height, size, border, transform, sourceImg, zIndexPos
         width = 45;
         height = 45;
     }
-    // const backUrl = useSelector((state) => state.backUrl);
+    const backUrl = useSelector((state) => state.backUrl);
 
-    const profilePicture  = sourceImg ? {uri:  sourceImg} : profile;
+    const profilePicture  = sourceImg ? {uri:  backUrl + sourceImg} : profile;
     return (
         <ImageBackground
             source={profilePicture}

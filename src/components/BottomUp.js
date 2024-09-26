@@ -53,7 +53,7 @@ import { useSharedValue } from 'react-native-reanimated';
                     ctaText={props.buttonTitle}
                     activeOpacity={0.8}
                     onPress={props.onPress}
-                    willFlex={'0'}
+                    willFlex={'1'}
                     style={{width: '100%'}}
                     >
                   

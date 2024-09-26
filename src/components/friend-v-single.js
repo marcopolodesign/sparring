@@ -5,7 +5,7 @@ import { Colors } from './constants.js';
 import { SubHeading, ThumbImage } from './styled-components.js';
 import React, { useState, useEffect } from 'react';
 
-const FriendBubble = ({ MapKey, source, friend, textColor, user, spots, newMatch, setNewMatch, setModalReady }) => {
+const FriendBubble = ({ MapKey, source, friend, textColor, user, spots, newMatch, setNewMatch, setModalReady, isOwner }) => {
   const backUrl = useSelector(state => state.backUrl);
   const [selectedFriends, setSelectedFriends] = useState([]);
   const [isSelected, setIsSelected] = useState(null);
@@ -70,6 +70,8 @@ if (spots) {
 
   return (
     <View key={MapKey} style={styles.container}>
+      {/* {console.log(source, 'SOURCEEEEEEE')} */}
+      {console.log(isOwner, 'IS OWNER')}
       <TouchableOpacity
         style={[
           styles.touchable,
@@ -82,19 +84,16 @@ if (spots) {
           <SubHeading
             size={'16px'}
             style={[styles.subHeading, isSelected && styles.selectedText]}
-          >
-            {friend.firstName}
-            {'\n'}
-            {friend.lastName}
+          > {isOwner ? 'Vos' : 
+            `${friend.firstName}\n${friend.lastName}`}
           </SubHeading>
         ) : (
           <SubHeading
             size={'16px'}
             style={[styles.subHeading, { color: textColor || Colors.textGrey }]}
           >
-            {user.firstName}
-            {'\n'}
-            {user.lastName}
+            {isOwner ? 'Vos' : 
+            `${user.firstName}\n${user.lastName}`}
           </SubHeading>
         )}
       </TouchableOpacity>

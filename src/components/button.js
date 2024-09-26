@@ -14,7 +14,7 @@ const MainButton = ({...props}) => {
             source= <Add />
             )}            
         )}
-        <Text style={{color: props.color || '#fff', fontWeight: 700, fontFamily: 'TT Interphases Pro Demi Bold', fontSize: 18}}>{props.ctaText}</Text>
+        <Text style={{color: props.color || '#fff', fontWeight: 700, fontFamily: 'TT Interphases Pro Demi Bold', fontSize: 18, textAlign: 'center', justifyContent: 'center', marginHorizontal: 'auto'}}>{props.ctaText}</Text>
         {props.isLoading && (
           <ActivityIndicator size="small" color="#fff" />
         )}
@@ -27,7 +27,7 @@ const MainButton = ({...props}) => {
                 source= <Add />
                 )}            
             )}
-            <Text style={{color: props.color || '#fff', fontWeight: 700, fontFamily: 'TT Interphases Pro Demi Bold', fontSize: 18}}>{props.ctaText}</Text>
+            <Text style={{color: props.color || '#fff', fontWeight: 700, fontFamily: 'TT Interphases Pro Demi Bold', fontSize: 18, textAlign: 'center'}}>{props.ctaText}</Text>
             {props.isLoading && (
               <ActivityIndicator size="small" color="#fff" />
             )}

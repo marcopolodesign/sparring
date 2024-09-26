@@ -112,6 +112,7 @@ export const ButtonFlex = styled.TouchableOpacity`
   border-radius: 100px;
   align-items: center;
   flex: ${({ willFlex }) =>  (willFlex ? 'willFlex' :  1)};
+  justify-content: center;
 `;
 
 // Components

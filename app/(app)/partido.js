@@ -23,12 +23,13 @@ import SignUp from '../../src/components/match-card/SignUp.js'
 
 import BottomUp from '../../src/components/BottomUp.js'
 import { id } from 'date-fns/locale';
+// import Players from '../../src/components/match-card/players.js';
 
 const Match = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [match, setMatch] = useState([]);
-  const members = match.members || [];
-  const matchOwner = match.match_owner || {};
+  const [members, setMembers] = useState([]);
+  const [matchOwner, setMatchOwner] = useState([])
   const partidoRef = useRef(null);
   const params = useLocalSearchParams();
 
@@ -44,9 +45,12 @@ const Match = () => {
   useEffect(() => {
     const loadMatch = async () => {
       try {
-      
         const match = await getMatchDetails(params.idMatch);
         setMatch(match);
+        setMembers(match.members)
+        setMatchOwner(match.match_owner)
+        {console.log(JSON.stringify(match,2, ' '), 'MATCH in PARTIDO')}
+
         // console.log('Match from partidos.js:', JSON.stringify(match, null, 2));
         setIsLoading(false);
       } catch (error) {
@@ -79,6 +83,7 @@ const Match = () => {
 
   return (
     <Container bgColor={Colors.lightBlue}>
+
       
       <Stack.Screen
         options={{
@@ -94,7 +99,7 @@ const Match = () => {
       <ScrollView 
       contentContainerStyle={{flexGrow: 1}}
       style={{ flex: 1, position: 'relative', minHeight: height}}>
-        <PageHeader canEdit/>
+        <PageHeader canEdit={match.match_owner?.id === user.id}/>
         <View style={{ padding: 20, zIndex: 3, gap: 20}}>
 
           {matchOwner.id != user.id && (
@@ -149,14 +154,14 @@ const Match = () => {
                   // Case Doubles
                   <>
                   <ViewJustifyCenter style={{ gap: 10 }}>
-                  {members.slice(0, 2).map((member, index) => (
+                  { match.member_1 && members.slice(0, 2).map((member, index) => (
                       <MatchPlayers key={index} user={member} source={member.profilePictureUrl} textColor={Colors.textGrey} />
                     ))}
                   </ViewJustifyCenter>
                   <Text style={{ padding: 5, backgroundColor: Colors.lightGrey, color: Colors.darkGreen }}>VS</Text>
 
-
-                  {match.ammount_players > match.members.length ? (
+         
+                  {match.ammount_players > match.members.length && match?.match_owner.id != user.id ? (
                     <SignUp
                       onPress={() => {
                         partidoRef.current.expand();
@@ -180,10 +185,15 @@ const Match = () => {
                 ) : 
                 // Case Singles
                 <>
-                   <MatchPlayers user={members[0]} source={members[0].profilePictureUrl} textColor={Colors.textGrey} />
+                {console.log(members[0], 'MEMBERS MATCH PLAYERS')}
+                {/* <Players spots={match.ammount_players} players={match.members} matchProp={match} /> */}
+                   <MatchPlayers isOwner={match?.match_owner.id === user.id} user={members[0] || null } source={members[0]?.profilePictureUrl || ''} textColor={Colors.textGrey} />
                    <Text style={{ padding: 5, backgroundColor: Colors.lightGrey, color: Colors.darkGreen }}>VS</Text>
                   
                    {match.ammount_players > match.members.length ? (
+                    <>
+            
+                 {match.match_owner?.id != user.id && match.ammount_players > match.members.length ?
                     <SignUp
                       onPress={ async () => {
                         await addMemberToMatch(match.id, user.id);
@@ -198,8 +208,12 @@ const Match = () => {
                           loading: false,
                         });
                       }}
-                    />) : 
-                    <MatchPlayers user={members[1]} source={members[1].profilePictureUrl} textColor={Colors.textGrey} /> }
+                    /> : 
+                    <Text>Esperando jugadores</Text>}
+                    </>
+                  
+                  ) : 
+                    <MatchPlayers user={members[1] || null} source={members[1]?.profilePictureUrl} textColor={Colors.textGrey} /> }
                 </>}
 
                 
