@@ -244,15 +244,17 @@ const getUserProfilePicture = async (userId) => {
   }
 };
 
-export const getMultipleMatchDetails = async (matchIds) => {
+export const getMultipleMatchDetails = async (matchIds, userId) => {
   if (!Array.isArray(matchIds) || matchIds.length === 0) {
     return [];
   }
 
-  console.log(matchIds, 'MATCHIDS');
+  // console.log(matchIds, 'MATCHIDS');
 
   // Construct the filter query with $in operator
   const filters = matchIds.map((id, index) => `filters[id][$in][${index}]=${id}`).join('&');
+
+  
   
   try {
     const response = await axiosInstance.get(`/own-matches?${filters}&populate=*`);
@@ -277,10 +279,12 @@ export const getMultipleMatchDetails = async (matchIds) => {
 
 export const getMatchDetails = async (matchId) => {
   try {
+
+    // console.log(`/partidos/${matchId}`)
     const response = await axiosInstance.get(`/partidos/${matchId}`);
     const match = response.data;
 
-    console.log(match, 'MATCH DETAILS')
+    // console.log(match, 'MATCH DETAILS!!!!')
 
     // Format the match and clean the members array
     // const formattedMatch = await formatMatchDetails(match);
@@ -293,9 +297,35 @@ export const getMatchDetails = async (matchId) => {
   }
 };
 
-export const getAllMatches = async () => {
+export const getMatchDetash = async (matchId) => {
+  console.log(`/matches/${matchId}?populate=*`)
   try {
-    const response = await axiosInstance.get(`/partidos`);
+    const response = await axiosInstance.get(`/matches/${matchId}?populate=*`);
+    const match = response.data;
+
+
+    // Format the match and clean the members array
+    // const formattedMatch = await formatMatchDetails(match);
+    // formattedMatch.members = formattedMatch.members.filter(Boolean); // Filter out null/undefined members
+
+    return match;
+  } catch (error) {
+    console.error(`Error fetching matchhh: ${error.message}`, error);
+    throw error;
+  }
+};
+
+export const getAllMatches = async (userId, ownMatch) => {
+
+  // ownMatch = 1 means true
+  try {
+    let response; // Declare response outside the blocks
+
+    if (!ownMatch) {
+      response = await axiosInstance.get(`/partidos/user/${userId}`);
+    } else {
+      response = await axiosInstance.get(`/partidos/own-matches/${userId}`);
+    }
     const matches = response.data;
 
     // Clean the members array for each match
@@ -305,6 +335,7 @@ export const getAllMatches = async () => {
         members: match.members ? match.members.filter(Boolean) : [], // Filter out null/undefined members
       };
     });
+    console.log(cleanedMatches, 'CLEANED MATCHES')
 
     return cleanedMatches;
   } catch (error) {
@@ -453,28 +484,45 @@ export const createMatch = async (matchData, id) => {
   }
 };
 
-export const addMemberToMatch = async (matchId, userId) => {
+export const addMemberToMatch = async (matchId, userId, playerPos) => {
   try {
- 
-    console.log(matchId, 'MATCH ID IN ADDMEMBER')
-    console.log(userId, 'USER ID IN ADDMEMBER');
-    const response = await getMatchDetails(matchId)
-      const match = response;
-      const members = match?.members || [];
-      console.log(JSON.stringify(match, null, 2))
-      console.log(members, 'ADD MEMBER TO MATCH MEMBERS')
-      const data = {
-        match,
-        members: [...members, userId],
-      };
-      return axiosInstance.put(`${API_BASE_URL}/matches/${matchId}`, { data });
+    const response = await getMatchDetash(matchId); // Fetch the match details
+    const match = response.data;
+    console.log(JSON.stringify(match, 2 , ' '))
+    let members = match?.attributes.members?.data || null;
+
+    console.log(members, 'MEMBERS ADD MEMBERS')
     
+    // Ensure members array has a length of 4 (for member_1 to member_4)
+    members = [...members]; // Create a copy of the array
+
+    // Dynamically update member_X field based on playerPos
+    const updatedMatch = {
+      ...match,
+      [`member_${playerPos}`]: userId, // This will set member_2, member_3, or member_4
+    };
+
+
+    console.log(`member_${playerPos}: userId`)
+    // Ensure that the members array maintains the correct position
+    // If playerPos is 2, the user should appear in index 1, etc.
+
+    members.splice(playerPos - 1, 0, userId); // Insert the user at the correct position
+    const data = {
+      ...updatedMatch,
+      members, // Update the members array with correct positions
+    };
+
+    console.log(data.members, 'DATA ADD MEMBS')
+
+    // Perform the PUT request to update the match
+    return await axiosInstance.put(`${API_BASE_URL}/matches/${matchId}`, { data });
+
   } catch (error) {
-    console.error('Error adding member to match:', error);
+    console.error('Error adding member to match:', error.message);
     throw error;
   }
-
-}
+};
 export const isEmpty = (obj) => {
   return Object.keys(obj).length === 0;
 };

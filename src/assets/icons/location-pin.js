@@ -1,9 +1,12 @@
 import * as React from 'react';
 import { SvgXml } from 'react-native-svg';
 
-export default (props) => (
+export default (props) => 
+ { 
+  const width = props.width || 24;
+  return (
   <SvgXml
-    width={24}
+    width={width}
     height={26}
     xml={`<svg width="24" height="26" viewBox="0 0 24 26" fill="none" xmlns="http://www.w3.org/2000/svg">
     <circle cx="12.0745" cy="12.4187" r="10.7863" stroke="${props.color}" stroke-width="1.3"/>
@@ -13,7 +16,7 @@ export default (props) => (
     
     `}
   />
-);
+)};
 
 
 

@@ -9,6 +9,8 @@ import { Heading, SubHeading, Span, BorderView } from '../../src/components/styl
 import { fetchCourtDetails } from '../../api/functions.js';
 import MapMarker from '../../src/components/mapMarker.js';
 
+import Loading from '../../src/components/loading.js';
+
 
 
 const { width } = Dimensions.get('screen');
@@ -36,11 +38,13 @@ const CourtScreen = () => {
   }, [courtId]);
 
   if (!court) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Loading...</Text>
-      </View>
-    );
+      return (
+        <Loading LoadingBgColor={Colors.orange || "#0F5CCD"}
+        title={'Cargando datos de la cancha'}
+        SubTitle={'Muy buena elección!'}
+        loader />
+      );
+
   }
 
   const renderItem = ({ item }) => (

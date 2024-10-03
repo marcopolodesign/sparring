@@ -4,6 +4,7 @@ import { Link } from 'expo-router';
 import {Colors} from './constants.js';
 import { SubHeading, ThumbImage } from './styled-components.js'
 import Arrow from './../assets/icons/arrow-left.js';
+import { router } from 'expo-router';
 
 const FriendBubbleRow = ({index, source, friend, user, textColor, hasArrow}) => {
     const backUrl = useSelector(state => state.backUrl);
@@ -23,7 +24,11 @@ const FriendBubbleRow = ({index, source, friend, user, textColor, hasArrow}) => 
                 {friend.firstName} {friend.lastName}
             </SubHeading>
             ) : (
-                <View>
+                <TouchableOpacity 
+                    onPress={ () => {
+                  router.push({pathname: '(app)/perfil', params: {playerID: user.id, LoadingBgColor: Colors.orange}})
+                    }}
+                >
                     <View style={{alignItems: 'center', flexDirection: 'row'}}>  
                         <SubHeading size={'16px'} style={{ color: textColor ? textColor : Colors.textGrey}}>{user.firstName} {user.lastName}</SubHeading>
                         {hasArrow && (
@@ -33,7 +38,7 @@ const FriendBubbleRow = ({index, source, friend, user, textColor, hasArrow}) => 
                         )}
                     </View>
                 <SubHeading size={'14px'} color={'#fff'}>Owner del partido</SubHeading>              
-            </View>
+            </TouchableOpacity>
             )}
         </TouchableOpacity>
     </Link>

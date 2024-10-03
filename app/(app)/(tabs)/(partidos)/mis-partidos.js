@@ -15,6 +15,7 @@ export default function Partidos({...props}) {
   return (
     <Container bgColor={Colors.darkGreen}>
       <Stack.Screen options={{headerShown: false}} title="mis-partidos"/>
+      {/* <NearbyMatches partidosView /> */}
       <OwnMatches partidosView />   
     </Container>
   );

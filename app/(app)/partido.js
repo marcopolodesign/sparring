@@ -13,7 +13,12 @@ import { getMatchDetails, addMemberToMatch } from '../../api/functions.js'
 const { height, width } = Dimensions.get('screen');
 import * as Haptics from 'expo-haptics'
 
+import Loading from '../../src/components/loading.js'
+
+
+
 import MatchPlayers from '../../src/components/friend-v-single.js'
+import Players from '../../src/components/match-card/players.js';
 
 // import Icons
 import PaddleRaquet from '../../src/assets/icons/paddle-raquet.js'
@@ -23,6 +28,7 @@ import SignUp from '../../src/components/match-card/SignUp.js'
 
 import BottomUp from '../../src/components/BottomUp.js'
 import { id } from 'date-fns/locale';
+import PlayerSet from '../../src/components/match-card/PlayerSet.js';
 // import Players from '../../src/components/match-card/players.js';
 
 const Match = () => {
@@ -48,8 +54,9 @@ const Match = () => {
         const match = await getMatchDetails(params.idMatch);
         setMatch(match);
         setMembers(match.members)
+        // console.log(match.match_owner, 'MATCH OWNER') 
         setMatchOwner(match.match_owner)
-        {console.log(JSON.stringify(match,2, ' '), 'MATCH in PARTIDO')}
+        // {console.log(JSON.stringify(match,2, ' '), 'MATCH in PARTIDO')}
 
         // console.log('Match from partidos.js:', JSON.stringify(match, null, 2));
         setIsLoading(false);
@@ -66,18 +73,22 @@ const Match = () => {
 
   if (isLoading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center' }}>
-        <Stack.Screen
-          options={{
-            headerShown: false,
-            gestureDirection: 'vertical',
-            animation: 'fade_from_bottom',
-            backgroundColor: Colors.lightBlue,
-          }}
-          title="Partido"
-        />
-        <Text>Loading...</Text>
-      </View>
+      <Loading LoadingBgColor={Colors.lightBlue || "#0F5CCD"}
+      title={'Cargando partido'}
+      SubTitle={'Te vas a anotar en este?'}
+      loader />
+      // <View style={{ flex: 1, justifyContent: 'center' }}>
+      //   <Stack.Screen
+      //     options={{
+      //       headerShown: false,
+      //       gestureDirection: 'vertical',
+      //       animation: 'fade_from_bottom',
+      //       backgroundColor: Colors.lightBlue,
+      //     }}
+      //     title="Partido"
+      //   />
+      //   <Text>Loading...</Text>
+      // </View>
     );
   }
 
@@ -99,7 +110,7 @@ const Match = () => {
       <ScrollView 
       contentContainerStyle={{flexGrow: 1}}
       style={{ flex: 1, position: 'relative', minHeight: height}}>
-        <PageHeader canEdit={match.match_owner?.id === user.id}/>
+        <PageHeader canEdit={match.match_owner?.id === user.id} hasSignedUp={params.hasSignedUp || false} />
         <View style={{ padding: 20, zIndex: 3, gap: 20}}>
 
           {matchOwner.id != user.id && (
@@ -127,9 +138,9 @@ const Match = () => {
               </>
             )}
 
-            <MatchOwner user={matchOwner} source={matchOwner.profilePictureUrl} textColor={Colors.primaryGreen} hasArrow={'true'} 
+            <View style={{marginTop: 15}}></View>
+               <MatchOwner user={matchOwner} source={matchOwner.profilePictureUrl} textColor={Colors.primaryGreen} hasArrow={'true'} />
             
-            />
           </View>
           )}
 
@@ -138,7 +149,7 @@ const Match = () => {
           >
             <PaddleRaquet />
             <SubHeading size={'16px'} color={Colors.textGrey}>
-              {match.sport.sport} • {match.ammount_players === 2 ? 'Singles' : 
+              {match.sport?.sport} • {match.ammount_players === 2 ? 'Singles' : 
             'Dobles' } • Intermedio 
             </SubHeading>
           </BorderView>
@@ -146,11 +157,11 @@ const Match = () => {
 
             <BorderView style={{ gap: 20, flex: 1}}>
               <SubHeading style={{ fontWeight: 'bold' }} color={'#000'} size={'16px'}>
-                Jugadores
+                Jugadores {match.id}
               </SubHeading>
 
               <View style={{ flex: 1, width: '100%', justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}>
-                { match.ammount_players > 2 ? (
+                {/* { match.ammount_players > 2 ? (
                   // Case Doubles
                   <>
                   <ViewJustifyCenter style={{ gap: 10 }}>
@@ -185,8 +196,6 @@ const Match = () => {
                 ) : 
                 // Case Singles
                 <>
-                {console.log(members[0], 'MEMBERS MATCH PLAYERS')}
-                {/* <Players spots={match.ammount_players} players={match.members} matchProp={match} /> */}
                    <MatchPlayers isOwner={match?.match_owner.id === user.id} user={members[0] || null } source={members[0]?.profilePictureUrl || ''} textColor={Colors.textGrey} />
                    <Text style={{ padding: 5, backgroundColor: Colors.lightGrey, color: Colors.darkGreen }}>VS</Text>
                   
@@ -196,7 +205,7 @@ const Match = () => {
                  {match.match_owner?.id != user.id && match.ammount_players > match.members.length ?
                     <SignUp
                       onPress={ async () => {
-                        await addMemberToMatch(match.id, user.id);
+                        await addMemberToMatch(match.id, user.id, 2);
                         partidoRef.current.expand();
                         setBottomUpProps({
                           title: 'Ya estás anotado!',
@@ -214,9 +223,10 @@ const Match = () => {
                   
                   ) : 
                     <MatchPlayers user={members[1] || null} source={members[1]?.profilePictureUrl} textColor={Colors.textGrey} /> }
-                </>}
+                </>} */}
 
-                
+
+                <PlayerSet setBottomUpProps={setBottomUpProps} match={match} isPartidosView={true} canSignUp user={user} partidoRef={partidoRef}/>    
               </View>
             </BorderView>
 
@@ -260,7 +270,10 @@ const Match = () => {
         onPress={() => {
           Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
           partidoRef.current.close();
-          router.replace('/');
+          router.push({
+            pathname: '(app)/partido',
+            params: { idMatch: match.id, hasSignedUp: true },
+          });
         }}
       />
     </Container>

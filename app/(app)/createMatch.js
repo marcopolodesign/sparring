@@ -177,7 +177,7 @@ const CreateMatch = () => {
         </ViewJustifyCenter>
         <ViewJustifyCenter>
           <PhotoMin zIndexPosition={2} size={'invite'} sourceImg={profilePictureUrl} />
-          <SignUp user={user} newMatch={newMatch} setNewMatch={setNewMatch} players={newMatch.ammount_players} ref={inviteRef}/>
+          {/* <SignUp user={user} newMatch={newMatch} setNewMatch={setNewMatch} players={newMatch.ammount_players} ref={inviteRef}/> */}
         </ViewJustifyCenter>
       </View>
 

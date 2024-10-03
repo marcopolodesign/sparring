@@ -13,8 +13,11 @@ const PageHeader = ({...props}) => {
 
         {console.log(props.canEdit, 'CAN EDIT')}
             <TouchableOpacity onPress={() => {
-              router.back()
-              console.log('navigateeee')
+              props.hasSignedUp ? 
+                  router.push('(tabs)/mis-partidos') 
+                :
+                  router.back()
+                console.log('navigateeee')
               }}>
               <BackArrow>
                   <Arrow />

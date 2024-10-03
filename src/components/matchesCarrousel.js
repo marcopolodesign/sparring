@@ -11,6 +11,12 @@ import SignUp from './match-card/SignUp.js';
 import * as Haptics from 'expo-haptics';
 import { getAllMatches } from '../../api/functions.js';
 import { useSelector } from 'react-redux';
+import Calendar from '../assets/icons/calendar.js';
+import LocationPin from '../assets/icons/location-pin.js';
+import PlayerSet from './match-card/PlayerSet.js';
+import Arrow from '../assets/icons/arrow-left.js';
+import { set } from 'date-fns';
+
 
 const { height, width } = Dimensions.get('screen');
 
@@ -20,8 +26,10 @@ const MatchesCarrousel = ({ ...props }) => {
   const [matches, setMatches] = useState([]);
   const session = useSelector((state) => state.session);
   const user = JSON.parse(session);
+
   const hasMatch = props.hasMatches;
   const isPartidosView = props.partidosView;
+  const { setMatchesLength } = props; // Destructure setMatchesLength
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -32,10 +40,15 @@ const MatchesCarrousel = ({ ...props }) => {
     if (!hasMatch) {
       const loadMatch = async () => {
         try {
-          const match = await getAllMatches();
-          setMatches(match);
+          const match = await getAllMatches(user.id);
+          setMatches(match);  
           setIsLoading(false);
           setRefreshing(false);
+
+          // Pass the number of matches to the parent component
+          if (typeof setMatchesLength === 'function') {
+            setMatchesLength(match.length); // Update the parent with the number of matches
+          }
         } catch (error) {
           console.error('Error fetching match:', error.message);
         }
@@ -45,6 +58,11 @@ const MatchesCarrousel = ({ ...props }) => {
       setMatches(user.matches);
       setIsLoading(false);
       setRefreshing(false);
+
+      // Pass the number of user matches to the parent component
+      if (typeof setMatchesLength === 'function') {
+        setMatchesLength(user.matches.length); // Update the parent with the number of matches
+      }
     }
   };
 
@@ -53,7 +71,14 @@ const MatchesCarrousel = ({ ...props }) => {
   }, []);
 
   const matchContent = (match) => (
-    <>
+    <TouchableOpacity
+      onPress={() => {
+        router.push({
+          pathname: '(app)/partido',
+          params: { idMatch: match.id },
+        });
+      }}
+    >
       <View
         id={match.id}
         style={[
@@ -72,78 +97,52 @@ const MatchesCarrousel = ({ ...props }) => {
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <PaddleRaquet />
             <Text size={'18px'} color={'black'}>
-              {match.sport?.sport}
+              {match.sport?.sport} • {match.ammount_players > 2 ? 'Dobles' : 'Singles'}
             </Text>
           </View>
           <Text size={'18px'} color={'#A8A8A8'}>
-            {match.time}
+            {match.time}hs
           </Text>
         </ViewJustifyCenter>
 
         <Span bgColor={Colors.lightGrey} />
 
-        <ViewJustifyCenter>
-          {match.ammount_players > 2 ? (
-            <>
-              {/* Case Doubles */}
-              <Players spots={match.ammount_players} players={match.members} matchProp={match} />
-              <Text style={{ padding: 5, backgroundColor: Colors.lightGrey, color: Colors.darkGreen }}>VS</Text>
-              {match.ammount_players > match.members.length ? (
-                <SignUp
-                  players={match.ammount_players}
-                  match={match}
-                  user={user}
-                  onPress={() => {
-                    router.push({
-                      pathname: '(app)/partido',
-                      params: { idMatch: match.id },
-                    });
-                  }}
-                />
-              ) : (
-                match.members.slice(2, 4).map((member, index) => (
-                  <Players key={index} user={member} source={member.profilePictureUrl} textColor={Colors.textGrey} matchProp={match} />
-                ))
-              )}
-            </>
-          ) : (
-            <>
-              {/* Case Singles */}
-              <Players spots={match.ammount_players} players={match.members} matchProp={match} />
-              <Text style={{ padding: 5, backgroundColor: Colors.lightGrey, color: Colors.darkGreen }}>VS</Text>
-              {match.ammount_players > match.members?.length ? (
-                <SignUp
-                  players={match.ammount_players}
-                  match={match}
-                  user={user}
-                  onPress={() => {
-                    router.push({
-                      pathname: '(app)/partido',
-                      params: { idMatch: match.id },
-                    });
-                  }}
-                />
-              ) : match.members?.length >= 2 ? (
-                <>
-                  <Players
-                    user={match.members}
-                    spots={match.ammount_players}
-                    players={match.members}
-                    source={match.members.profilePictureUrl}
-                    textColor={Colors.textGrey}
-                    matchProp={match}
-                  />
-                </>
-              ) : null}
-            </>
-          )}
-        </ViewJustifyCenter>
+        {isPartidosView && (
+          <TouchableOpacity
+            onPress={() => {
+              router.push({
+                pathname: '(app)/partido',
+                params: { idMatch: match.id },
+              });
+            }}
+            style={{ marginBottom: 15 }}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <SubHeading color="black" isBold>
+                {match.date.split(' ').slice(0, 2).join(' ')} • {match.time}hs
+              </SubHeading>
+              <Arrow width={20} color={Colors.blue} />
+            </View>
+
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 5, marginTop: 0 }}>
+              <LocationPin color={Colors.textGrey} width={20} />
+              <Text style={{ color: Colors.textGrey, fontSize: 15 }}>
+                {match.location.address.split(' ').slice(0, 3).join(' ').replace(/,$/, '')}
+                {match.id}
+              </Text>
+            </View>
+          </TouchableOpacity>
+        )}
+
+        <View style={{ justifyContent: 'space-between', alignItems: 'center', flexDirection: 'row' }}>
+          <PlayerSet match={match} isPartidosView />
+        </View>
       </View>
-    </>
+    </TouchableOpacity>
   );
 
   const openMatches = (match) => {
-    if (matches.length < 0) {
+    if (matches.length === 0) {
       return <Text style={{ color: '#fff' }}>There are no matches available</Text>;
     }
     if (hasMatch) {
@@ -151,7 +150,11 @@ const MatchesCarrousel = ({ ...props }) => {
         return null;
       }
     } else {
-      if (match.members.length >= match.ammount_players || match.members?.some((member) => member.id === user.id) || match.match_owner.id === user.id) {
+      if (
+        match.members.length >= match.ammount_players ||
+        match.members?.some((member) => member.id === user.id) ||
+        match.match_owner.id === user.id
+      ) {
         return null;
       }
     }
@@ -193,7 +196,7 @@ const MatchesCarrousel = ({ ...props }) => {
         showsHorizontalScrollIndicator={false}
         horizontal={!isPartidosView}
         initialScrollIndex={isPartidosView ? null : 0}
-        snapToInterval={isPartidosView ? null : (width * 0.83) + 21}
+        snapToInterval={isPartidosView ? null : width * 0.83 + 21}
         decelerationRate={isPartidosView ? 'normal' : 'fast'}
         disableIntervalMomentum={!isPartidosView}
         maxToRenderPerBatch={12}

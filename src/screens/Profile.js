@@ -27,7 +27,9 @@ const Profile = () => {
     const user = JSON.parse(session);
     const backUrl = useSelector(state => state.backUrl);
     const [image, setImage] = useState({});
-    const [profileImage, setProfileImage] = useState(backUrl + user?.profilePicture.formats.thumbnail.url);
+    const [profileImage, setProfileImage] = useState(user?.profilePicture.formats.thumbnail.url);
+
+    console.log(profileImage, "profileImage")
 
     // Check if user.profilePicture and its nested properties exist
     const profilePictureUrl = user?.profilePicture.formats.thumbnail.url;

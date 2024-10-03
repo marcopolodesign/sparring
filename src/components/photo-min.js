@@ -8,9 +8,9 @@ const PhotoMin = ({ width, height, size, border, transform, sourceImg, zIndexPos
     if (size === 'small') {
         width = 40;
         height = 40;
-    } else if (size === 'invite') {
-        width = 45;
-        height = 45;
+    } else if (size === 'invite' || size === 'big') {
+        width = 55;
+        height = 55;
     }
     const backUrl = useSelector((state) => state.backUrl);
 

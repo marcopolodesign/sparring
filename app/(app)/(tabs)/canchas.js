@@ -33,7 +33,7 @@ const CourtScreen = () => {
       try {
         const data = await fetchCourts();
         setCourts(data);
-        console.log('Courts:', JSON.stringify(data, null, 2));
+        // console.log('Courts:', JSON.stringify(data, null, 2));
         setIsLoading(false);
       } catch (error) {
         console.error('Error fetching court details:', error);
@@ -115,7 +115,9 @@ const CourtScreen = () => {
           </View>
           <View style={styles.headerButtons}>
             <TouchableOpacity><HistoryIcon /></TouchableOpacity>
-            {/* <TouchableOpacity><Text>🔖</Text></TouchableOpacity> */}
+            <TouchableOpacity>
+                {/* <Text>🔖</Text> */}
+              </TouchableOpacity>
           </View>
         </View>
         <View style={styles.filters}>
@@ -179,27 +181,24 @@ const CourtScreen = () => {
         }}
       >
        {courts.map((court) => (
-        <>
-
-            <Marker
-              key={court.id}
-              coordinate={{
-                latitude: court.attributes.location.latitude,
-                longitude: court.attributes.location.longitude,
-              }}
-              onPress={() => {
-                setSelectedMarker(court.id);
-                handleMarkerPress(court.attributes.location.latitude, court.attributes.location.longitude)
-              }}
-            >
-              <MapMarker
-                uri={court.attributes.cover?.data?.attributes?.formats?.medium?.url}
-                title={court.attributes.name}
-                id={court.id}
-                isSelected={selectedMarker === court.id}
-              />
-            </Marker>
-            </>
+          <Marker 
+            key={court.id}
+            coordinate={{
+              latitude: court.attributes.location.latitude,
+              longitude: court.attributes.location.longitude,
+            }}
+            onPress={() => {
+              setSelectedMarker(court.id);
+              handleMarkerPress(court.attributes.location.latitude, court.attributes.location.longitude)
+            }}
+          >
+            <MapMarker
+              uri={court.attributes.cover?.data?.attributes?.formats?.medium?.url}
+              title={court.attributes.name}
+              id={court.id}
+              isSelected={selectedMarker === court.id}
+            />
+          </Marker>
           ))}
       </MapView>
       {!isMapActive && 
